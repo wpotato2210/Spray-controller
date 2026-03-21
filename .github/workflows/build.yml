@@ -1,0 +1,15 @@
+name: Build Firmware
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Arduino CLI
+        uses: arduino/setup-arduino-cli@v1
+      - name: Compile
+        run: arduino-cli compile --fqbn arduino:avr:nano .
