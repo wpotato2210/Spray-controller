@@ -6,16 +6,20 @@ Operation Steps
 	1.	Power on the system.
 	2.	Set the run/hold switch:
 	•	Run: normal operation
-	•	Hold: stops pumps; optional bypass solenoid activated if configured
-	3.	Monitor flow sensors per section.
+	•	Hold: stops pump; optional bypass solenoid activated if configured
+	3.	Enable or disable boom sections as needed.
 	4.	Observe LED indicators for each active boom section.
+
+How Rate Control Works
+	•	The controller maintains target application rate (L/ha) using vehicle speed (km/h) and active spray width (m).
+	•	Active spray width is the sum of ON boom sections (SECTION_WIDTH_M per active section).
+	•	Section changes affect effective width only; flow remains globally controlled through one pump and one total flow sensor.
 
 Notes
 	•	Flow calibration required before first operation.
 	•	Safety interlocks should be verified prior to field use.
-	•	Multi-flow sensor expansion: additional sections may be added; see HARDWARE.md.
 
 Placeholders
-	•	Specific calibration values per boom section
+	•	Specific calibration values for TARGET_RATE_LPHA and KP
 	•	Safety and alarm behavior details
 	•	Optional operator interface guidance
