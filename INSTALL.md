@@ -1,21 +1,25 @@
-USAGE.md
+INSTALL.md
 
-Spray Controller Usage Instructions
+Spray Controller Installation
 
-Operation Steps
-	1.	Power on the system.
-	2.	Set the run/hold switch:
-	•	Run: normal operation
-	•	Hold: stops pumps; optional bypass solenoid activated if configured
-	3.	Monitor flow sensors per section.
-	4.	Observe LED indicators for each active boom section.
+Firmware Setup
+	•	Toolchain: Arduino IDE
+	•	Board: Arduino Nano
+	•	Port: COMx / /dev/ttyUSBx
+	•	Libraries: Servo.h, Wire.h
+
+Install Steps
+	1.	Connect the controller hardware per HARDWARE.md.
+	2.	Open firmware project in Arduino IDE.
+	3.	Select board and serial port.
+	4.	Build and upload firmware.
+	5.	Validate protocol output and I/O behavior per TESTING.md.
 
 Notes
-	•	Flow calibration required before first operation.
-	•	Safety interlocks should be verified prior to field use.
-	•	Multi-flow sensor expansion: additional sections may be added; see HARDWARE.md.
+	•	Use CONFIGURATION.md values for target rate and controller constants.
+	•	Protocol framing and message formats are defined in PROTOCOLS.md.
 
 Placeholders
-	•	Specific calibration values per boom section
-	•	Safety and alarm behavior details
-	•	Optional operator interface guidance
+	•	Pinned library versions
+	•	CI build artifact workflow
+	•	Optional GUI integration
