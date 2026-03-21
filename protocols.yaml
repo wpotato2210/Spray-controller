@@ -1,0 +1,22 @@
+version: 1
+
+messages:
+  flow:
+    format: "FS:<lpm>\\n"
+    description: total flow rate
+
+  pump:
+    format: "P:<pwm>\\n"
+    description: set pump PWM
+
+  section:
+    format: "S:<section>:<state>\\n"
+    description: section ON/OFF
+
+  switch:
+    format: "SW:<runHold>\\n"
+    description: run/hold state
+
+constraints:
+  - no_per_section_flow
+  - ascii_serial
