@@ -1,0 +1,19 @@
+pins:
+  wheel_sensor: 2
+  flow_sensor: 3
+  pump_pwm: 11
+
+  boom_sections:
+    section_1: 12
+    section_2: 13
+    section_3: A1
+
+  leds:
+    section_1: A2
+
+  switches:
+    run_hold: TBD
+    section_switches:
+      section_1: TBD
+      section_2: TBD
+      section_3: TBD
