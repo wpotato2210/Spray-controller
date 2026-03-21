@@ -1,0 +1,15 @@
+application:
+  target_rate_lpha: 100.0
+  section_width_m: 0.5
+
+control:
+  kp: 2.0
+  pwm_min: 0
+  pwm_max: 255
+
+limits:
+  min_speed_kmh: 0.5
+  max_flow_lpm: 100.0
+
+timing:
+  loop_interval_ms: TBD
