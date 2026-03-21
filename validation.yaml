@@ -1,0 +1,23 @@
+rules:
+  control_model:
+    must_be: global_flow
+
+  flow_sensor:
+    count: 1
+
+  section_control:
+    type: binary_only
+
+  disallowed:
+    - per_section_flow_control
+    - multiple_independent_pumps
+
+units:
+  speed: km_per_hour
+  flow: L_per_min
+  rate: L_per_hectare
+
+consistency_checks:
+  - md_vs_headers
+  - headers_vs_yaml
+  - protocols_consistency
