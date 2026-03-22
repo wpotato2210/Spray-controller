@@ -19,53 +19,11 @@ Per phase-gate rules, P1 can close only when all P1 deliverables are complete
 
 ## P1 deliverable status
 
-<table>
-  <thead>
-    <tr>
-      <th>P1 Deliverable</th>
-      <th>Status</th>
-      <th>Evidence</th>
-      <th>Notes</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-        Final <code>pins.yaml</code> and <code>config.yaml</code> schema
-        with no TODO fields
-      </td>
-      <td><strong>Complete</strong></td>
-      <td>Both files contain concrete values and no TODO markers.</td>
-      <td>
-        Includes Nano and Uno pin profiles and finalized control/timing keys.
-      </td>
-    </tr>
-    <tr>
-      <td>Validation pass output with no missing/extra keys</td>
-      <td><strong>Complete</strong></td>
-      <td>
-        <code>./scripts/validate.sh</code> passed; committed pass artifact at
-        <code>validation/validation_pass.txt</code>.
-      </td>
-      <td>
-        Deterministic gate command and pass evidence now present in repo.
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <code>CONFIGURATION.md</code> and <code>HARDWARE.md</code> updated to
-        exact values
-      </td>
-      <td><strong>Complete</strong></td>
-      <td>
-        <code>CONFIGURATION.md</code> contains exact numeric defaults;
-        <code>HARDWARE.md</code> pin mapping matches profile mapping.
-      </td>
-      <td>P1 documentation values are now explicit.</td>
-    </tr>
-  </tbody>
-</table>
-
+| P1 Deliverable | Status | Evidence | Notes |
+| --- | --- | --- | --- |
+| Final `pins.yaml` and `config.yaml` schema with no TODO fields | **Complete** | Both files contain concrete values and no TODO markers. | Includes Nano and Uno pin profiles and finalized control/timing keys. |
+| Validation pass output with no missing/extra keys | **Complete** | `./scripts/validate.sh` passed; committed pass artifact at `validation/validation_pass.txt`. | Deterministic gate command and pass evidence now present in repo. |
+| `CONFIGURATION.md` and `HARDWARE.md` updated to exact values | **Complete** | `CONFIGURATION.md` contains exact numeric defaults; `HARDWARE.md` pin mapping matches profile mapping. | P1 documentation values are now explicit. |
 
 ## Readiness verdict
 
