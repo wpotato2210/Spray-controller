@@ -26,20 +26,16 @@ jobs:
           arduino-cli core update-index
           arduino-cli core install arduino:avr
 
-      - name: Generate config.h
+      - name: Generate default config.h
         run: |
           mkdir -p include
           cat <<EOT > include/config.h
-          #ifndef SPRAY_CONTROLLER_CONFIG_H
-          #define SPRAY_CONTROLLER_CONFIG_H
+          #pragma once
 
-          #define SECTION_COUNT 8
+          #define SECTION_COUNT 8         // Adjust as required
           #define FLOW_SENSOR_PIN 2
           #define PUMP_PWM_PIN 3
-
-          // Add other macros/constants your code requires
-
-          #endif // SPRAY_CONTROLLER_CONFIG_H
+          // Add additional project-specific macros/constants here
           EOT
 
       - name: Prepare artifacts folder
