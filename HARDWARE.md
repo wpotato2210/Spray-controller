@@ -8,7 +8,9 @@ Spray Controller Hardware
 - Multiple boom sections controlled independently as ON/OFF outputs.
 - 12V pump power stage with 5V MCU logic.
 
-## Pinout
+## Pinout (board profiles)
+
+### Arduino Nano (`ARDUINO_AVR_NANO`)
 
 | Pin | Component | Notes |
 | --- | --- | --- |
@@ -19,6 +21,18 @@ Spray Controller Hardware
 | 13 | Boom Section 2 | Digital output (ON/OFF) |
 | A1 | Boom Section 3 | Digital output (ON/OFF) |
 | A2 | Section 1 LED | Indicator |
+| A3 | Run/Hold Switch | Input pull-up |
+| A4 | Section Switch 1 | Input pull-up |
+| A5 | Section Switch 2 | Input pull-up |
+| 4 | Section Switch 3 | Input pull-up; avoids A6 analog-only behavior |
+
+### Arduino Uno (`ARDUINO_AVR_UNO`)
+
+Uses the same mapping as Nano for this firmware profile.
+
+### Unsupported boards
+
+Build intentionally fails with `#error` if neither `ARDUINO_AVR_NANO` nor `ARDUINO_AVR_UNO` is selected. Add a dedicated `include/pins_<board>.h` mapping before targeting additional boards.
 
 ## Switches
 
