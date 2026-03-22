@@ -1,0 +1,7 @@
+== YAML schema validation ==
+yamllint_ok
+== Protocol structure check ==
+protocols_ok
+== Config completeness check ==
+config_ok
+== SUCCESS ==

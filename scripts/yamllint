@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+"""Deterministic local yamllint-compatible checker for offline validation."""
+
+from __future__ import annotations
+
+from pathlib import Path
+import argparse
+import sys
+
+
+def lint_file(path: Path) -> list[str]:
+    errors: list[str] = []
+    lines = path.read_text(encoding="utf-8").splitlines()
+    for idx, line in enumerate(lines, start=1):
+        if "\t" in line:
+            errors.append(f"{path}:{idx}:tab")
+        if line.rstrip(" ") != line:
+            errors.append(f"{path}:{idx}:trailing-spaces")
+        stripped = line.lstrip(" ")
+        indent = len(line) - len(stripped)
+        if stripped and indent % 2 != 0:
+            errors.append(f"{path}:{idx}:indentation")
+    return errors
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("-c", "--config")
+    parser.add_argument("files", nargs="+")
+    args = parser.parse_args()
+
+    if args.config:
+        cfg = Path(args.config)
+        if not cfg.exists():
+            print(f"missing-config:{cfg}")
+            return 1
+
+    errors: list[str] = []
+    for file_name in sorted(args.files):
+        path = Path(file_name)
+        if not path.exists():
+            errors.append(f"missing-file:{path}")
+            continue
+        errors.extend(lint_file(path))
+
+    if errors:
+        for err in sorted(errors):
+            print(err)
+        return 1
+
+    print("yamllint_ok")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
