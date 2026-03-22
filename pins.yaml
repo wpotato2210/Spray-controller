@@ -1,19 +1,40 @@
-pins:
-  wheel_sensor: 2
-  flow_sensor: 3
-  pump_pwm: 11
+profiles:
+  arduino_avr_nano:
+    wheel_sensor: 2
+    flow_sensor: 3
+    pump_pwm: 11
 
-  boom_sections:
-    section_1: 12
-    section_2: 13
-    section_3: A1
+    boom_sections:
+      section_1: 12
+      section_2: 13
+      section_3: A1
 
-  leds:
-    section_1: A2
+    leds:
+      section_1: A2
 
-  switches:
-    run_hold: A3
-    section_switches:
-      section_1: A4
-      section_2: A5
-      section_3: A6
+    switches:
+      run_hold: A3
+      section_switches:
+        section_1: A4
+        section_2: A5
+        section_3: 4
+
+  arduino_avr_uno:
+    wheel_sensor: 2
+    flow_sensor: 3
+    pump_pwm: 11
+
+    boom_sections:
+      section_1: 12
+      section_2: 13
+      section_3: A1
+
+    leds:
+      section_1: A2
+
+    switches:
+      run_hold: A3
+      section_switches:
+        section_1: A4
+        section_2: A5
+        section_3: 4

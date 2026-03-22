@@ -12,7 +12,7 @@ System Model (authoritative summary)
 	•	One global FlowController computes one pump PWM command from target rate, speed, and active width.
 
 Core Components
-	•	MCU: Arduino Nano (5V logic)
+	•	MCU: Arduino Nano (ATmega328P, 5V logic)
 	•	Pump: 12V PWM-controlled
 	•	Boom sections: independent binary valve outputs
 	•	Sensors: single YF-S201C flow sensor + wheel speed sensor
@@ -34,6 +34,10 @@ Quickstart
 Dependencies
 	•	Arduino IDE
 	•	Required libraries: Servo, Wire
+
+Board support and compile guard
+	•	Supported compile targets: `ARDUINO_AVR_NANO`, `ARDUINO_AVR_UNO`
+	•	Firmware fails at compile time with a clear `#error` on unsupported board targets.
 
 Placeholders
 	•	High-level project diagram
