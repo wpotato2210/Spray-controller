@@ -3,6 +3,7 @@
 
 namespace spray {
 
+constexpr const char* MSG_STATUS_PREFIX = "ST:";
 constexpr const char* MSG_FLOW_PREFIX = "FS:";
 constexpr const char* MSG_PUMP_PREFIX = "P:";
 constexpr const char* MSG_SECTION_PREFIX = "S:";
