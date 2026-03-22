@@ -25,9 +25,21 @@ Spray Controller Protocols
   - `bit1` = wheel pulse timeout active.
   - `bit2` = flow sensor configuration invalid.
   - `bit3` = wheel sensor configuration invalid.
+  - `bit4` = pressure sensor configuration invalid (only when pressure feature
+    is enabled).
 - `fault_text` is deterministic status text:
   - `OK` when `fault_bits == 0`.
   - `FAULT` when any fault bit is set.
+
+### PRESSURE (optional, compile-time gated)
+
+- Enabled only when `ENABLE_PRESSURE_SENSOR=true` in `config.h` (default is
+  `false`).
+- Format:
+- `PR:<pressure_kpa>\n`
+- Description:
+- Telemetry-only pressure reading in kPa (2 decimal precision). No control loop
+  coupling.
 
 ## Versioning
 

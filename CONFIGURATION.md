@@ -24,6 +24,9 @@ applying no-flow fault logic (L/min). |
 | `timing` | `telemetry_interval_ms` | 200 | Telemetry output interval (ms). |
 | `timing` | `sensor_fault_timeout_ms` | 1200 | Timeout for stale sensor
 updates before fault handling (ms). |
+| `pressure` | `enable_pressure_sensor` | false | Compile-time gate for optional pressure telemetry (`PR:` frame), no control coupling. |
+| `pressure` | `min_kpa` | 0.0 | Lower scaling clamp for analog pressure readout. |
+| `pressure` | `max_kpa` | 1000.0 | Upper scaling clamp for analog pressure readout. |
 
 ## Placeholders
 

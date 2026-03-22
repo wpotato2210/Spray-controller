@@ -43,6 +43,19 @@ class WheelSensor {
   bool config_fault_active_;
 };
 
+class PressureSensor {
+ public:
+  explicit PressureSensor(uint8_t pin);
+  void begin();
+  float readPressure();
+  void reset();
+  bool isConfigFaultActive() const;
+
+ private:
+  uint8_t pin_;
+  bool config_fault_active_;
+};
+
 class RunHoldSwitch {
  public:
   explicit RunHoldSwitch(uint8_t pin);

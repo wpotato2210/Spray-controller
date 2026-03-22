@@ -14,6 +14,9 @@ RunHoldSwitch g_run_hold(PIN_RUN_HOLD);
 SectionManager g_section_manager;
 FlowController g_flow_controller;
 PumpControl g_pump(PIN_PUMP_PWM);
+#if ENABLE_PRESSURE_SENSOR
+PressureSensor g_pressure_sensor(PIN_PRESSURE_SENSOR);
+#endif
 
 const uint8_t kSectionOutputPins[SECTION_COUNT] = {PIN_BOOM_1, PIN_BOOM_2, PIN_BOOM_3};
 const uint8_t kSectionSwitchPins[SECTION_COUNT] = {
@@ -67,6 +70,11 @@ uint8_t getStatusFaultBitfield() {
   if (g_wheel_sensor.isConfigFaultActive()) {
     faults |= STATUS_FAULT_WHEEL_CONFIG;
   }
+#if ENABLE_PRESSURE_SENSOR
+  if (g_pressure_sensor.isConfigFaultActive()) {
+    faults |= STATUS_FAULT_PRESSURE_CONFIG;
+  }
+#endif
   return faults;
 }
 
@@ -89,6 +97,14 @@ void publishStatus(float flow_lpm, uint8_t pump_duty, bool run_enabled, uint8_t 
   Serial.print(getStatusFaultText(fault_bits));
   Serial.print(MSG_TERMINATOR);
 }
+
+#if ENABLE_PRESSURE_SENSOR
+void publishPressure(float pressure_kpa) {
+  Serial.print(MSG_PRESSURE_PREFIX);
+  Serial.print(pressure_kpa, 2);
+  Serial.print(MSG_TERMINATOR);
+}
+#endif
 
 bool shouldPublishTelemetry(uint32_t now_ms, uint32_t last_telemetry_ms) {
   return (now_ms - last_telemetry_ms) >= TELEMETRY_INTERVAL_MS;
@@ -116,6 +132,10 @@ void setup() {
   spray::g_flow_sensor.reset();
   spray::g_wheel_sensor.reset();
   spray::g_pump.startPWM();
+#if ENABLE_PRESSURE_SENSOR
+  spray::g_pressure_sensor.begin();
+  spray::g_pressure_sensor.reset();
+#endif
 }
 
 void loop() {
@@ -146,6 +166,9 @@ void loop() {
   spray::writeSections();
   if (spray::shouldPublishTelemetry(now_ms, last_telemetry_ms) && spray::hasTelemetryTxCapacity()) {
     spray::publishStatus(measured_flow_lpm, duty, run_enabled, spray::getStatusFaultBitfield());
+#if ENABLE_PRESSURE_SENSOR
+    spray::publishPressure(spray::g_pressure_sensor.readPressure());
+#endif
     last_telemetry_ms = now_ms;
   }
 }
