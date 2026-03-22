@@ -18,6 +18,19 @@ Spray Controller Testing Procedures
 - `FQBN=arduino:avr:nano ./ci/compile-sketch.sh`
 - `FQBN=arduino:avr:uno ./ci/compile-sketch.sh`
 
+## P1 Gate Check (Canonical)
+
+- Command: `./scripts/validate.sh`
+- Expected output markers (all required):
+  - `== YAML schema validation ==`
+  - `== Protocol structure check ==`
+  - `== Config completeness check ==`
+  - `== SUCCESS ==`
+
+- Optional artifact capture:
+  - `./scripts/run_validation_and_capture.sh`
+  - Writes pass/fail transcript to `validation/validation_pass.txt`.
+
 ## Synthetic Event Tests
 
 - Simulate run/hold switch toggle.
