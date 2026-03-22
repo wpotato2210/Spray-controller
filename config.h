@@ -38,6 +38,10 @@ constexpr float WHEEL_CIRCUMFERENCE_M = 2.0f;
 constexpr float WHEEL_PULSES_PER_REV = 20.0f;
 constexpr uint32_t WHEEL_PULSE_TIMEOUT_MS = 1200UL;
 
+constexpr bool ENABLE_PRESSURE_SENSOR = false;
+constexpr float PRESSURE_SENSOR_MIN_KPA = 0.0f;
+constexpr float PRESSURE_SENSOR_MAX_KPA = 1000.0f;
+
 }  // namespace spray
 
 #endif  // SPRAY_CONTROLLER_CONFIG_H

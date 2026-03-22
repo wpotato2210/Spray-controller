@@ -19,6 +19,7 @@ constexpr uint8_t PIN_RUN_HOLD = A3;
 constexpr uint8_t PIN_SECTION_SW_1 = A4;
 constexpr uint8_t PIN_SECTION_SW_2 = A5;
 constexpr uint8_t PIN_SECTION_SW_3 = 4U;
+constexpr uint8_t PIN_PRESSURE_SENSOR = A0;
 
 }  // namespace spray
 

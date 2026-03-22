@@ -33,6 +33,7 @@ TX-capacity gating to reduce control-loop jitter risk.
 
 - **0.10** (2026-03-22): Executed `P3-TSK-002` by adding explicit flow stale-timeout fallback in `FlowSensor::readFlow()` using `FLOW_STALE_TIMEOUT_MS` + bounded fallback output `FLOW_STALE_FALLBACK_LPM` (default `0.0`), while preserving burst clamp behavior via `MAX_FLOW_LPM`.
 - **0.11** (2026-03-22): Executed `P3-TSK-003` by extending `ST` telemetry with deterministic fault visibility fields (`fault_bits`, `fault_text`) and wiring fault source bits for flow stale timeout, wheel timeout, and sensor-config validity.
+- **0.12** (2026-03-22): Executed `P3-TSK-004` by adding compile-time gated pressure telemetry abstraction (`PressureSensor::readPressure()`), default-disabled gate (`ENABLE_PRESSURE_SENSOR=false`), optional `PR:<pressure_kpa>` output, and pressure config fault bit wiring when enabled.
 
 ## Placeholders
 

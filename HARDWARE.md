@@ -25,6 +25,7 @@ Spray Controller Hardware
 | A4 | Section Switch 1 | Input pull-up |
 | A5 | Section Switch 2 | Input pull-up |
 | 4 | Section Switch 3 | Input pull-up; avoids A6 analog-only behavior |
+| A0 | Pressure Sensor (Optional) | Analog telemetry input; feature-gated and disabled by default |
 
 ### Arduino Uno (`ARDUINO_AVR_UNO`)
 
@@ -58,6 +59,7 @@ MCU Nano (5V logic)
 | 13 -> Boom 2         |----> Solenoid 2 (ON/OFF)
 | A1 -> Boom 3         |----> Solenoid 3 (ON/OFF)
 | A2 -> LED Boom 1     |----> Indicator LED
+| A0 -> Pressure In    |----> Optional analog pressure telemetry
 | GND -----------------|----> Common GND
 +----------------------+
 ```
