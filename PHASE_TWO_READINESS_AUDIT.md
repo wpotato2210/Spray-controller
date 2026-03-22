@@ -26,16 +26,19 @@ implemented and current validation passes with deterministic success markers.
   to configuration/protocol/docs gate inputs.
 - Validation command rerun on 2026-03-22 (UTC):
   - `./scripts/validate.sh`
-  - Result: success (`yamllint_ok`, `protocols_ok`, `config_ok`, `== SUCCESS ==`).
+  - Result: success (`yamllint_ok`, `protocols_ok`, `config_ok`,
+    `== SUCCESS ==`).
 
 ## P1 deliverable status snapshot
 
 | P1 deliverable (roadmap) | Status | Evidence |
 | --- | --- | --- |
-| Final `pins.yaml` + `config.yaml` schema (no TODO fields) | Complete | Concrete values in both files. |
-| Validation pass output with no missing/extra keys | Complete | `validation/validation_pass.txt` plus deterministic validator scripts and rerun success. |
-| `CONFIGURATION.md` and `HARDWARE.md` updated to exact values | Complete | Numeric values and board pin map documented. |
-| Gate bookkeeping: phase closure referenced in changelog | Complete | `CHANGELOG.md` v0.7 explicitly states P1 closure and references validation evidence. |
+| Final `pins.yaml` + `config.yaml` schema | Complete | Set. |
+|  |  | (No TODO fields.) |
+| Validation pass output | Complete | Set. |
+|  |  | (No missing/extra keys.) |
+| `CONFIGURATION.md` + `HARDWARE.md` exact values | Complete | Set. |
+| Gate bookkeeping: changelog reference | Complete | Set. |
 
 ---
 
@@ -43,11 +46,11 @@ implemented and current validation passes with deterministic success markers.
 
 | Task ID | Status | Closure evidence |
 | --- | --- | --- |
-| P1-GATE-001 | Complete | `CHANGELOG.md` v0.7 includes explicit P1 closure entry with validation command and artifact reference. |
-| P1-GATE-002 | Complete | `PHASE_ONE_READINESS.md` updated to match current evidence and gate closure state. |
-| P1-GATE-003 | Complete | `TESTING.md` includes canonical `./scripts/validate.sh` command and required output markers. |
-| P1-GATE-004 | Complete | `.github/workflows/validate.yml` runs deterministic validation for P1 gate input changes, with documented manual fallback in `TESTING.md`. |
-| P1-GATE-005 | Complete | This readiness re-audit confirms all prior gate items are closed and issues a go decision for P2. |
+| P1-GATE-001 | Complete | `CHANGELOG.md` v0.7 has explicit closure evidence. |
+| P1-GATE-002 | Complete | `PHASE_ONE_READINESS.md` matches closure state. |
+| P1-GATE-003 | Complete | `TESTING.md` has canonical gate markers. |
+| P1-GATE-004 | Complete | Workflow gate + manual fallback docs exist. |
+| P1-GATE-005 | Complete | Re-audit confirms all prior P1 gate tasks closed. |
 
 ## Recommended go/no-go decision
 
