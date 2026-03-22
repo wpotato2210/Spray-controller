@@ -33,7 +33,7 @@ Quickstart
 
 Dependencies
 	•	Arduino IDE
-	•	Required libraries: Servo, Wire
+	•	Required libraries: none beyond the Arduino core (`Arduino.h`)
 
 Board support and compile guard
 	•	Supported compile targets: `ARDUINO_AVR_NANO`, `ARDUINO_AVR_UNO`

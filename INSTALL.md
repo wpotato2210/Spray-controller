@@ -7,7 +7,7 @@ Spray Controller Installation
 - Toolchain: Arduino IDE
 - Board: Arduino Nano
 - Port: COMx / /dev/ttyUSBx
-- Libraries: Servo.h, Wire.h
+- Libraries: no additional libraries required (uses Arduino core `Arduino.h`)
 
 ## Install Steps
 
