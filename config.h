@@ -27,7 +27,6 @@ constexpr uint8_t SAFE_FALLBACK_DUTY = PWM_MIN;
 constexpr float MIN_SPEED_KMH = 0.5f;
 constexpr float MAX_FLOW_LPM = 100.0f;
 
-constexpr uint32_t SECTION_TIMEOUT_MS = 500UL;
 constexpr uint32_t LOOP_INTERVAL_MS = 50UL;
 
 constexpr float FLOW_PULSES_PER_LITER = 450.0f;

@@ -12,8 +12,6 @@ void PumpControl::begin() { pinMode(pin_, OUTPUT); }
 
 void PumpControl::startPWM() { analogWrite(pin_, PWM_MIN); }
 
-void PumpControl::stopPWM() { analogWrite(pin_, PWM_MIN); }
-
 void PumpControl::setDutyCycle(uint8_t duty) {
   if (duty > PWM_MAX) {
     duty = PWM_MAX;
