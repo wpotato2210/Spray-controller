@@ -14,7 +14,7 @@ Scope audited: `Spray-controller.ino` and all `src/*.cpp` files.
 
 - Project-local includes are now normalized to plain header names: `interfaces.h`, `pins.h`, `protocol.h`.
 - The include directory must be on the compiler search path (`-Iinclude`) for non-Arduino toolchains.
-- CI compile checks now pass `-I$GITHUB_WORKSPACE/include` explicitly via Arduino CLI build properties.
+- CI compile checks run through `ci/compile-sketch.sh`, which injects `-I$GITHUB_WORKSPACE/include` for both C and C++ compilation.
 
 ## Portability check
 
