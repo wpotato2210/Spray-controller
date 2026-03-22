@@ -2,7 +2,36 @@ name: Validate
 
 on:
   push:
+    paths:
+      - 'config.yaml'
+      - 'pins.yaml'
+      - 'config.h'
+      - 'PROTOCOLS.md'
+      - 'CONFIGURATION.md'
+      - 'HARDWARE.md'
+      - 'TESTING.md'
+      - 'DEVELOPMENT_ROADMAP.md'
+      - 'scripts/validate.sh'
+      - 'scripts/validate_config.py'
+      - 'scripts/validate_protocols.py'
+      - 'scripts/run_validation_and_capture.sh'
+      - '.github/workflows/validate.yml'
   pull_request:
+    paths:
+      - 'config.yaml'
+      - 'pins.yaml'
+      - 'config.h'
+      - 'PROTOCOLS.md'
+      - 'CONFIGURATION.md'
+      - 'HARDWARE.md'
+      - 'TESTING.md'
+      - 'DEVELOPMENT_ROADMAP.md'
+      - 'scripts/validate.sh'
+      - 'scripts/validate_config.py'
+      - 'scripts/validate_protocols.py'
+      - 'scripts/run_validation_and_capture.sh'
+      - '.github/workflows/validate.yml'
+  workflow_dispatch:
 
 jobs:
   validation:
