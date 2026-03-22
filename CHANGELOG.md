@@ -80,6 +80,12 @@ TX-capacity gating to reduce control-loop jitter risk.
   and documenting validator command/pass marker plus enforced
   scenario coverage in `TESTING.md`.
 
+- **0.20** (2026-03-22): Executed `P4-TSK-007` by replacing
+  `DIAGRAMS.md` placeholders with implemented deterministic diagrams for
+  SEE/THINK/DO architecture, operator menu transitions, preview/reset I/O
+  dependencies, and logical wiring aligned to `ME`/`ST`/`PV`/`MS`/`RS`
+  protocol behavior.
+
 ## Placeholders
 
 - Update dates.
