@@ -9,25 +9,24 @@ jobs:
       fail-fast: false
       matrix:
         fqbn:
-          - arduino:avr:nano
-          - arduino:avr:uno
+          - "arduino:avr:nano"
+          - "arduino:avr:uno"
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Install Arduino CLI
-        run: |
-          curl -fsSL https://arduino.github.io/arduino-cli/installer.sh | sh -s -- -b "$HOME/bin"
-          echo "$HOME/bin" >> "$GITHUB_PATH"
-          arduino-cli version
+      - name: Setup Arduino CLI
+        uses: arduino/setup-arduino-cli@v2
 
       - name: Install AVR core
         run: |
-          command -v arduino-cli
-          arduino-cli version
           arduino-cli core update-index
           arduino-cli core install arduino:avr
 
       - name: Compile sketch
         env:
           FQBN: ${{ matrix.fqbn }}
-        run: ./ci/compile-sketch.sh
+        run: |
+          # Ensure script is executable before running
+          chmod +x ./ci/compile-sketch.sh
+          ./ci/compile-sketch.sh
