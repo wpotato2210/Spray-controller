@@ -2,4 +2,8 @@
 set -euo pipefail
 
 mkdir -p validation
-bash scripts/validate.sh > validation/validation_pass.txt
+
+if ! bash scripts/validate.sh | tee validation/validation_pass.txt; then
+  echo "VALIDATION_FAILED" | tee -a validation/validation_pass.txt
+  exit 1
+fi
