@@ -43,25 +43,25 @@ void writeSections() {
   digitalWrite(PIN_LED_SECTION_1, g_section_manager.getSection(0U) ? HIGH : LOW);
 }
 
-void publishStatus(float flow_lpm, uint8_t pump_duty, bool run_enabled) {
-  Serial.print(MSG_FLOW_PREFIX);
-  Serial.print(flow_lpm, 3);
-  Serial.print(MSG_TERMINATOR);
-
-  Serial.print(MSG_PUMP_PREFIX);
-  Serial.print(pump_duty);
-  Serial.print(MSG_TERMINATOR);
-
+uint8_t getSectionBitmask() {
+  uint8_t mask = 0U;
   for (uint8_t i = 0U; i < SECTION_COUNT; ++i) {
-    Serial.print(MSG_SECTION_PREFIX);
-    Serial.print(i);
-    Serial.print(':');
-    Serial.print(g_section_manager.getSection(i) ? 1 : 0);
-    Serial.print(MSG_TERMINATOR);
+    if (g_section_manager.getSection(i)) {
+      mask |= static_cast<uint8_t>(1U << i);
+    }
   }
+  return mask;
+}
 
-  Serial.print(MSG_SWITCH_PREFIX);
+void publishStatus(float flow_lpm, uint8_t pump_duty, bool run_enabled) {
+  Serial.print(MSG_STATUS_PREFIX);
+  Serial.print(flow_lpm, 3);
+  Serial.print(',');
+  Serial.print(pump_duty);
+  Serial.print(',');
   Serial.print(run_enabled ? 1 : 0);
+  Serial.print(',');
+  Serial.print(getSectionBitmask());
   Serial.print(MSG_TERMINATOR);
 }
 

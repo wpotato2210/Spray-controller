@@ -6,16 +6,14 @@ Spray Controller Protocols
 
 | Message | Format | Description |
 | --- | --- | --- |
-| `FLOW_TOTAL` | `FS:<lpm>\n` | Total measured flow from single FlowSensor |
-| `PUMP` | `P:<0-255>\n` | Set global pump PWM duty cycle |
-| `SECTION` | `S:<index>:0|1\n` | Report section state (OFF/ON) for each section index |
-| `SWITCH` | `SW:0|1\n` | Run/Hold switch state |
+| `STATUS` | `ST:<lpm>,<pump_duty>,<run>,<section_mask>\n` | Compact loop status frame with deterministic field order |
 
 ## Notes
 
-- Flow messages report total flow only.
-- Section messages represent binary ON/OFF state and are emitted once per section each loop.
-- No per-section flow message is defined in `PROTOCOL_V1`.
+- `lpm` is the measured total flow (3 decimal precision).
+- `pump_duty` is the PWM duty in range `0-255`.
+- `run` is `1` for RUN and `0` for HOLD.
+- `section_mask` packs section states in LSB-first order (`bit0=section0`, `bit1=section1`, `bit2=section2`).
 
 ## Versioning
 
