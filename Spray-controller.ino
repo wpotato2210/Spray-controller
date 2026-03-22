@@ -16,6 +16,7 @@ SectionManager g_section_manager;
 FlowController g_flow_controller;
 PumpControl g_pump(PIN_PUMP_PWM);
 OperatorMenuStateMachine g_operator_menu;
+CoverageAccumulator g_coverage_accumulator;
 #if ENABLE_PRESSURE_SENSOR
 PressureSensor g_pressure_sensor(PIN_PRESSURE_SENSOR);
 #endif
@@ -159,6 +160,7 @@ void setup() {
   spray::g_pump.begin();
   spray::g_flow_sensor.reset();
   spray::g_wheel_sensor.reset();
+  spray::g_coverage_accumulator.reset();
   spray::g_pump.startPWM();
 #if ENABLE_PRESSURE_SENSOR
   spray::g_pressure_sensor.begin();
@@ -185,8 +187,9 @@ void loop() {
 
   const float active_width_m = spray::g_section_manager.getActiveWidth();
   const uint8_t active_sections = spray::g_section_manager.getActiveCount();
-  const float distance_m = 0.0f;
-  const float area_ha = 0.0f;
+  spray::g_coverage_accumulator.update(speed_kmh, active_width_m, spray::LOOP_INTERVAL_MS);
+  const float distance_m = spray::g_coverage_accumulator.getDistanceMeters();
+  const float area_ha = spray::g_coverage_accumulator.getAreaHectares();
 
   uint8_t duty = spray::PWM_MIN;
   if (run_enabled) {

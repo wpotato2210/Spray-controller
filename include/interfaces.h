@@ -105,6 +105,19 @@ class PumpControl {
   uint8_t pin_;
 };
 
+class CoverageAccumulator {
+ public:
+  CoverageAccumulator();
+  void update(float speed_kmh, float active_width_m, uint32_t elapsed_ms);
+  void reset();
+  float getDistanceMeters() const;
+  float getAreaHectares() const;
+
+ private:
+  float distance_m_;
+  float area_ha_;
+};
+
 }  // namespace spray
 
 #endif  // SPRAY_CONTROLLER_INTERFACES_H
