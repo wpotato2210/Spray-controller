@@ -1,9 +1,9 @@
 #include <Arduino.h>
 
 #include "config.h"
-#include "interfaces.h"
-#include "pins.h"
-#include "protocol.h"
+#include "include/interfaces.h"
+#include "include/pins.h"
+#include "include/protocol.h"
 
 namespace spray {
 namespace {
