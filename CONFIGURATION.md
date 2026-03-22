@@ -24,5 +24,7 @@ Spray Controller Configuration Parameters
 ## Placeholders
 
 - Calibration-derived defaults for `target_rate_lpha`, `section_width_m`, and
-  control gains.
+
+control gains.
+
 - Optional parameters for actuator ramp-up and delayed section sequencing.

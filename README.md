@@ -10,7 +10,8 @@ one global flow-control model.
 - Single FlowSensor measures total system flow (L/min).
 - Multiple BoomSection valves are binary ON/OFF outputs.
 - One global FlowController computes one pump PWM command from target rate,
-  speed, and active width.
+
+speed, and active width.
 
 ## Core Components
 
@@ -44,7 +45,8 @@ one global flow-control model.
 
 - Supported compile targets: `ARDUINO_AVR_NANO`, `ARDUINO_AVR_UNO`.
 - Firmware fails at compile time with a clear `#error` on unsupported board
-  targets.
+
+targets.
 
 ## Placeholders
 

@@ -29,7 +29,8 @@ Spray Controller Testing Procedures
 - Map PWM duty cycle to total flow rate.
 - Verify total flow sensor readings against known volume over time.
 - Validate rate-control response using speed (km/h), width (m), and target
-  rate (L/ha).
+
+rate (L/ha).
 
 ## Placeholders
 
