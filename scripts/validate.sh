@@ -6,18 +6,24 @@ if ! command -v yamllint >/dev/null 2>&1; then
   YAMLLINT_BIN="scripts/yamllint"
 fi
 
-printf '== YAML schema validation ==\n'
-"${YAMLLINT_BIN}" -c .yamllint.yml \
-  config.yaml \
-  openspec.yaml \
-  pins.yaml \
-  protocols.yaml \
-  validation.yaml
+run_step() {
+  local name="$1"
+  shift
+  echo "== $name =="
+  if ! "$@"; then
+    echo "FAIL: $name"
+    exit 1
+  fi
+}
 
-printf '== Protocol structure check ==\n'
-python3 scripts/validate_protocols.py
+run_step "YAML schema validation" \
+  "${YAMLLINT_BIN}" -c .yamllint.yml \
+  config.yaml openspec.yaml pins.yaml protocols.yaml validation.yaml
 
-printf '== Config completeness check ==\n'
-python3 scripts/validate_config.py
+run_step "Protocol structure check" \
+  python3 scripts/validate_protocols.py
 
-printf '== SUCCESS ==\n'
+run_step "Config completeness check" \
+  python3 scripts/validate_config.py
+
+echo "== SUCCESS =="
