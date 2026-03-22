@@ -4,7 +4,11 @@
 
 namespace spray {
 
-SectionManager::SectionManager() : sections_{false, false, false} {}
+SectionManager::SectionManager() : sections_{} {
+  for (uint8_t i = 0U; i < SECTION_COUNT; ++i) {
+    sections_[i] = false;
+  }
+}
 
 void SectionManager::setSection(uint8_t index, bool state) {
   if (index >= SECTION_COUNT) {

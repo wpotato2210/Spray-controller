@@ -76,7 +76,6 @@ class PumpControl {
   explicit PumpControl(uint8_t pin);
   void begin();
   void startPWM();
-  void stopPWM();
   void setDutyCycle(uint8_t duty);
 
  private:
