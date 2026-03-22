@@ -19,6 +19,8 @@ TX-capacity gating to reduce control-loop jitter risk.
 
 - **0.7** (2026-03-22): P1 closed. Finalized `pins.yaml` + `config.yaml`, aligned `CONFIGURATION.md`/`HARDWARE.md`, validated with `./scripts/validate.sh` (success markers: `yamllint_ok`, `protocols_ok`, `config_ok`), and recorded pass artifact `validation/validation_pass.txt`.
 
+- **0.8** (2026-03-22): Executed `P1-GATE-005` readiness re-audit; confirmed `P1-GATE-001` through `P1-GATE-004` are complete and recorded **GO** decision to proceed to P2 in `PHASE_TWO_READINESS_AUDIT.md`.
+
 ## Placeholders
 
 - Update dates.
