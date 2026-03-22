@@ -12,20 +12,20 @@ Spray Controller Hardware
 
 ### Arduino Nano (`ARDUINO_AVR_NANO`)
 
-| Pin | Component | Notes |
-| --- | --- | --- |
-| 2 | Wheel Sensor | Digital pulse input |
-| 3 | Flow Sensor | Single total-flow pulse input (YF-S201C) |
-| 11 | Pump PWM | PWM output to 12V pump driver |
-| 12 | Boom Section 1 | Digital output (ON/OFF) |
-| 13 | Boom Section 2 | Digital output (ON/OFF) |
-| A1 | Boom Section 3 | Digital output (ON/OFF) |
-| A2 | Section 1 LED | Indicator |
-| A3 | Run/Hold Switch | Input pull-up |
-| A4 | Section Switch 1 | Input pull-up |
-| A5 | Section Switch 2 | Input pull-up |
-| 4 | Section Switch 3 | Input pull-up; avoids A6 analog-only behavior |
-| A0 | Pressure Sensor (Optional) | Analog telemetry input; feature-gated and disabled by default |
+|Pin|Component|Notes|
+|---|---|---|
+|2|Wheel Sensor|Digital pulse input|
+|3|Flow Sensor|Single total-flow pulse input (YF-S201C)|
+|11|Pump PWM|PWM output to 12V pump driver|
+|12|Boom Section 1|Digital output (ON/OFF)|
+|13|Boom Section 2|Digital output (ON/OFF)|
+|A1|Boom Section 3|Digital output (ON/OFF)|
+|A2|Section 1 LED|Indicator|
+|A3|Run/Hold Switch|Input pull-up|
+|A4|Section Switch 1|Input pull-up|
+|A5|Section Switch 2|Input pull-up|
+|4|Section Switch 3|Input pull-up; avoids A6 analog-only behavior|
+|A0|Pressure Sensor (Optional)|Analog telemetry input; feature-gated and disabled by default|
 
 ### Arduino Uno (`ARDUINO_AVR_UNO`)
 

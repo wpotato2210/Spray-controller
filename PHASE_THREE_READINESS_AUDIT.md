@@ -31,20 +31,20 @@ validated with deterministic repository checks.
 
 ## P3 deterministic task status
 
-| P3 task (roadmap) | Status | Findings |
-| --- | --- | --- |
-| Wheel pulse timeout + forced zero-speed handling | **Complete** | `WHEEL_PULSE_TIMEOUT_MS` timeout path returns `0.0f` when stale/config-invalid. |
-| Flow plausibility clamp + stale-read fallback | **Complete** | Max clamp to `MAX_FLOW_LPM`; stale/config-invalid path returns `FLOW_STALE_FALLBACK_LPM`. |
-| Pressure abstraction (`readPressure()`), telemetry-only | **Complete** | `PressureSensor::readPressure()` implemented and runtime usage is `#if ENABLE_PRESSURE_SENSOR` guarded. |
-| Sensor fault flags in protocol/debug output | **Complete** | Status frame includes `fault_bits` and deterministic `fault_text` with per-source fault bit mapping. |
+|P3 task (roadmap)|Status|Findings|
+|---|---|---|
+|Wheel pulse timeout + forced zero-speed handling|**Complete**|`WHEEL_PULSE_TIMEOUT_MS` timeout path returns `0.0f` when stale/config-invalid.|
+|Flow plausibility clamp + stale-read fallback|**Complete**|Max clamp to `MAX_FLOW_LPM`; stale/config-invalid path returns `FLOW_STALE_FALLBACK_LPM`.|
+|Pressure abstraction (`readPressure()`), telemetry-only|**Complete**|`PressureSensor::readPressure()` implemented and runtime usage is `#if ENABLE_PRESSURE_SENSOR` guarded.|
+|Sensor fault flags in protocol/debug output|**Complete**|Status frame includes `fault_bits` and deterministic `fault_text` with per-source fault bit mapping.|
 
 ## Deliverable status snapshot
 
-| P3 deliverable (roadmap) | Status | Evidence summary |
-| --- | --- | --- |
-| `flow_sensor` + `wheel_sensor` bounded in no-pulse and burst cases | **Complete** | Timeout-to-safe output and flow max clamp are implemented and validator-enforced. |
-| Optional pressure module guarded and disabled by default | **Complete** | `ENABLE_PRESSURE_SENSOR=false` in `config.h`; pressure publish path compile-time gated. |
-| Fault bitfield and status text in telemetry | **Complete** | `ST:<...>,<fault_bits>,<fault_text>` defined in docs and emitted in runtime status publish path. |
+|P3 deliverable (roadmap)|Status|Evidence summary|
+|---|---|---|
+|`flow_sensor` + `wheel_sensor` bounded in no-pulse and burst cases|**Complete**|Timeout-to-safe output and flow max clamp are implemented and validator-enforced.|
+|Optional pressure module guarded and disabled by default|**Complete**|`ENABLE_PRESSURE_SENSOR=false` in `config.h`; pressure publish path compile-time gated.|
+|Fault bitfield and status text in telemetry|**Complete**|`ST:<...>,<fault_bits>,<fault_text>` defined in docs and emitted in runtime status publish path.|
 
 ## Gate decision
 

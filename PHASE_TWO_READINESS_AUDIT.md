@@ -31,26 +31,24 @@ implemented and current validation passes with deterministic success markers.
 
 ## P1 deliverable status snapshot
 
-| P1 deliverable (roadmap) | Status | Evidence |
-| --- | --- | --- |
-| Final `pins.yaml` + `config.yaml` schema | Complete | Set. |
-|  |  | (No TODO fields.) |
-| Validation pass output | Complete | Set. |
-|  |  | (No missing/extra keys.) |
-| `CONFIGURATION.md` + `HARDWARE.md` exact values | Complete | Set. |
-| Gate bookkeeping: changelog reference | Complete | Set. |
+|P1 deliverable (roadmap)|Status|Evidence|
+|---|---|---|
+|Final `pins.yaml` + `config.yaml` schema|Complete|Set (no TODO fields).|
+|Validation pass output|Complete|Set (no missing/extra keys).|
+|`CONFIGURATION.md` + `HARDWARE.md` exact values|Complete|Set.|
+|Gate bookkeeping: changelog reference|Complete|Set.|
 
 ---
 
 ## P1 gate task closure status
 
-| Task ID | Status | Closure evidence |
-| --- | --- | --- |
-| P1-GATE-001 | Complete | `CHANGELOG.md` v0.7 has explicit closure evidence. |
-| P1-GATE-002 | Complete | `PHASE_ONE_READINESS.md` matches closure state. |
-| P1-GATE-003 | Complete | `TESTING.md` has canonical gate markers. |
-| P1-GATE-004 | Complete | Workflow gate + manual fallback docs exist. |
-| P1-GATE-005 | Complete | Re-audit confirms all prior P1 gate tasks closed. |
+|Task ID|Status|Closure evidence|
+|---|---|---|
+|P1-GATE-001|Complete|`CHANGELOG.md` v0.7 has explicit closure evidence.|
+|P1-GATE-002|Complete|`PHASE_ONE_READINESS.md` matches closure state.|
+|P1-GATE-003|Complete|`TESTING.md` has canonical gate markers.|
+|P1-GATE-004|Complete|Workflow gate + manual fallback docs exist.|
+|P1-GATE-005|Complete|Re-audit confirms all prior P1 gate tasks closed.|
 
 ## Recommended go/no-go decision
 
