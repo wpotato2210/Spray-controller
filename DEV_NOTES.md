@@ -1,10 +1,10 @@
-# DEV_NOTES
+# DEV_NOTES.md
 
 Developer Notes
 
 ## Standards
 
-- Use modular SEE/THINK/DO structure
+- Use modular structure (See/Think/Do)
 - Maintain frozen interfaces
 
 ## Guidelines

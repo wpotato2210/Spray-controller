@@ -1,4 +1,4 @@
-# CALIBRATION
+# CALIBRATION.md
 
 Calibration Procedures
 
@@ -10,14 +10,14 @@ Calibration Procedures
 
 ## Pump Calibration
 
-- PWM vs total-flow curve: placeholder
+- PWM vs total-flow curve: [placeholder]
 
 ## Controller Calibration
 
-- TARGET_RATE_LPHA: placeholder
-- SECTION_WIDTH_M: placeholder
-- KP: placeholder
-- MIN_SPEED_KMH: placeholder
+- `TARGET_RATE_LPHA`: [placeholder]
+- `SECTION_WIDTH_M`: [placeholder]
+- `KP`: [placeholder]
+- `MIN_SPEED_KMH`: [placeholder]
 
 ## Placeholders
 

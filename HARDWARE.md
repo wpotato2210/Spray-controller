@@ -1,12 +1,12 @@
-# HARDWARE
+# HARDWARE.md
 
 Spray Controller Hardware
 
 ## Hardware Summary
 
-- Single flow sensor for total flow feedback
-- Multiple boom sections controlled as ON/OFF outputs
-- 12V pump power stage with 5V MCU logic
+- Single flow sensor for total flow feedback.
+- Multiple boom sections controlled independently as ON/OFF outputs.
+- 12V pump power stage with 5V MCU logic.
 
 ## Pinout
 
@@ -22,7 +22,7 @@ Spray Controller Hardware
 
 ## Switches
 
-- Individual section on/off switches
+- Individual section on/off
 - Run/Hold switch with optional bypass solenoid
 
 ## Power
@@ -43,11 +43,5 @@ MCU Nano (5V logic)
 | A1 -> Boom 3         |----> Solenoid 3 (ON/OFF)
 | A2 -> LED Boom 1     |----> Indicator LED
 | GND -----------------|----> Common GND
-| 5V ------------------|----> MCU logic supply
 +----------------------+
 ```
-
-## Placeholders
-
-- Detailed wiring per boom section
-- Power ratings per pump and solenoid

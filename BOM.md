@@ -1,4 +1,4 @@
-# BOM
+# BOM.md
 
 Bill of Materials
 

@@ -1,88 +1,53 @@
-# ARCHITECTURE
+# ARCHITECTURE.md
 
 Spray Controller Architecture
 
-## Layer Separation (SEE / THINK / DO)
+## Layer Separation (See / Think / Do)
 
 ```text
-+----------------------+      +----------------------+      +----------------------+
-|      SEE Layer       | ---> |     THINK Layer      | ---> |       DO Layer       |
-|----------------------|      |----------------------|      |----------------------|
-| FlowSensor (total)   |      | SystemState          |      | PumpControl (PWM)    |
-| WheelSensor          |      | SectionManager       |      | BoomSection[]        |
-| RunHoldSwitch        |      | FlowController       |      |                      |
-+----------------------+      +----------------------+      +----------------------+
+                 +----------------------+
+                 |      SEE Layer       |
+                 |----------------------|
+                 | FlowSensor (total)   |
+                 | WheelSensor          |
+                 | RunHoldSwitch        |
+                 +----------+-----------+
+                            |
+                            v
+                 +----------------------+
+                 |     THINK Layer      |
+                 |----------------------|
+                 | SystemState          |
+                 | SectionManager       |
+                 | FlowController       |
+                 +----------+-----------+
+                            |
+                            v
+                 +----------------------+
+                 |       DO Layer       |
+                 |----------------------|
+                 | PumpControl (PWM)    |
+                 | BoomSection[]        |
+                 +----------------------+
 ```
 
 ## Global Flow Control Model
 
-- Single FlowSensor measures total system flow.
-- Multiple BoomSection outputs are binary ON/OFF.
-- FlowController computes one pump command for active boom width.
-- SectionManager tracks active sections and effective spray width.
+- Single `FlowSensor` measures total system flow.
+- Multiple `BoomSection` outputs are binary (ON/OFF).
+- `FlowController` is global and computes one pump command for the active boom
+  width.
+- `SectionManager` tracks active sections and exposes effective spray width.
 
 ## Frozen Module Interfaces
 
-### FlowSensor
-
-- Inputs: pulse input from sensor
-- Outputs: totalFlowRate (L/min)
-- Methods: readFlow(), reset()
-- Notes: single YF-S201C total-flow sensor
-
-### WheelSensor
-
-- Inputs: digital pulse input
-- Outputs: vehicleSpeed (km/h)
-- Methods: readSpeed(), reset()
-- Notes: used for rate normalization
-
-### RunHoldSwitch
-
-- Inputs: digital input (bool)
-- Outputs: runEnabled (bool)
-- Methods: readRunHold()
-- Notes: run/hold operator control
-
-### SystemState
-
-- Inputs: run/hold, faults, section states
-- Outputs: systemMode
-- Methods: update(), getMode()
-- Notes: tracks run/hold/fault states
-
-### SectionManager
-
-- Inputs: section switch states (bool[])
-- Outputs: activeSections, activeWidth (m)
-- Methods: setSection(), getActiveWidth()
-- Notes: sections are ON/OFF only
-
-### FlowController
-
-- Inputs: targetRate, speed, activeWidth, totalFlowRate
-- Outputs: pumpCommand (PWM 0-255)
-- Methods: computePumpDuty(), stop()
-- Notes: global closed-loop flow control
-
-### PumpControl
-
-- Inputs: pumpCommand (PWM 0-255)
-- Outputs: PWM signal (0-255)
-- Methods: startPWM(), stopPWM(), setDutyCycle()
-- Notes: single global pump output
-
-### BoomSection
-
-- Inputs: sectionCommand (bool)
-- Outputs: sectionState (bool)
-- Methods: open(), close(), status()
-- Notes: binary valve state only
-
-## Placeholders
-
-- Module update intervals for SEE/THINK/DO timing
-- Error and alert outputs for sensor failures
-- UML or modular connection diagram
-- Versioning of frozen interfaces
-- Wiring diagram references for each boom section
+| Module | Inputs | Outputs | Methods / Actions | Notes / Units |
+| --- | --- | --- | --- | --- |
+| FlowSensor | pulse | total_flow_lpm | `readLpm()` | single global flow |
+| WheelSensor | pulse | speed_kmh | `readSpeed()` | used for rate control |
+| RunHoldSwitch | digital in | run_state | `isRun()` | hold may trigger bypass |
+| SystemState | sensors + switches | state struct | `update()` | aggregates runtime state |
+| SectionManager | section switches | active_sections, width_m | `updateSections()` | ON/OFF only |
+| FlowController | target_rate, speed, width, total_flow | pump_pwm | `computePWM()` | global control loop |
+| PumpControl | pwm command | hardware signal | `setPWM()` | `0..255` |
+| BoomSection[i] | section cmd | valve state | `setOn(bool)` | binary outputs |
