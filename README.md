@@ -32,9 +32,9 @@ speed, and active width.
 ## Quickstart
 
 1. Wire hardware according to `HARDWARE.md`.
-2. Configure constants from `CONFIGURATION.md`.
-3. Install and flash firmware (see `INSTALL.md`).
-4. Operate with run/hold and section switches (see `USAGE.md`).
+1. Configure constants from `CONFIGURATION.md`.
+1. Install and flash firmware (see `INSTALL.md`).
+1. Operate with run/hold and section switches (see `USAGE.md`).
 
 ## Dependencies
 

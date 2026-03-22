@@ -7,11 +7,11 @@
 ### Deterministic tasks
 
 1. Freeze current module contracts in `include/interfaces.h`.
-2. Confirm `src/main.cpp` loop cadence against
+1. Confirm `src/main.cpp` loop cadence against
 
 `config.yaml:timing.loop_interval_ms`.
 
-3. Record current assumptions: single flow sensor, single pump PWM, and
+1. Record current assumptions: single flow sensor, single pump PWM, and
 
 3 binary sections.
 
@@ -28,12 +28,12 @@
 ### Deterministic tasks (2)
 
 1. Finalize `pins.yaml` for a Nano-safe map.
-2. Finalize `config.yaml` keys for gains, limits, and timing.
-3. Add deterministic YAML validation (`validation.yaml`) in CI or manual
+1. Finalize `config.yaml` keys for gains, limits, and timing.
+1. Add deterministic YAML validation (`validation.yaml`) in CI or manual
 
 checks.
 
-4. Define one canonical loop interval (for example, 50 ms) and enforce it in
+1. Define one canonical loop interval (for example, 50 ms) and enforce it in
 
 firmware constants.
 
@@ -53,12 +53,12 @@ firmware constants.
 
 section state.
 
-2. Integrate global flow controller with active boom width from section
+1. Integrate global flow controller with active boom width from section
 
 manager.
 
-3. Add a loop determinism guard (elapsed-time check plus fixed order).
-4. Publish a compact serial status frame each loop interval.
+1. Add a loop determinism guard (elapsed-time check plus fixed order).
+1. Publish a compact serial status frame each loop interval.
 
 ### Deliverables (done = all complete) (3)
 
@@ -77,12 +77,12 @@ telemetry.
 ### Deterministic tasks (4)
 
 1. Add pulse timeout and zero-speed handling for the wheel sensor.
-2. Add flow plausibility clamp and stale-read fallback.
-3. Add optional pressure sensor abstraction (`readPressure()`), telemetry only
+1. Add flow plausibility clamp and stale-read fallback.
+1. Add optional pressure sensor abstraction (`readPressure()`), telemetry only
 
 (no control coupling).
 
-4. Define sensor fault flags for protocol and debug output.
+1. Define sensor fault flags for protocol and debug output.
 
 ### Deliverables (done = all complete) (4)
 
@@ -100,9 +100,9 @@ burst conditions.
 ### Deterministic tasks (5)
 
 1. Implement menu navigation states.
-2. Add live preview fields (speed, flow, duty, active sections).
-3. Add distance and area accumulators based on wheel data and active width.
-4. Add reset confirmation workflow for counters and calibration.
+1. Add live preview fields (speed, flow, duty, active sections).
+1. Add distance and area accumulators based on wheel data and active width.
+1. Add reset confirmation workflow for counters and calibration.
 
 ### Deliverables (done = all complete) (5)
 
@@ -117,9 +117,9 @@ burst conditions.
 ### Deterministic tasks (6)
 
 1. Replace hard-coded section arrays with config-driven descriptors.
-2. Introduce compile-time max constants (`MAX_SECTIONS`, `MAX_SENSORS`).
-3. Isolate hardware adapters from control logic for a future multi-MCU bridge.
-4. Add deterministic ID mapping for section and sensor telemetry.
+1. Introduce compile-time max constants (`MAX_SECTIONS`, `MAX_SENSORS`).
+1. Isolate hardware adapters from control logic for a future multi-MCU bridge.
+1. Add deterministic ID mapping for section and sensor telemetry.
 
 ### Deliverables (done = all complete) (6)
 
@@ -134,12 +134,12 @@ burst conditions.
 ### Deterministic tasks (7)
 
 1. Define flow calibration sequence (pulses/L or factor).
-2. Define wheel calibration sequence (distance pulses).
-3. Store and reload calibration constants with defaults and a checksum or
+1. Define wheel calibration sequence (distance pulses).
+1. Store and reload calibration constants with defaults and a checksum or
 
 validity marker.
 
-4. Add operator override flag (use defaults versus calibrated values).
+1. Add operator override flag (use defaults versus calibrated values).
 
 ### Deliverables (done = all complete) (7)
 
@@ -157,11 +157,11 @@ validity marker.
 
 implemented firmware.
 
-2. Replace placeholder diagrams in `DIAGRAMS.md` with final SEE/THINK/DO,
+1. Replace placeholder diagrams in `DIAGRAMS.md` with final SEE/THINK/DO,
 
 wiring, and state flow.
 
-3. Mark frozen interface version and date.
+1. Mark frozen interface version and date.
 
 ### Deliverables (done = all complete) (8)
 
@@ -179,12 +179,12 @@ wiring, and state flow.
 
 tests, and min/max speed).
 
-2. Run YAML validation and config compatibility checks.
-3. Bump firmware version, tag release, and update `CHANGELOG.md` with exact
+1. Run YAML validation and config compatibility checks.
+1. Bump firmware version, tag release, and update `CHANGELOG.md` with exact
 
 date.
 
-4. Archive known limitations.
+1. Archive known limitations.
 
 ### Deliverables (done = all complete) (9)
 
@@ -199,9 +199,9 @@ date.
 ### Deterministic tasks (10)
 
 1. Multi-MCU transport abstraction (UART/CAN bridge).
-2. Advanced UI (preset profiles, guided calibration).
-3. Remote logging output channel.
-4. GPS-driven area and speed fallback logic.
+1. Advanced UI (preset profiles, guided calibration).
+1. Remote logging output channel.
+1. GPS-driven area and speed fallback logic.
 
 ### Deliverables (done = all complete) (10)
 
@@ -214,7 +214,7 @@ date.
 
 P8.
 
-2. P9 starts only after P8 tag exists.
-3. Gate rule: each phase closes only when all listed deliverables are present
+1. P9 starts only after P8 tag exists.
+1. Gate rule: each phase closes only when all listed deliverables are present
 
 in repo and referenced from `CHANGELOG.md`.

@@ -22,30 +22,30 @@ gate criteria.
 Primary blockers:
 
 1. `CONFIGURATION.md` still contains `[TBD]` placeholders.
-2. No committed validation pass evidence for the YAML validation gate.
-3. Phase gate rule requires completed deliverables to be referenced from
+1. No committed validation pass evidence for the YAML validation gate.
+1. Phase gate rule requires completed deliverables to be referenced from
    `CHANGELOG.md`; no explicit P1 closure entry is present.
 
 ## Tasks required to move to P2
 
 1. **Close configuration doc placeholders**
-   - Fill `CONFIGURATION.md` with exact values aligned to:
+- Fill `CONFIGURATION.md` with exact values aligned to:
      - `config.yaml` (`target_rate_lpha`, `section_width_m`, `kp`,
        `min_speed_kmh`, loop interval).
      - `config.h` compile-time constants.
 
-2. **Add deterministic validation execution + proof**
-   - Define one canonical validation command (local + CI).
-   - Validate `pins.yaml`, `config.yaml`, and `validation.yaml` key consistency.
-   - Commit pass artifact (e.g., `validation_report.json` or CI log reference).
+1. **Add deterministic validation execution + proof**
+- Define one canonical validation command (local + CI).
+- Validate `pins.yaml`, `config.yaml`, and `validation.yaml` key consistency.
+- Commit pass artifact (e.g., `validation_report.json` or CI log reference).
 
-3. **Cross-file consistency check**
-   - Ensure `HARDWARE.md` pin mapping matches `pins.yaml` and board pin headers.
-   - Ensure loop interval is identical across docs and firmware constants
+1. **Cross-file consistency check**
+- Ensure `HARDWARE.md` pin mapping matches `pins.yaml` and board pin headers.
+- Ensure loop interval is identical across docs and firmware constants
      (`50 ms` currently).
 
-4. **Gate bookkeeping in changelog**
-   - Add explicit entry in `CHANGELOG.md` that P1 deliverables are complete
+1. **Gate bookkeeping in changelog**
+- Add explicit entry in `CHANGELOG.md` that P1 deliverables are complete
      (with date and validation reference).
 
 ## Suggested P2 entry checklist (once above is done)
