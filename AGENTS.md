@@ -15,9 +15,9 @@ Automation agents assist with:
 
 | Agent Name | Task Description | Trigger / Schedule |
 | --- | --- | --- |
-| DocUpdater | Updates `.md` files with new interface or wiring info | On commit / manual trigger |
-| InterfaceValidator | Checks frozen module interfaces against code | Nightly / pre-release |
-| TestScriptGen | Generates synthetic event tests for SEE/THINK/DO | Manual or CI pipeline |
+| DocUpdater | Updates docs for interface or wiring changes | Commit/manual |
+| InterfaceValidator | Verifies frozen interfaces | Nightly/prerelease |
+| TestScriptGen | Generates synthetic SEE/THINK/DO tests | Manual/CI |
 | EventMonitor | Logs system events for analysis | Continuous during operation |
 
 ## Placeholders

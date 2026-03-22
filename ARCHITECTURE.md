@@ -46,8 +46,8 @@ Spray Controller Architecture
 | FlowSensor | pulse | total_flow_lpm | `readLpm()` | single global flow |
 | WheelSensor | pulse | speed_kmh | `readSpeed()` | used for rate control |
 | RunHoldSwitch | digital in | run_state | `isRun()` | hold may trigger bypass |
-| SystemState | sensors + switches | state struct | `update()` | aggregates runtime state |
-| SectionManager | section switches | active_sections, width_m | `updateSections()` | ON/OFF only |
-| FlowController | target_rate, speed, width, total_flow | pump_pwm | `computePWM()` | global control loop |
+| SystemState | sensors+switches | state struct | `update()` | aggregate |
+| SectionManager | switches | active,width | `updateSections()` | ON/OFF |
+| FlowController | target,speed,width,flow | pump_pwm | `computePWM()` | loop |
 | PumpControl | pwm command | hardware signal | `setPWM()` | `0..255` |
 | BoomSection[i] | section cmd | valve state | `setOn(bool)` | binary outputs |
