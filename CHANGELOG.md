@@ -17,6 +17,8 @@ TX-capacity gating to reduce control-loop jitter risk.
 
 (`flow,pwm,run,section_mask`) to reduce per-cycle serial overhead.
 
+- **0.7** (2026-03-22): P1 closed. Finalized `pins.yaml` + `config.yaml`, aligned `CONFIGURATION.md`/`HARDWARE.md`, validated with `./scripts/validate.sh` (success markers: `yamllint_ok`, `protocols_ok`, `config_ok`), and recorded pass artifact `validation/validation_pass.txt`.
+
 ## Placeholders
 
 - Update dates.
