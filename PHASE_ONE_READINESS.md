@@ -4,8 +4,8 @@ Date: 2026-03-22 (UTC)
 
 ## Scope and gate
 
-This audit checks P1 closure readiness against `DEVELOPMENT_ROADMAP.md`.
-Per phase-gate rules, P1 can close only when all P1 deliverables are complete
+This audit checks P1 closure readiness against `DEVELOPMENT_ROADMAP.md`. Per
+phase-gate rules, P1 can close only when all P1 deliverables are complete
 **and** closure is referenced from `CHANGELOG.md`.
 
 ## Evidence collected
@@ -20,20 +20,12 @@ Per phase-gate rules, P1 can close only when all P1 deliverables are complete
 
 ## P1 deliverable status
 
-| P1 Deliverable | Status | Evidence | Notes |
-| --- | --- | --- | --- |
-| Final `pins.yaml` + `config.yaml` schema (no TODO fields) | **Complete** |
-|  |  | Concrete values in both files. | Nano + Uno pin profiles; finalized |
-|  |  |  | control/timing keys. |
-| Validation pass output with no missing/extra keys | **Complete** |
-|  |  | `./scripts/validate.sh` passed. | Pass artifact committed at |
-|  |  |  | `validation/validation_pass.txt`. |
-| `CONFIGURATION.md` + `HARDWARE.md` updated to exact values | **Complete** |
-|  |  | Exact numeric defaults and board pin map documented. | Values aligned |
-|  |  |  | across configuration assets and docs. |
-| Gate bookkeeping: phase closure referenced in changelog | **Complete** |
-|  |  | `CHANGELOG.md` v0.7 explicitly states “P1 closed”. | Entry references |
-|  |  |  | command/result markers and pass artifact. |
+|P1 Deliverable|Status|Evidence|Notes|
+|---|---|---|---|
+|Final `pins.yaml` + `config.yaml` schema (no TODO fields)|**Complete**|Concrete values in both files.|Nano + Uno pin profiles; finalized control/timing keys.|
+|Validation pass output with no missing/extra keys|**Complete**|`./scripts/validate.sh` passed.|Pass artifact committed at `validation/validation_pass.txt`.|
+|`CONFIGURATION.md` + `HARDWARE.md` updated to exact values|**Complete**|Exact numeric defaults and board pin map documented.|Values aligned across configuration assets and docs.|
+|Gate bookkeeping: phase closure referenced in changelog|**Complete**|`CHANGELOG.md` v0.7 explicitly states “P1 closed”.|Entry references command/result markers and pass artifact.|
 
 ## Readiness verdict
 

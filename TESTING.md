@@ -53,7 +53,8 @@ Spray Controller Testing Procedures
 - Deterministic checks enforced:
   - Wheel timeout constant + timeout-to-zero behavior in `readSpeed()`.
   - Flow stale-timeout constant + stale fallback and max clamp behavior.
-  - Pressure telemetry compile-time guard (`ENABLE_PRESSURE_SENSOR=false` by default).
+  - Pressure telemetry compile-time guard (`ENABLE_PRESSURE_SENSOR=false` by
+    default).
   - Status telemetry schema includes `fault_bits` and `fault_text`.
 
 ## Synthetic Event Tests
