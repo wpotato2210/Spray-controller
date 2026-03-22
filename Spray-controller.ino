@@ -64,6 +64,14 @@ void publishStatus(float flow_lpm, uint8_t pump_duty, bool run_enabled) {
   Serial.print(run_enabled ? 1 : 0);
   Serial.print(MSG_TERMINATOR);
 }
+
+bool shouldPublishTelemetry(uint32_t now_ms, uint32_t last_telemetry_ms) {
+  return (now_ms - last_telemetry_ms) >= TELEMETRY_INTERVAL_MS;
+}
+
+bool hasTelemetryTxCapacity() {
+  return Serial.availableForWrite() >= TELEMETRY_MIN_TX_BUFFER_BYTES;
+}
 }  // namespace
 }  // namespace spray
 
@@ -87,6 +95,7 @@ void setup() {
 
 void loop() {
   static uint32_t last_loop_ms = 0U;
+  static uint32_t last_telemetry_ms = 0U;
   const uint32_t now_ms = millis();
   if ((now_ms - last_loop_ms) < spray::LOOP_INTERVAL_MS) {
     return;
@@ -110,5 +119,8 @@ void loop() {
 
   spray::g_pump.setDutyCycle(duty);
   spray::writeSections();
-  spray::publishStatus(measured_flow_lpm, duty, run_enabled);
+  if (spray::shouldPublishTelemetry(now_ms, last_telemetry_ms) && spray::hasTelemetryTxCapacity()) {
+    spray::publishStatus(measured_flow_lpm, duty, run_enabled);
+    last_telemetry_ms = now_ms;
+  }
 }
