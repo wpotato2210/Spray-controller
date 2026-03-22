@@ -23,6 +23,7 @@ OpenSpec Source of Truth
 	•	HARDWARE.md → pin mappings
 	•	PROTOCOLS.md → message formats
 	•	CONFIGURATION.md → constants and units
+	•	DEVELOPMENT_ROADMAP.md → phased implementation plan
 
 Quickstart
 	1.	Wire hardware according to HARDWARE.md.
