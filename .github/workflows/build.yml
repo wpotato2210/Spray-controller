@@ -8,9 +8,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        fqbn:
-          - "arduino:avr:nano"
-          - "arduino:avr:uno"
+        include:
+          - fqbn: "arduino:avr:nano"
+            log_name: "arduino-avr-nano"
+          - fqbn: "arduino:avr:uno"
+            log_name: "arduino-avr-uno"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -18,15 +20,22 @@ jobs:
       - name: Setup Arduino CLI
         uses: arduino/setup-arduino-cli@v2
 
-      - name: Install AVR core
+      - name: Install Arduino CLI core
         run: |
-          arduino-cli core update-index
-          arduino-cli core install arduino:avr
+          chmod +x ./ci/setup-arduino-cli.sh
+          ./ci/setup-arduino-cli.sh
 
       - name: Compile sketch
         env:
           FQBN: ${{ matrix.fqbn }}
+          LOG_FILE: artifacts/${{ matrix.log_name }}.log
         run: |
-          # Ensure script is executable before running
           chmod +x ./ci/compile-sketch.sh
           ./ci/compile-sketch.sh
+
+      - name: Upload compiler logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compile-log-${{ matrix.log_name }}
+          path: artifacts/${{ matrix.log_name }}.log
