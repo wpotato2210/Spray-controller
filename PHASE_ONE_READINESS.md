@@ -22,10 +22,18 @@ Per phase-gate rules, P1 can close only when all P1 deliverables are complete
 
 | P1 Deliverable | Status | Evidence | Notes |
 | --- | --- | --- | --- |
-| Final `pins.yaml` and `config.yaml` schema with no TODO fields | **Complete** | Both files contain concrete values and no TODO markers. | Includes Nano and Uno pin profiles and finalized control/timing keys. |
-| Validation pass output with no missing/extra keys | **Complete** | `./scripts/validate.sh` passed; committed pass artifact at `validation/validation_pass.txt`. | Deterministic gate command and pass evidence are present in repo. |
-| `CONFIGURATION.md` and `HARDWARE.md` updated to exact values | **Complete** | `CONFIGURATION.md` contains exact numeric defaults; `HARDWARE.md` pin mapping matches profile mapping. | P1 documentation values are explicit and aligned with configuration assets. |
-| Gate bookkeeping: phase closure referenced in changelog | **Complete** | `CHANGELOG.md` v0.7 entry explicitly states “P1 closed” with command/result markers and pass artifact reference. | Satisfies the roadmap requirement for changelog-referenced phase closure. |
+| Final `pins.yaml` + `config.yaml` schema (no TODO fields) | **Complete** |
+|  |  | Concrete values in both files. | Nano + Uno pin profiles; finalized |
+|  |  |  | control/timing keys. |
+| Validation pass output with no missing/extra keys | **Complete** |
+|  |  | `./scripts/validate.sh` passed. | Pass artifact committed at |
+|  |  |  | `validation/validation_pass.txt`. |
+| `CONFIGURATION.md` + `HARDWARE.md` updated to exact values | **Complete** |
+|  |  | Exact numeric defaults and board pin map documented. | Values aligned |
+|  |  |  | across configuration assets and docs. |
+| Gate bookkeeping: phase closure referenced in changelog | **Complete** |
+|  |  | `CHANGELOG.md` v0.7 explicitly states “P1 closed”. | Entry references |
+|  |  |  | command/result markers and pass artifact. |
 
 ## Readiness verdict
 
