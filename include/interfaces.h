@@ -63,6 +63,12 @@ class FlowController {
 
  private:
   float current_duty_;
+  float flow_integral_;
+  float filtered_flow_lpm_;
+  float filtered_speed_kmh_;
+  uint32_t no_flow_ms_;
+  bool flow_filter_initialized_;
+  bool speed_filter_initialized_;
 };
 
 class PumpControl {
