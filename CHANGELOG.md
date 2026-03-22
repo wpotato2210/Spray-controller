@@ -59,6 +59,11 @@ TX-capacity gating to reduce control-loop jitter risk.
 
 - **0.16** (2026-03-22): Executed `P4-TSK-001` by defining the deterministic operator-interface contract in `PROTOCOLS.md` and `USAGE.md`, including menu states/transitions, required `PV` preview payload fields (`speed_kmh,flow_lpm,pump_duty,active_sections,distance_m,area_ha`), fixed preview cadence rules, and explicit reset-confirm handshake semantics.
 
+- **0.17** (2026-03-22): Executed `P4-TSK-003` by implementing fixed-cadence
+  `PV` preview publishing in the main loop with
+  `speed_kmh,flow_lpm,pump_duty,active_sections,distance_m,area_ha` payload
+  order and deterministic protocol prefix wiring (`MSG_PREVIEW_PREFIX`).
+
 ## Placeholders
 
 - Update dates.
