@@ -41,6 +41,8 @@ TX-capacity gating to reduce control-loop jitter risk.
 
 - **0.15** (2026-03-22): Executed Phase-Four readiness audit in `PHASE_FOUR_READINESS_AUDIT.md`; decision: **NO-GO for P4 closure readiness** with prioritized task backlog `P4-TSK-001` through `P4-TSK-007`.
 
+- **0.16** (2026-03-22): Executed `P4-TSK-001` by defining the deterministic operator-interface contract in `PROTOCOLS.md` and `USAGE.md`, including menu states/transitions, required `PV` preview payload fields (`speed_kmh,flow_lpm,pump_duty,active_sections,distance_m,area_ha`), fixed preview cadence rules, and explicit reset-confirm handshake semantics.
+
 ## Placeholders
 
 - Update dates.

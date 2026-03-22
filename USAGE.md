@@ -13,6 +13,40 @@ Spray Controller Usage Instructions
 1. Enable or disable boom sections as needed.
 1. Observe LED indicators for each active boom section.
 
+## Operator Interface (P4 deterministic contract)
+
+### Menu states
+
+- `HOME`: Default operator view with fixed-cadence preview payload.
+- `MENU`: Navigation root for operator actions.
+- `COUNTERS`: Displays distance and sprayed area counters.
+- `RESET_CONFIRM`: Explicit confirmation screen for counter reset.
+
+### Required preview payload
+
+The operator preview must include the following fields every publish cycle:
+
+1. `speed_kmh`
+1. `flow_lpm`
+1. `pump_duty`
+1. `active_sections`
+1. `distance_m`
+1. `area_ha`
+
+### Reset confirmation sequence
+
+1. Navigate `HOME -> MENU -> COUNTERS`.
+1. Select reset to enter `RESET_CONFIRM`.
+1. Choose one action:
+   - `CONFIRM`: reset both distance and area counters to zero.
+   - `CANCEL`: return to `COUNTERS` with counters unchanged.
+
+### Determinism rules
+
+- Undefined menu transitions are ignored.
+- Preview cadence follows the canonical fixed loop interval.
+- Counter reset occurs atomically in one deterministic update cycle.
+
 ## How Rate Control Works
 
 - The controller maintains target application rate (L/ha) using vehicle speed
@@ -36,4 +70,3 @@ through one pump and one total flow sensor.
 
 - Specific calibration values for `TARGET_RATE_LPHA` and `KP`
 - Safety and alarm behavior details
-- Optional operator interface guidance
