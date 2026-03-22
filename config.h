@@ -32,6 +32,8 @@ constexpr uint32_t TELEMETRY_INTERVAL_MS = 200UL;
 constexpr int TELEMETRY_MIN_TX_BUFFER_BYTES = 32;
 
 constexpr float FLOW_PULSES_PER_LITER = 450.0f;
+constexpr uint32_t FLOW_STALE_TIMEOUT_MS = SENSOR_FAULT_TIMEOUT_MS;
+constexpr float FLOW_STALE_FALLBACK_LPM = 0.0f;
 constexpr float WHEEL_CIRCUMFERENCE_M = 2.0f;
 constexpr float WHEEL_PULSES_PER_REV = 20.0f;
 constexpr uint32_t WHEEL_PULSE_TIMEOUT_MS = 1200UL;
