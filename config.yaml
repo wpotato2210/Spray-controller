@@ -12,4 +12,4 @@ limits:
   max_flow_lpm: 100.0
 
 timing:
-  loop_interval_ms: TBD
+  loop_interval_ms: 50

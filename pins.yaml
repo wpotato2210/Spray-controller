@@ -12,8 +12,8 @@ pins:
     section_1: A2
 
   switches:
-    run_hold: TBD
+    run_hold: A3
     section_switches:
-      section_1: TBD
-      section_2: TBD
-      section_3: TBD
+      section_1: A4
+      section_2: A5
+      section_3: A6
