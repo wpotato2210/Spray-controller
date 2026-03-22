@@ -12,6 +12,8 @@ constexpr const char* MSG_PUMP_PREFIX = "P:";
 constexpr const char* MSG_SECTION_PREFIX = "S:";
 constexpr const char* MSG_SWITCH_PREFIX = "SW:";
 constexpr const char* MSG_PRESSURE_PREFIX = "PR:";
+constexpr const char* MSG_MENU_STATE_PREFIX = "MS:";
+constexpr const char* MSG_RESET_EVENT_PREFIX = "RS:";
 constexpr char MSG_TERMINATOR = '\n';
 
 enum StatusFaultBit : uint8_t {
