@@ -51,6 +51,14 @@ void publishStatus(float flow_lpm, uint8_t pump_duty, bool run_enabled) {
   Serial.print(pump_duty);
   Serial.print(MSG_TERMINATOR);
 
+  for (uint8_t i = 0U; i < SECTION_COUNT; ++i) {
+    Serial.print(MSG_SECTION_PREFIX);
+    Serial.print(i);
+    Serial.print(':');
+    Serial.print(g_section_manager.getSection(i) ? 1 : 0);
+    Serial.print(MSG_TERMINATOR);
+  }
+
   Serial.print(MSG_SWITCH_PREFIX);
   Serial.print(run_enabled ? 1 : 0);
   Serial.print(MSG_TERMINATOR);
