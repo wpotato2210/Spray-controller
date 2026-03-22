@@ -17,7 +17,7 @@ profiles:
       section_switches:
         section_1: A4
         section_2: A5
-        section_3: 4
+        section_3: 4  # Nano-safe: avoids A6/A7 analog-only pins
 
   arduino_avr_uno:
     wheel_sensor: 2
@@ -37,4 +37,4 @@ profiles:
       section_switches:
         section_1: A4
         section_2: A5
-        section_3: 4
+        section_3: 4  # Uno/Nano shared safe digital input

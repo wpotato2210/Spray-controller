@@ -11,9 +11,24 @@ CONFIG_PATH = Path("config.yaml")
 
 SCHEMA: dict[str, object] = {
     "application": {"target_rate_lpha": "number", "section_width_m": "number"},
-    "control": {"kp": "number", "pwm_min": "int", "pwm_max": "int"},
-    "limits": {"min_speed_kmh": "number", "max_flow_lpm": "number"},
-    "timing": {"loop_interval_ms": "int"},
+    "control": {
+        "gains": {"kp": "number", "ki": "number"},
+        "pwm_min": "int",
+        "pwm_max": "int",
+        "integral_limits": {"min": "number", "max": "number"},
+        "slew_limit_pwm_per_cycle": "number",
+    },
+    "limits": {
+        "min_speed_kmh": "number",
+        "max_flow_lpm": "number",
+        "flow_fault_lpm_threshold": "number",
+        "min_target_flow_for_fault_lpm": "number",
+    },
+    "timing": {
+        "loop_interval_ms": "int",
+        "telemetry_interval_ms": "int",
+        "sensor_fault_timeout_ms": "int",
+    },
 }
 
 
