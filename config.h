@@ -34,6 +34,7 @@ constexpr int TELEMETRY_MIN_TX_BUFFER_BYTES = 32;
 constexpr float FLOW_PULSES_PER_LITER = 450.0f;
 constexpr float WHEEL_CIRCUMFERENCE_M = 2.0f;
 constexpr float WHEEL_PULSES_PER_REV = 20.0f;
+constexpr uint32_t WHEEL_PULSE_TIMEOUT_MS = 1200UL;
 
 }  // namespace spray
 

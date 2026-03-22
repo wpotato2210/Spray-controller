@@ -31,6 +31,7 @@ class WheelSensor {
   uint8_t pin_;
   uint32_t last_total_pulses_;
   uint32_t last_read_ms_;
+  uint32_t last_pulse_ms_;
 };
 
 class RunHoldSwitch {
