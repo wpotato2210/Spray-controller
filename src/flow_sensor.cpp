@@ -12,9 +12,12 @@ void onFlowPulse() { ++g_flow_pulses; }
 }  // namespace
 
 FlowSensor::FlowSensor(uint8_t pin)
-    : pin_(pin), last_total_pulses_(0U), last_read_ms_(millis()) {
+    : pin_(pin), last_total_pulses_(0U), last_read_ms_(0U) {}
+
+void FlowSensor::begin() {
   pinMode(pin_, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(pin_), onFlowPulse, RISING);
+  last_read_ms_ = millis();
 }
 
 float FlowSensor::readFlow() {

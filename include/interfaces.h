@@ -10,6 +10,7 @@ namespace spray {
 class FlowSensor {
  public:
   explicit FlowSensor(uint8_t pin);
+  void begin();
   float readFlow();
   void reset();
 
@@ -22,6 +23,7 @@ class FlowSensor {
 class WheelSensor {
  public:
   explicit WheelSensor(uint8_t pin);
+  void begin();
   float readSpeed();
   void reset();
 
@@ -34,6 +36,7 @@ class WheelSensor {
 class RunHoldSwitch {
  public:
   explicit RunHoldSwitch(uint8_t pin);
+  void begin();
   bool readRunHold() const;
 
  private:
@@ -65,6 +68,7 @@ class FlowController {
 class PumpControl {
  public:
   explicit PumpControl(uint8_t pin);
+  void begin();
   void startPWM();
   void stopPWM();
   void setDutyCycle(uint8_t duty);

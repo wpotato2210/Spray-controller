@@ -12,9 +12,12 @@ void onWheelPulse() { ++g_wheel_pulses; }
 }  // namespace
 
 WheelSensor::WheelSensor(uint8_t pin)
-    : pin_(pin), last_total_pulses_(0U), last_read_ms_(millis()) {
+    : pin_(pin), last_total_pulses_(0U), last_read_ms_(0U) {}
+
+void WheelSensor::begin() {
   pinMode(pin_, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(pin_), onWheelPulse, RISING);
+  last_read_ms_ = millis();
 }
 
 float WheelSensor::readSpeed() {
