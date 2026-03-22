@@ -4,7 +4,9 @@
 
 namespace spray {
 
-RunHoldSwitch::RunHoldSwitch(uint8_t pin) : pin_(pin) { pinMode(pin_, INPUT_PULLUP); }
+RunHoldSwitch::RunHoldSwitch(uint8_t pin) : pin_(pin) {}
+
+void RunHoldSwitch::begin() { pinMode(pin_, INPUT_PULLUP); }
 
 bool RunHoldSwitch::readRunHold() const {
   return digitalRead(pin_) == LOW;

@@ -61,9 +61,13 @@ void publishStatus(float flow_lpm, uint8_t pump_duty, bool run_enabled) {
 void setup() {
   Serial.begin(115200);
   spray::setupPins();
-  spray::g_pump.startPWM();
+  spray::g_flow_sensor.begin();
+  spray::g_wheel_sensor.begin();
+  spray::g_run_hold.begin();
+  spray::g_pump.begin();
   spray::g_flow_sensor.reset();
   spray::g_wheel_sensor.reset();
+  spray::g_pump.startPWM();
 }
 
 void loop() {

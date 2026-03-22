@@ -8,10 +8,9 @@ namespace spray {
 
 PumpControl::PumpControl(uint8_t pin) : pin_(pin) {}
 
-void PumpControl::startPWM() {
-  pinMode(pin_, OUTPUT);
-  analogWrite(pin_, PWM_MIN);
-}
+void PumpControl::begin() { pinMode(pin_, OUTPUT); }
+
+void PumpControl::startPWM() { analogWrite(pin_, PWM_MIN); }
 
 void PumpControl::stopPWM() { analogWrite(pin_, PWM_MIN); }
 
