@@ -1,5 +1,7 @@
 #include "interfaces.h"
 
+#include <math.h>
+
 #include "config.h"
 
 namespace spray {
@@ -10,6 +12,13 @@ float clampValue(float value, float min_value, float max_value) {
   }
   if (value > max_value) {
     return max_value;
+  }
+  return value;
+}
+
+float sanitizeNonNegativeFinite(float value) {
+  if (!isfinite(value) || value < 0.0f) {
+    return 0.0f;
   }
   return value;
 }
@@ -27,6 +36,10 @@ FlowController::FlowController()
 uint8_t FlowController::computePumpDuty(float speed_kmh,
                                         float active_width_m,
                                         float measured_flow_lpm) {
+  speed_kmh = sanitizeNonNegativeFinite(speed_kmh);
+  active_width_m = sanitizeNonNegativeFinite(active_width_m);
+  measured_flow_lpm = sanitizeNonNegativeFinite(measured_flow_lpm);
+
   if (!speed_filter_initialized_) {
     filtered_speed_kmh_ = speed_kmh;
     speed_filter_initialized_ = true;

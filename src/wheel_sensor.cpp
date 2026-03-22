@@ -16,7 +16,10 @@ WheelSensor::WheelSensor(uint8_t pin)
 
 void WheelSensor::begin() {
   pinMode(pin_, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(pin_), onWheelPulse, RISING);
+  const int interrupt_id = digitalPinToInterrupt(pin_);
+  if (interrupt_id != NOT_AN_INTERRUPT) {
+    attachInterrupt(interrupt_id, onWheelPulse, RISING);
+  }
   last_read_ms_ = millis();
 }
 
@@ -33,6 +36,11 @@ float WheelSensor::readSpeed() {
 
   const uint32_t delta_pulses = total_pulses - last_total_pulses_;
   const float elapsed_s = static_cast<float>(elapsed_ms) / 1000.0f;
+  if (WHEEL_PULSES_PER_REV <= 0.0f || elapsed_s <= 0.0f) {
+    last_total_pulses_ = total_pulses;
+    last_read_ms_ = now_ms;
+    return 0.0f;
+  }
   const float pulse_freq_hz = static_cast<float>(delta_pulses) / elapsed_s;
 
   float speed_kmh =
