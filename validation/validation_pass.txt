@@ -4,4 +4,6 @@ yamllint_ok
 protocols_ok
 == Config completeness check ==
 config_ok
+== P3 sensor robustness check ==
+p3_sensor_robustness_ok
 == SUCCESS ==

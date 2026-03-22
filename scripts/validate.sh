@@ -26,4 +26,7 @@ run_step "Protocol structure check" \
 run_step "Config completeness check" \
   python3 scripts/validate_config.py
 
+run_step "P3 sensor robustness check" \
+  python3 scripts/validate_p3_sensor_robustness.py
+
 echo "== SUCCESS =="
