@@ -5,10 +5,10 @@ Spray Controller Configuration Parameters
 | Parameter | Default | Description |
 | --- | --- | --- |
 | `PWM_MAX` | 255 | Maximum pump duty cycle (PWM counts) |
-| `TARGET_RATE_LPHA` | [TBD] | Target application rate (L/ha) |
-| `SECTION_WIDTH_M` | [TBD] | Width per boom section (m) |
-| `KP` | [TBD] | Proportional gain for global `FlowController` |
-| `MIN_SPEED_KMH` | [TBD] | Minimum valid speed for rate control (km/h) |
+| `TARGET_RATE_LPHA` | 200 | Target application rate (L/ha) |
+| `SECTION_WIDTH_M` | 1.5 | Width per boom section (m) |
+| `KP` | 0.5 | Proportional gain for global `FlowController` |
+| `MIN_SPEED_KMH` | 0.25 | Minimum valid speed for rate control (km/h) |
 | `SECTION_TIMEOUT` | 500 ms | Section switch debounce time (ms) |
 | `LOOP_INTERVAL_MS` | 50 ms | Main control loop interval (ms) |
 | `FLOW_PULSES_PER_LITER` | 450.0 | Flow sensor calibration (pulses per liter) |
