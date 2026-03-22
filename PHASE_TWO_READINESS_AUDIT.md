@@ -1,8 +1,9 @@
 # Phase-Two Readiness Audit (P1 Gate Check)
 
-Date: 2026-03-22 (UTC) Scope: Validate whether the repository is ready to move
-from Phase 1 (P1) to Phase 2 (P2) using `DEVELOPMENT_ROADMAP.md` phase-gate
-criteria.
+Date: 2026-03-22 (UTC)
+
+Scope: Validate whether the repository is ready to move from Phase 1 (P1) to
+Phase 2 (P2) using `DEVELOPMENT_ROADMAP.md` phase-gate criteria.
 
 ## Verdict
 
@@ -26,10 +27,15 @@ Reason: the roadmap gate requires each phase to be explicitly closed in
 
 | P1 deliverable (roadmap) | Status | Evidence |
 | --- | --- | --- |
-| Final `pins.yaml` + `config.yaml` schema (no TODO fields) | Complete | Concrete values in both files. |
-| Validation pass output with no missing/extra keys | Complete | `validation/validation_pass.txt` plus deterministic validator scripts. |
-| `CONFIGURATION.md` and `HARDWARE.md` updated to exact values | Complete | Numeric values and board pin map documented. |
-| Gate bookkeeping: phase closure referenced in changelog | **Missing (blocker)** | `CHANGELOG.md` has version notes but no explicit P1 closure reference. |
+| Final `pins.yaml` + `config.yaml` schema (no TODO fields) | Complete |
+Concrete values in both files. |
+| Validation pass output with no missing/extra keys | Complete |
+`validation/validation_pass.txt` plus deterministic validator scripts. |
+| `CONFIGURATION.md` and `HARDWARE.md` updated to exact values | Complete |
+Numeric values and board pin map documented. |
+| Gate bookkeeping: phase closure referenced in changelog |
+**Missing (blocker)** | `CHANGELOG.md` has version notes but no explicit P1
+closure reference. |
 
 ---
 
@@ -37,10 +43,23 @@ Reason: the roadmap gate requires each phase to be explicitly closed in
 
 | Priority | Task ID | Task | Why it is required | Acceptance criteria |
 | --- | --- | --- | --- | --- |
-| P0 (Blocker) | P1-GATE-001 | Add explicit P1 closure entry to `CHANGELOG.md`. Include date, validation command, and pass artifact reference. | Mandatory by roadmap phase-gate rule. | Changelog contains a dated entry explicitly stating P1 is closed and referencing validation evidence. |
-| P1 (High) | P1-GATE-002 | Update `PHASE_ONE_READINESS.md` to reflect current evidence and remove outdated blocker statements. | Prevents contradictory readiness records and improves audit traceability. | `PHASE_ONE_READINESS.md` aligns with current file state and points to the same closure evidence used in changelog. |
-| P1 (High) | P1-GATE-003 | Add a single canonical “P1 gate check” command in docs (recommended: `./scripts/validate.sh`) and record expected output. | Ensures repeatable verification before/after merge. | `TESTING.md` (or `README.md`) includes one canonical command and expected success markers. |
-| P2 (Medium) | P1-GATE-004 | Add lightweight CI job (or documented local policy) to run `./scripts/validate.sh` on changes to config/protocol/docs inputs. | Reduces risk of regressions after entering P2. | CI/workflow or written enforcement policy exists and is referenced from docs. |
+| P0 (Blocker) | P1-GATE-001 | Add explicit P1 closure entry to
+`CHANGELOG.md`. Include date, validation command, and pass artifact reference. |
+Mandatory by roadmap phase-gate rule. | Changelog contains a dated entry
+explicitly stating P1 is closed and referencing validation evidence. |
+| P1 (High) | P1-GATE-002 | Update `PHASE_ONE_READINESS.md` to reflect current
+evidence and remove outdated blocker statements. | Prevents contradictory
+readiness records and improves audit traceability. |
+`PHASE_ONE_READINESS.md` aligns with current file state and points to the same
+closure evidence used in changelog. |
+| P1 (High) | P1-GATE-003 | Add a single canonical “P1 gate check” command in
+docs (recommended: `./scripts/validate.sh`) and record expected output. |
+Ensures repeatable verification before/after merge. | `TESTING.md` (or
+`README.md`) includes one canonical command and expected success markers. |
+| P2 (Medium) | P1-GATE-004 | Add lightweight CI job (or documented local
+policy) to run `./scripts/validate.sh` on changes to config/protocol/docs
+inputs. | Reduces risk of regressions after entering P2. | CI/workflow or
+written enforcement policy exists and is referenced from docs. |
 
 ## Recommended go/no-go decision
 
