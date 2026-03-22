@@ -31,6 +31,8 @@ TX-capacity gating to reduce control-loop jitter risk.
   `PHASE_THREE_READINESS_AUDIT.md`; decision: **NO-GO for P3 closure**
   pending blocker tasks `P3-TSK-001` through `P3-TSK-003`.
 
+- **0.10** (2026-03-22): Executed `P3-TSK-002` by adding explicit flow stale-timeout fallback in `FlowSensor::readFlow()` using `FLOW_STALE_TIMEOUT_MS` + bounded fallback output `FLOW_STALE_FALLBACK_LPM` (default `0.0`), while preserving burst clamp behavior via `MAX_FLOW_LPM`.
+
 ## Placeholders
 
 - Update dates.

@@ -7,12 +7,16 @@
 namespace spray {
 namespace {
 volatile uint32_t g_flow_pulses = 0U;
+volatile uint32_t g_last_flow_pulse_ms = 0U;
 
-void onFlowPulse() { ++g_flow_pulses; }
+void onFlowPulse() {
+  ++g_flow_pulses;
+  g_last_flow_pulse_ms = millis();
+}
 }  // namespace
 
 FlowSensor::FlowSensor(uint8_t pin)
-    : pin_(pin), last_total_pulses_(0U), last_read_ms_(0U) {}
+    : pin_(pin), last_total_pulses_(0U), last_read_ms_(0U), last_pulse_ms_(0U) {}
 
 void FlowSensor::begin() {
   pinMode(pin_, INPUT_PULLUP);
@@ -21,6 +25,10 @@ void FlowSensor::begin() {
     attachInterrupt(interrupt_id, onFlowPulse, RISING);
   }
   last_read_ms_ = millis();
+  last_pulse_ms_ = last_read_ms_;
+  noInterrupts();
+  g_last_flow_pulse_ms = last_pulse_ms_;
+  interrupts();
 }
 
 float FlowSensor::readFlow() {
@@ -32,13 +40,29 @@ float FlowSensor::readFlow() {
 
   noInterrupts();
   const uint32_t total_pulses = g_flow_pulses;
+  const uint32_t last_pulse_ms = g_last_flow_pulse_ms;
   interrupts();
 
   const uint32_t delta_pulses = total_pulses - last_total_pulses_;
+  const bool pulse_timed_out = (now_ms - last_pulse_ms) >= FLOW_STALE_TIMEOUT_MS;
   const float elapsed_s = static_cast<float>(elapsed_ms) / 1000.0f;
   if (FLOW_PULSES_PER_LITER <= 0.0f || elapsed_s <= 0.0f) {
     last_total_pulses_ = total_pulses;
     last_read_ms_ = now_ms;
+    last_pulse_ms_ = last_pulse_ms;
+    return FLOW_STALE_FALLBACK_LPM;
+  }
+
+  if (pulse_timed_out) {
+    last_total_pulses_ = total_pulses;
+    last_read_ms_ = now_ms;
+    last_pulse_ms_ = last_pulse_ms;
+    return FLOW_STALE_FALLBACK_LPM;
+  }
+
+  if (delta_pulses == 0U) {
+    last_read_ms_ = now_ms;
+    last_pulse_ms_ = last_pulse_ms;
     return 0.0f;
   }
   const float pulse_freq_hz = static_cast<float>(delta_pulses) / elapsed_s;
@@ -53,16 +77,19 @@ float FlowSensor::readFlow() {
 
   last_total_pulses_ = total_pulses;
   last_read_ms_ = now_ms;
+  last_pulse_ms_ = last_pulse_ms;
   return flow_lpm;
 }
 
 void FlowSensor::reset() {
   noInterrupts();
   g_flow_pulses = 0U;
+  g_last_flow_pulse_ms = millis();
   interrupts();
 
   last_total_pulses_ = 0U;
   last_read_ms_ = millis();
+  last_pulse_ms_ = last_read_ms_;
 }
 
 }  // namespace spray
