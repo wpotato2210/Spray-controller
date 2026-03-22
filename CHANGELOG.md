@@ -86,6 +86,10 @@ TX-capacity gating to reduce control-loop jitter risk.
   dependencies, and logical wiring aligned to `ME`/`ST`/`PV`/`MS`/`RS`
   protocol behavior.
 
+- **0.21** (2026-03-22): Re-ran Phase-Four readiness audit in
+  `PHASE_FOUR_READINESS_AUDIT.md`; confirmed all P4 deterministic tasks and
+  deliverables are complete, and recorded **GO** decision to proceed to P5.
+
 ## Placeholders
 
 - Update dates.
