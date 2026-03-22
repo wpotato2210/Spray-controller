@@ -37,6 +37,8 @@ TX-capacity gating to reduce control-loop jitter risk.
 
 - **0.13** (2026-03-22): Re-ran Phase-Three readiness audit with deterministic checks (`./scripts/validate.sh`, `python3 scripts/validate_p3_sensor_robustness.py`), confirmed all P3 deliverables complete, and recorded **GO** decision in `PHASE_THREE_READINESS_AUDIT.md`.
 
+- **0.14** (2026-03-22): Executed Phase-Zero readiness audit in `PHASE_ZERO_READINESS_AUDIT.md`; decision: **NO-GO for P0 closure** pending missing deliverables for DEV_NOTES loop ownership mapping and a frozen interface checklist mapped to source implementations.
+
 ## Placeholders
 
 - Update dates.
