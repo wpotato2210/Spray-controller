@@ -1,34 +1,32 @@
-# README.md
-
 # Spray Controller
 
 ## Overview
 
-Automated boom sprayer controller for precision agricultural
-application using a global flow-control model.
+Automated boom sprayer controller for precision agricultural application using
+one global flow-control model.
 
 ## System Model (authoritative summary)
 
 - Single FlowSensor measures total system flow (L/min).
 - Multiple BoomSection valves are binary ON/OFF outputs.
-- One global FlowController computes one pump PWM command from
-  target rate, speed, and active width.
+- One global FlowController computes one pump PWM command from target rate,
+  speed, and active width.
 
 ## Core Components
 
-- MCU: Arduino Nano (ATmega328P, 5V logic)
-- Pump: 12V PWM-controlled
-- Boom sections: independent binary valve outputs
-- Sensors: single YF-S201C flow sensor + wheel speed sensor
-- Operator control: run/hold switch
+- MCU: Arduino Nano (ATmega328P, 5V logic).
+- Pump: 12V PWM-controlled.
+- Boom sections: independent binary valve outputs.
+- Sensors: single YF-S201C flow sensor plus wheel speed sensor.
+- Operator control: run/hold switch.
 
 ## OpenSpec Source of Truth
 
-- `ARCHITECTURE.md` -> module interfaces
-- `HARDWARE.md` -> pin mappings
-- `PROTOCOLS.md` -> message formats
-- `CONFIGURATION.md` -> constants and units
-- `DEVELOPMENT_ROADMAP.md` -> phased implementation plan
+- `ARCHITECTURE.md`: module interfaces.
+- `HARDWARE.md`: pin mappings.
+- `PROTOCOLS.md`: message formats.
+- `CONFIGURATION.md`: constants and units.
+- `DEVELOPMENT_ROADMAP.md`: phased implementation plan.
 
 ## Quickstart
 
@@ -39,16 +37,16 @@ application using a global flow-control model.
 
 ## Dependencies
 
-- Arduino IDE
-- Required libraries: none beyond the Arduino core (`Arduino.h`)
+- Arduino IDE.
+- Required libraries: none beyond the Arduino core (`Arduino.h`).
 
 ## Board support and compile guard
 
-- Supported compile targets: `ARDUINO_AVR_NANO`, `ARDUINO_AVR_UNO`
-- Firmware fails at compile time with a clear `#error` on
-  unsupported board targets.
+- Supported compile targets: `ARDUINO_AVR_NANO`, `ARDUINO_AVR_UNO`.
+- Firmware fails at compile time with a clear `#error` on unsupported board
+  targets.
 
 ## Placeholders
 
-- High-level project diagram
-- Supported MCU alternatives beyond Nano (optional)
+- High-level project diagram.
+- Supported MCU alternatives beyond Nano (optional).
