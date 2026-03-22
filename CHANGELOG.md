@@ -39,6 +39,8 @@ TX-capacity gating to reduce control-loop jitter risk.
 
 - **0.14** (2026-03-22): Executed Phase-Zero readiness audit in `PHASE_ZERO_READINESS_AUDIT.md`; decision: **NO-GO for P0 closure** pending missing deliverables for DEV_NOTES loop ownership mapping and a frozen interface checklist mapped to source implementations.
 
+- **0.15** (2026-03-22): Executed Phase-Four readiness audit in `PHASE_FOUR_READINESS_AUDIT.md`; decision: **NO-GO for P4 closure readiness** with prioritized task backlog `P4-TSK-001` through `P4-TSK-007`.
+
 ## Placeholders
 
 - Update dates.
