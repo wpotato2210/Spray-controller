@@ -7,7 +7,7 @@ Spray Controller Protocols
 ### STATUS
 
 - Format:
-- `ST:<lpm>,<pump_duty>,<run>,<section_mask>\n`
+- `ST:<lpm>,<pump_duty>,<run>,<section_mask>,<fault_bits>,<fault_text>\n`
 - Description:
 - Deterministic status frame.
 
@@ -20,6 +20,14 @@ Spray Controller Protocols
 - `bit0=section0`
 - `bit1=section1`
 - `bit2=section2`
+- `fault_bits` is an unsigned bitfield:
+  - `bit0` = flow stale timeout active.
+  - `bit1` = wheel pulse timeout active.
+  - `bit2` = flow sensor configuration invalid.
+  - `bit3` = wheel sensor configuration invalid.
+- `fault_text` is deterministic status text:
+  - `OK` when `fault_bits == 0`.
+  - `FAULT` when any fault bit is set.
 
 ## Versioning
 

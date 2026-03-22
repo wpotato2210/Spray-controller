@@ -32,6 +32,7 @@ TX-capacity gating to reduce control-loop jitter risk.
   pending blocker tasks `P3-TSK-001` through `P3-TSK-003`.
 
 - **0.10** (2026-03-22): Executed `P3-TSK-002` by adding explicit flow stale-timeout fallback in `FlowSensor::readFlow()` using `FLOW_STALE_TIMEOUT_MS` + bounded fallback output `FLOW_STALE_FALLBACK_LPM` (default `0.0`), while preserving burst clamp behavior via `MAX_FLOW_LPM`.
+- **0.11** (2026-03-22): Executed `P3-TSK-003` by extending `ST` telemetry with deterministic fault visibility fields (`fault_bits`, `fault_text`) and wiring fault source bits for flow stale timeout, wheel timeout, and sensor-config validity.
 
 ## Placeholders
 

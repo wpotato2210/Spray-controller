@@ -13,12 +13,16 @@ class FlowSensor {
   void begin();
   float readFlow();
   void reset();
+  bool isStaleFaultActive() const;
+  bool isConfigFaultActive() const;
 
  private:
   uint8_t pin_;
   uint32_t last_total_pulses_;
   uint32_t last_read_ms_;
   uint32_t last_pulse_ms_;
+  bool stale_fault_active_;
+  bool config_fault_active_;
 };
 
 class WheelSensor {
@@ -27,12 +31,16 @@ class WheelSensor {
   void begin();
   float readSpeed();
   void reset();
+  bool isTimeoutFaultActive() const;
+  bool isConfigFaultActive() const;
 
  private:
   uint8_t pin_;
   uint32_t last_total_pulses_;
   uint32_t last_read_ms_;
   uint32_t last_pulse_ms_;
+  bool timeout_fault_active_;
+  bool config_fault_active_;
 };
 
 class RunHoldSwitch {
