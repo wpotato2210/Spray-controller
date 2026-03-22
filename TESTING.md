@@ -12,11 +12,11 @@ Spray Controller Testing Procedures
 ## Deterministic Compile Verification
 
 - Install Arduino CLI and AVR core:
-  - `chmod +x ./ci/setup-arduino-cli.sh`
-  - `./ci/setup-arduino-cli.sh`
+- `chmod +x ./ci/setup-arduino-cli.sh`
+- `./ci/setup-arduino-cli.sh`
 - Compile both supported board targets:
-  - `FQBN=arduino:avr:nano ./ci/compile-sketch.sh`
-  - `FQBN=arduino:avr:uno ./ci/compile-sketch.sh`
+- `FQBN=arduino:avr:nano ./ci/compile-sketch.sh`
+- `FQBN=arduino:avr:uno ./ci/compile-sketch.sh`
 
 ## Synthetic Event Tests
 

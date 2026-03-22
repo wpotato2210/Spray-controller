@@ -68,42 +68,42 @@ read, say so briefly and continue with the best fallback.
 
 follow the workflow.
 
-  2. When `SKILL.md` references relative paths (e.g., `scripts/foo.py`),
+  1. When `SKILL.md` references relative paths (e.g., `scripts/foo.py`),
 
 resolve them relative to the skill directory listed above first, and only
 consider other paths if needed.
 
-  3. If `SKILL.md` points to extra folders such as `references/`, load only the
+  1. If `SKILL.md` points to extra folders such as `references/`, load only the
 
 specific files needed for the request; don't bulk-load everything.
 
-  4. If `scripts/` exist, prefer running or patching them instead of retyping
+  1. If `scripts/` exist, prefer running or patching them instead of retyping
 
 large code blocks.
 
-  5. If `assets/` or templates exist, reuse them instead of recreating from
+  1. If `assets/` or templates exist, reuse them instead of recreating from
 
 scratch.
 
 - Coordination and sequencing:
-  - If multiple skills apply, choose the minimal set that covers the request
+- If multiple skills apply, choose the minimal set that covers the request
 
 and state the order you'll use them.
 
-  - Announce which skill(s) you're using and why (one short line). If you skip
+- Announce which skill(s) you're using and why (one short line). If you skip
 
 an obvious skill, say why.
 
 - Context hygiene:
-  - Keep context small: summarize long sections instead of pasting them; only
+- Keep context small: summarize long sections instead of pasting them; only
 
 load extra files when needed.
 
-  - Avoid deep reference-chasing: prefer opening only files directly linked
+- Avoid deep reference-chasing: prefer opening only files directly linked
 
 from `SKILL.md` unless you're blocked.
 
-  - When variants exist (frameworks, providers, domains), pick only the
+- When variants exist (frameworks, providers, domains), pick only the
 
 relevant reference file(s) and note that choice.
 

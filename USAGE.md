@@ -5,13 +5,13 @@ Spray Controller Usage Instructions
 ## Operation Steps
 
 1. Power on the system.
-2. Set the run/hold switch:
+1. Set the run/hold switch:
 
-   - Run: normal operation
-   - Hold: stops pump; optional bypass solenoid activated if configured
+- Run: normal operation
+- Hold: stops pump; optional bypass solenoid activated if configured
 
-3. Enable or disable boom sections as needed.
-4. Observe LED indicators for each active boom section.
+1. Enable or disable boom sections as needed.
+1. Observe LED indicators for each active boom section.
 
 ## How Rate Control Works
 

@@ -12,10 +12,10 @@ Spray Controller Installation
 ## Install Steps
 
 1. Connect the controller hardware per `HARDWARE.md`.
-2. Open firmware project in Arduino IDE.
-3. Select board and serial port.
-4. Build and upload firmware.
-5. Validate protocol output and I/O behavior per `TESTING.md`.
+1. Open firmware project in Arduino IDE.
+1. Select board and serial port.
+1. Build and upload firmware.
+1. Validate protocol output and I/O behavior per `TESTING.md`.
 
 ## Notes
 

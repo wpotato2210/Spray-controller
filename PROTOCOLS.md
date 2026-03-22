@@ -7,9 +7,9 @@ Spray Controller Protocols
 ### STATUS
 
 - Format:
-  - `ST:<lpm>,<pump_duty>,<run>,<section_mask>\n`
+- `ST:<lpm>,<pump_duty>,<run>,<section_mask>\n`
 - Description:
-  - Deterministic status frame.
+- Deterministic status frame.
 
 ## Notes
 
@@ -17,9 +17,9 @@ Spray Controller Protocols
 - `pump_duty` is the PWM duty in range `0-255`.
 - `run` is `1` for RUN and `0` for HOLD.
 - `section_mask` packs section states in LSB-first order:
-  - `bit0=section0`
-  - `bit1=section1`
-  - `bit2=section2`
+- `bit0=section0`
+- `bit1=section1`
+- `bit2=section2`
 
 ## Versioning
 
