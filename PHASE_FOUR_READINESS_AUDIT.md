@@ -7,53 +7,47 @@ Scope: Assess implementation readiness against P4 requirements in
 
 ## Verdict
 
-**Not ready to close P4 (NO-GO).**
+**Ready to close P4 (GO).**
 
-Reason: P4 operator-interface deterministic tasks are not yet implemented in
-firmware, protocol surface, or documentation. Current implementation remains
-focused on core control-loop and compact telemetry, with no explicit operator
-menu workflow.
+Reason: P4 operator-interface deterministic tasks and deliverables are implemented
+across firmware, protocol contracts, validation scripts, and operator
+documentation.
 
 ## Evidence reviewed
 
 - P4 deterministic tasks/deliverables in `DEVELOPMENT_ROADMAP.md`.
-- Runtime firmware loop and telemetry output in `Spray-controller.ino`.
-- Frozen interfaces in `include/interfaces.h`.
-- Protocol definitions in `PROTOCOLS.md` and `include/protocol.h`.
-- Operator/user guidance in `USAGE.md`, `ARCHITECTURE.md`, and `DIAGRAMS.md`.
+- Runtime firmware loop and operator interface implementation in
+  `Spray-controller.ino`.
+- Operator menu state-machine contract and implementation in
+  `include/operator_menu.h` and `src/operator_menu.cpp`.
+- Coverage counters implementation in `include/interfaces.h` and
+  `src/coverage_accumulator.cpp`.
+- Protocol + operator docs in `PROTOCOLS.md`, `USAGE.md`, and `DIAGRAMS.md`.
+- Deterministic P4 gate validator in `scripts/validate_p4_operator_interface.py`
+  and canonical gate execution in `scripts/validate.sh`.
 
 ## P4 deterministic task status
 
 |P4 task (roadmap)|Status|Findings|
 |---|---|---|
-|Implement menu navigation states|**Missing**|No menu/state-machine module or interfaces exist; loop performs only sensor read/control/telemetry cycle.|
-|Add live preview fields (speed, flow, duty, active sections)|**Partial**|Loop telemetry publishes flow/duty/run/sections/faults, but does not publish speed in `ST` frame and no operator UI preview surface exists.|
-|Add distance and area accumulators based on wheel data and active width|**Missing**|No accumulator variables, services, protocol fields, or docs for distance/area counters.|
-|Add reset confirmation workflow for counters and calibration|**Missing**|No reset workflow/state confirmation path in firmware or protocol; docs contain placeholder operator-interface guidance.|
+|Implement menu navigation states|**Complete**|`OperatorMenuState` + `OperatorMenuEvent` and deterministic transition handling are implemented; `ME:*` input events map to state transitions and emit `MS:*` state frames.|
+|Add live preview fields (speed, flow, duty, active sections)|**Complete**|`PV:` preview frame includes required live fields and is published at fixed interval gate (`PREVIEW_INTERVAL_MS`).|
+|Add distance and area accumulators based on wheel data and active width|**Complete**|Coverage accumulator updates distance/area deterministically from speed and active width; values are exposed in preview payload.|
+|Add reset confirmation workflow for counters and calibration|**Complete**|Two-step reset confirmation is implemented through `RESET_CONFIRM` + `CFM`; reset executes only on confirmed action and emits deterministic `RS:` event frame.|
 
 ## Deliverable status snapshot
 
 |P4 deliverable (roadmap)|Status|Evidence summary|
 |---|---|---|
-|Operator menu state machine documented and tested|**Missing**|No menu state machine in code/docs; no P4-specific tests in `TESTING.md` or scripts.|
-|Live preview updates at fixed interval|**Missing**|Telemetry interval exists, but no dedicated operator preview contract including all required fields.|
-|Distance and area reset requires explicit confirm action|**Missing**|No counters and no confirm/reset protocol/UI behavior implemented.|
+|Operator menu state machine documented and tested|**Complete**|State machine is documented in `USAGE.md`/`DIAGRAMS.md` and checked by deterministic validator `validate_p4_operator_interface.py`.|
+|Live preview updates at fixed interval|**Complete**|Preview publication is gated by `PREVIEW_INTERVAL_MS` and integrated in the main loop with TX-capacity guard.|
+|Distance and area reset requires explicit confirm action|**Complete**|Reset only executes when confirmation flag is consumed after confirm transition and emits reset event telemetry.|
 
-## Prioritized task list
+## Prioritized task list (required for P4 closure)
 
-|Priority|Task ID|Task|Why this priority|Exit criteria|
-|---|---|---|---|---|
-|P0|`P4-TSK-001`|Define operator-interface contract (menu states, preview fields, reset-confirm sequence) in `PROTOCOLS.md` + `USAGE.md`.|Unblocks deterministic implementation and testing; prevents interface churn.|Docs define state names/transitions, required preview payload (`speed,flow,duty,active_sections,distance,area`), and confirm-reset handshake.|
-|P0|`P4-TSK-002`|Implement firmware menu state machine module and integrate in main loop with deterministic update cadence.|Core P4 objective; all other UI features depend on stable state handling.|New state machine code compiled for Nano/Uno, with explicit transitions for navigate/select/confirm/cancel.|
-|P1|`P4-TSK-003`|Extend runtime preview pipeline to include speed + existing fields at fixed interval.|Provides immediate operator visibility and validates state-machine output path.|Preview frame includes speed, flow, duty, active sections with documented fixed publish interval.|
-|P1|`P4-TSK-004`|Add deterministic distance/area accumulators using wheel speed and active spray width.|Needed for field metrics and reset workflow; relies on stable loop timing.|Counters update each loop with bounded numeric behavior and are exposed in preview/status contract.|
-|P1|`P4-TSK-005`|Implement explicit reset confirmation workflow for counters and calibration data.|Safety requirement in roadmap; prevents accidental destructive resets.|Two-step confirm action required; reset events observable in telemetry/log output.|
-|P2|`P4-TSK-006`|Add validation tests/scripts for P4 scenarios (menu navigation, preview cadence, counter reset confirmation).|Required to close gate reproducibly and guard regressions.|Deterministic checks added to validation scripts and documented in `TESTING.md` with pass markers.|
-|P2|`P4-TSK-007`|Close documentation placeholders in `DIAGRAMS.md` and operator sections after implementation.|Needed for phase closure quality and future reproducibility.|No operator-interface placeholders remain; state and I/O diagrams match implemented behavior.|
+No remaining required tasks. All P4 closure criteria are satisfied.
 
 ## Gate decision
 
-- **NO-GO for P4 closure readiness.**
-- Start with `P4-TSK-001` and `P4-TSK-002` before implementing counters/reset
-  logic.
-- Re-audit P4 after `P4-TSK-001` through `P4-TSK-006` are complete.
+- **GO for P4 closure readiness.**
+- P4 can be marked closed and execution may proceed to P5.
