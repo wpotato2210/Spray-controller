@@ -32,7 +32,10 @@ Uses the same mapping as Nano for this firmware profile.
 
 ### Unsupported boards
 
-Build intentionally fails with `#error` if neither `ARDUINO_AVR_NANO` nor `ARDUINO_AVR_UNO` is selected. Add a dedicated `include/pins_<board>.h` mapping before targeting additional boards.
+Build intentionally fails with `#error` unless
+`ARDUINO_AVR_NANO` or `ARDUINO_AVR_UNO` is selected.
+Add a dedicated `include/pins_<board>.h` mapping before
+adding new board targets.
 
 ## Switches
 
