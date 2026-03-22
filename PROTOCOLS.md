@@ -70,6 +70,24 @@ Spray Controller Protocols
   - `RESET_CONFIRM -> COUNTERS` (confirm reset complete)
 - Any undefined transition request must be ignored and state preserved.
 
+#### MENU command input
+
+- Format:
+- `ME:<event>\n`
+- Accepted event tokens:
+  - `NAV` = navigate
+  - `SEL` = select
+  - `CAN` = cancel/back
+  - `CFM` = confirm
+- Unknown tokens are ignored with no state change.
+
+#### MENU state output
+
+- Format:
+- `MS:<state>\n`
+- Output is emitted when a valid menu event is accepted and processed at the
+  deterministic menu cadence.
+
 ### RESET CONFIRM HANDSHAKE (P4 operator interface)
 
 - Reset action is two-step and explicit:
@@ -78,6 +96,14 @@ Spray Controller Protocols
 - `CANCEL` must abort reset and return to `COUNTERS` with values unchanged.
 - On successful `CONFIRM`, both `distance_m` and `area_ha` are set to zero in a
   single deterministic update cycle.
+- Successful reset also clears runtime calibration/sensor state via module
+  reset hooks and emits a deterministic reset event frame.
+
+#### RESET event output
+
+- Format:
+- `RS:COUNTERS_CALIBRATION_RESET\n`
+- Emitted exactly once per successful `CONFIRM` reset action.
 
 ### PRESSURE (optional, compile-time gated)
 

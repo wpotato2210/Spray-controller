@@ -62,6 +62,11 @@ Spray Controller Testing Procedures
 - Simulate run/hold switch toggle.
 - Simulate total-flow sensor dropouts/spikes.
 - Toggle section combinations and verify active width calculation.
+- Validate reset-confirm workflow:
+  - Send `ME:NAV`, `ME:SEL`, `ME:SEL`, `ME:CFM` over serial.
+  - Verify `MS:` state transitions and single `RS:COUNTERS_CALIBRATION_RESET`
+    frame on confirm.
+  - Repeat with `ME:CAN` in `RESET_CONFIRM` and verify no `RS:` frame.
 
 ## Calibration Procedures
 

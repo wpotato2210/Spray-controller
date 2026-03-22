@@ -40,6 +40,15 @@ The operator preview must include the following fields every publish cycle:
 1. Choose one action:
    - `CONFIRM`: reset both distance and area counters to zero.
    - `CANCEL`: return to `COUNTERS` with counters unchanged.
+1. On `CONFIRM`, runtime calibration/sensor state is reset via module reset
+   hooks and one reset event frame is emitted: `RS:COUNTERS_CALIBRATION_RESET`.
+
+### Operator command/event tokens
+
+- Input command frame: `ME:<event>`
+  - `ME:NAV`, `ME:SEL`, `ME:CAN`, `ME:CFM`
+- State output frame: `MS:<state>`
+  - `HOME`, `MENU`, `COUNTERS`, `RESET_CONFIRM`
 
 ### Determinism rules
 

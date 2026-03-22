@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <string.h>
 
 #include "config.h"
 #include "interfaces.h"
@@ -142,6 +143,94 @@ bool shouldPublishPreview(uint32_t now_ms, uint32_t last_preview_ms) {
 bool hasTelemetryTxCapacity() {
   return Serial.availableForWrite() >= TELEMETRY_MIN_TX_BUFFER_BYTES;
 }
+
+const char* getMenuStateText(OperatorMenuState state) {
+  switch (state) {
+    case OperatorMenuState::kHome:
+      return "HOME";
+    case OperatorMenuState::kMenu:
+      return "MENU";
+    case OperatorMenuState::kCounters:
+      return "COUNTERS";
+    case OperatorMenuState::kResetConfirm:
+      return "RESET_CONFIRM";
+  }
+  return "HOME";
+}
+
+void publishMenuState(OperatorMenuState state) {
+  Serial.print(MSG_MENU_STATE_PREFIX);
+  Serial.print(getMenuStateText(state));
+  Serial.print(MSG_TERMINATOR);
+}
+
+void publishResetEvent() {
+  Serial.print(MSG_RESET_EVENT_PREFIX);
+  Serial.print("COUNTERS_CALIBRATION_RESET");
+  Serial.print(MSG_TERMINATOR);
+}
+
+OperatorMenuEvent parseMenuEventToken(const char* token) {
+  if (strcmp(token, "NAV") == 0) {
+    return OperatorMenuEvent::kNavigate;
+  }
+  if (strcmp(token, "SEL") == 0) {
+    return OperatorMenuEvent::kSelect;
+  }
+  if (strcmp(token, "CAN") == 0) {
+    return OperatorMenuEvent::kCancel;
+  }
+  if (strcmp(token, "CFM") == 0) {
+    return OperatorMenuEvent::kConfirm;
+  }
+  return OperatorMenuEvent::kNone;
+}
+
+void processOperatorCommand(uint32_t now_ms) {
+  static char command_buffer[16];
+  static uint8_t command_length = 0U;
+  while (Serial.available() > 0) {
+    const char incoming = static_cast<char>(Serial.read());
+    if (incoming == '\r') {
+      continue;
+    }
+    if (incoming != '\n') {
+      if (command_length < (sizeof(command_buffer) - 1U)) {
+        command_buffer[command_length++] = incoming;
+      } else {
+        command_length = 0U;
+      }
+      continue;
+    }
+
+    command_buffer[command_length] = '\0';
+    command_length = 0U;
+    if (strncmp(command_buffer, "ME:", 3) != 0) {
+      continue;
+    }
+
+    const OperatorMenuEvent event = parseMenuEventToken(command_buffer + 3);
+    if (event == OperatorMenuEvent::kNone) {
+      continue;
+    }
+    if (g_operator_menu.update(now_ms, event)) {
+      publishMenuState(g_operator_menu.getState());
+    }
+  }
+}
+
+void executeResetIfConfirmed() {
+  if (!g_operator_menu.consumeResetConfirmed()) {
+    return;
+  }
+  g_coverage_accumulator.reset();
+  g_flow_sensor.reset();
+  g_wheel_sensor.reset();
+#if ENABLE_PRESSURE_SENSOR
+  g_pressure_sensor.reset();
+#endif
+  publishResetEvent();
+}
 }  // namespace
 }  // namespace spray
 
@@ -173,7 +262,9 @@ void loop() {
   static uint32_t last_telemetry_ms = 0U;
   static uint32_t last_preview_ms = 0U;
   const uint32_t now_ms = millis();
+  spray::processOperatorCommand(now_ms);
   spray::g_operator_menu.update(now_ms, spray::OperatorMenuEvent::kNone);
+  spray::executeResetIfConfirmed();
   if ((now_ms - last_loop_ms) < spray::LOOP_INTERVAL_MS) {
     return;
   }

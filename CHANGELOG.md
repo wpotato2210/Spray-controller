@@ -64,6 +64,12 @@ TX-capacity gating to reduce control-loop jitter risk.
   `speed_kmh,flow_lpm,pump_duty,active_sections,distance_m,area_ha` payload
   order and deterministic protocol prefix wiring (`MSG_PREVIEW_PREFIX`).
 
+- **0.18** (2026-03-22): Executed `P4-TSK-005` by implementing explicit
+  two-step reset confirmation execution in firmware (`ME:*` input events to
+  `RESET_CONFIRM` + `CFM`), deterministic reset action for counters and runtime
+  calibration/sensor reset hooks, and observable reset/state telemetry frames
+  (`MS:` and `RS:COUNTERS_CALIBRATION_RESET`).
+
 ## Placeholders
 
 - Update dates.
