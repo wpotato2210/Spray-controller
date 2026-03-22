@@ -1,0 +1,68 @@
+{
+  "repo": "Spray-controller",
+  "date_utc": "2026-03-22",
+  "recommendations": [
+    {
+      "id": "REC-001",
+      "priority": "P0",
+      "title": "Restore deterministic compile verification in CI and local dev",
+      "why": "Current analysis environment could not run arduino-cli, preventing entry-point compile confirmation.",
+      "actions": [
+        "Install Arduino CLI in CI and developer setup scripts.",
+        "Run ci/compile-sketch.sh with FQBN=arduino:avr:nano and FQBN=arduino:avr:uno on every PR.",
+        "Fail the workflow if either target fails compilation."
+      ],
+      "acceptance_criteria": [
+        "Both FQBN jobs pass on a clean checkout.",
+        "Artifacts include compiler logs for both boards."
+      ]
+    },
+    {
+      "id": "REC-002",
+      "priority": "P1",
+      "title": "Reconcile documented dependencies with code",
+      "why": "README/INSTALL mention Servo/Wire, but current sources do not include those libraries.",
+      "actions": [
+        "If not required, remove Servo/Wire from README and INSTALL dependency lists.",
+        "If required for roadmap features, add a 'future dependency' section with scope and trigger conditions."
+      ],
+      "acceptance_criteria": [
+        "Dependency docs match compile-time includes in committed sources."
+      ]
+    },
+    {
+      "id": "REC-003",
+      "priority": "P1",
+      "title": "Add pin capability guards for interrupt-backed sensors",
+      "why": "Flow and wheel sensors rely on digitalPinToInterrupt(pin_) mapping correctness.",
+      "actions": [
+        "Add compile-time checks per supported board ensuring flow and wheel pins are interrupt-capable.",
+        "Add startup self-check fallback if compile-time checks cannot cover a target."
+      ],
+      "acceptance_criteria": [
+        "Build fails with a clear error when invalid interrupt pins are configured."
+      ]
+    },
+    {
+      "id": "REC-004",
+      "priority": "P2",
+      "title": "Control telemetry rate to reduce loop jitter risk",
+      "why": "Loop publishes multiple serial messages each control cycle.",
+      "actions": [
+        "Publish status at a lower configurable rate than control loop frequency.",
+        "Keep control loop timing independent from telemetry throughput."
+      ],
+      "acceptance_criteria": [
+        "Measured loop period remains stable under continuous telemetry consumption limits."
+      ]
+    }
+  ],
+  "upload_readiness_for_nano": {
+    "status": "CONDITIONAL",
+    "requirements": [
+      "Compile success for arduino:avr:nano",
+      "Correct board/port selection in IDE or CLI",
+      "Hardware pinout matches include/pins_nano.h"
+    ]
+  }
+}
