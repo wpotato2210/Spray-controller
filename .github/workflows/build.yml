@@ -13,6 +13,7 @@ jobs:
             log_name: "arduino-avr-nano"
           - fqbn: "arduino:avr:uno"
             log_name: "arduino-avr-uno"
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -20,10 +21,29 @@ jobs:
       - name: Setup Arduino CLI
         uses: arduino/setup-arduino-cli@v2
 
-      - name: Install Arduino CLI core
+      - name: Install AVR core
         run: |
-          chmod +x ./ci/setup-arduino-cli.sh
-          ./ci/setup-arduino-cli.sh
+          arduino-cli core update-index
+          arduino-cli core install arduino:avr
+
+      - name: Generate config.h
+        run: |
+          mkdir -p include
+          cat <<EOT > include/config.h
+          #ifndef SPRAY_CONTROLLER_CONFIG_H
+          #define SPRAY_CONTROLLER_CONFIG_H
+
+          #define SECTION_COUNT 8
+          #define FLOW_SENSOR_PIN 2
+          #define PUMP_PWM_PIN 3
+
+          // Add other macros/constants your code requires
+
+          #endif // SPRAY_CONTROLLER_CONFIG_H
+          EOT
+
+      - name: Prepare artifacts folder
+        run: mkdir -p artifacts
 
       - name: Compile sketch
         env:
@@ -31,7 +51,7 @@ jobs:
           LOG_FILE: artifacts/${{ matrix.log_name }}.log
         run: |
           chmod +x ./ci/compile-sketch.sh
-          ./ci/compile-sketch.sh
+          ./ci/compile-sketch.sh | tee "$LOG_FILE"
 
       - name: Upload compiler logs
         if: always()
