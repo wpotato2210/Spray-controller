@@ -37,6 +37,9 @@ TX-capacity gating to reduce control-loop jitter risk.
 
 - **0.13** (2026-03-22): Re-ran Phase-Three readiness audit with deterministic checks (`./scripts/validate.sh`, `python3 scripts/validate_p3_sensor_robustness.py`), confirmed all P3 deliverables complete, and recorded **GO** decision in `PHASE_THREE_READINESS_AUDIT.md`.
 
+- **0.14** (2026-03-22): Executed Phase-Four readiness audit in `PHASE_FOUR_READINESS_AUDIT.md`; decision: **NO-GO for P4 closure** because operator menu state machine, distance/area accumulators, and explicit reset-confirm workflows are not yet implemented.
+
+
 ## Placeholders
 
 - Update dates.
