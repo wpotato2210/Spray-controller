@@ -1,24 +1,40 @@
-AGENTS.md
+# AGENTS
 
 Spray Controller Automation Agents
 
-Purpose
+## Purpose
 
 Automation agents assist with:
-	•	Documentation updates
-	•	Frozen interface validation
-	•	Test script generation
-	•	Monitoring system events
 
-Tasks
+- Documentation updates
+- Frozen interface validation
+- Test script generation
+- Monitoring system events
 
-Agent Name	Task Description	Trigger / Schedule
-DocUpdater	Updates .md files with new interface or wiring info	On commit / manual trigger
-InterfaceValidator	Checks frozen module interfaces against code	Nightly / pre-release
-TestScriptGen	Generates synthetic event tests for SEE/THINK/DO	Manual or CI pipeline
-EventMonitor	Logs system events for analysis	Continuous during operation
+## Tasks
 
-Placeholders
-	•	Workflow and execution scripts
-	•	Integration with CI/CD or local development tools
-	•	Automated calibration routines
+### DocUpdater
+
+- Task: update Markdown interface or wiring info
+- Trigger: on commit or manual trigger
+
+### InterfaceValidator
+
+- Task: check frozen module interfaces against code
+- Trigger: nightly or pre-release
+
+### TestScriptGen
+
+- Task: generate synthetic SEE/THINK/DO event tests
+- Trigger: manual or CI pipeline
+
+### EventMonitor
+
+- Task: log system events for analysis
+- Trigger: continuous during operation
+
+## Placeholders
+
+- Workflow and execution scripts
+- Integration with CI/CD or local development tools
+- Automated calibration routines

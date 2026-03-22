@@ -1,25 +1,29 @@
-INSTALL.md
+# INSTALL
 
 Spray Controller Installation
 
-Firmware Setup
-	•	Toolchain: Arduino IDE
-	•	Board: Arduino Nano
-	•	Port: COMx / /dev/ttyUSBx
-	•	Libraries: Servo.h, Wire.h
+## Firmware Setup
 
-Install Steps
-	1.	Connect the controller hardware per HARDWARE.md.
-	2.	Open firmware project in Arduino IDE.
-	3.	Select board and serial port.
-	4.	Build and upload firmware.
-	5.	Validate protocol output and I/O behavior per TESTING.md.
+- Toolchain: Arduino IDE
+- Board: Arduino Nano
+- Port: COMx or /dev/ttyUSBx
+- Libraries: Servo.h and Wire.h
 
-Notes
-	•	Use CONFIGURATION.md values for target rate and controller constants.
-	•	Protocol framing and message formats are defined in PROTOCOLS.md.
+## Install Steps
 
-Placeholders
-	•	Pinned library versions
-	•	CI build artifact workflow
-	•	Optional GUI integration
+1. Connect controller hardware per HARDWARE.md.
+2. Open firmware project in Arduino IDE.
+3. Select board and serial port.
+4. Build and upload firmware.
+5. Validate protocol output and I/O behavior per TESTING.md.
+
+## Notes
+
+- Use CONFIGURATION.md values for target rate and constants.
+- Protocol framing and message formats are in PROTOCOLS.md.
+
+## Placeholders
+
+- Pinned library versions
+- CI build artifact workflow
+- Optional GUI integration

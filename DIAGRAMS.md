@@ -1,13 +1,17 @@
-# DIAGRAMS.md
-# System Diagrams
+# DIAGRAMS
 
-## Architecture (See / Think / Do)
-[Refer to ARCHITECTURE.md]
+System Diagrams
+
+## Architecture (SEE / THINK / DO)
+
+- Refer to ARCHITECTURE.md.
 
 ## Wiring
-[Refer to HARDWARE.md ASCII diagram]
+
+- Refer to HARDWARE.md ASCII diagram.
 
 ## Placeholders
-- Full wiring schematic (image)
+
+- Full wiring schematic image
 - Module connection diagram
 - Signal flow diagram

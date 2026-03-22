@@ -1,33 +1,38 @@
-HARDWARE.md
+# HARDWARE
 
 Spray Controller Hardware
 
-Hardware Summary
-	•	Single flow sensor for total flow feedback.
-	•	Multiple boom sections controlled independently as ON/OFF outputs.
-	•	12V pump power stage with 5V MCU logic.
+## Hardware Summary
 
-Pinout
+- Single flow sensor for total flow feedback
+- Multiple boom sections controlled as ON/OFF outputs
+- 12V pump power stage with 5V MCU logic
 
-Pin	Component	Notes
-2	Wheel Sensor	Digital pulse input
-3	Flow Sensor	Single total-flow pulse input (YF-S201C)
-11	Pump PWM	PWM output to 12V pump driver
-12	Boom Section 1	Digital output (ON/OFF)
-13	Boom Section 2	Digital output (ON/OFF)
-A1	Boom Section 3	Digital output (ON/OFF)
-A2	Section 1 LED	Indicator
+## Pinout
 
-Switches
-	•	Individual section on/off
-	•	Run/Hold switch with optional bypass solenoid
+| Pin | Component | Notes |
+| --- | --- | --- |
+| 2 | Wheel Sensor | Digital pulse input |
+| 3 | Flow Sensor | Single total-flow pulse input (YF-S201C) |
+| 11 | Pump PWM | PWM output to 12V pump driver |
+| 12 | Boom Section 1 | Digital output (ON/OFF) |
+| 13 | Boom Section 2 | Digital output (ON/OFF) |
+| A1 | Boom Section 3 | Digital output (ON/OFF) |
+| A2 | Section 1 LED | Indicator |
 
-Power
-	•	Pump: 12V supply
-	•	MCU: 5V logic
+## Switches
 
-ASCII Wiring Diagram
+- Individual section on/off switches
+- Run/Hold switch with optional bypass solenoid
 
+## Power
+
+- Pump: 12V supply
+- MCU: 5V logic
+
+## ASCII Wiring Diagram
+
+```text
 MCU Nano (5V logic)
 +----------------------+
 | 2  -> Wheel Sensor   |----> Pulse input
@@ -40,7 +45,9 @@ MCU Nano (5V logic)
 | GND -----------------|----> Common GND
 | 5V ------------------|----> MCU logic supply
 +----------------------+
+```
 
-Placeholders:
-	•	Detailed wiring per boom section
-	•	Power ratings per pump/solenoid
+## Placeholders
+
+- Detailed wiring per boom section
+- Power ratings per pump and solenoid

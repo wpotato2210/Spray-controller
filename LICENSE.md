@@ -1,12 +1,13 @@
-LICENSE.md
+# LICENSE
 
 Spray Controller License
 
-License
+## License
 
-[Insert license text here]
+Insert license text here.
 
-Placeholders
-	•	Specify license type (e.g., MIT, GPL, Apache 2.0)
-	•	Include year and copyright holder
-	•	Any special clauses for redistribution or modification
+## Placeholders
+
+- Specify license type, such as MIT, GPL, or Apache 2.0
+- Include year and copyright holder
+- Add any special redistribution or modification clauses
