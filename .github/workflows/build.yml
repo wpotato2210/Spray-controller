@@ -28,9 +28,6 @@ jobs:
           arduino-cli core install arduino:avr
 
       - name: Compile sketch
-        run: |
-          arduino-cli compile \
-            --fqbn "${{ matrix.fqbn }}" \
-            --build-property "compiler.cpp.extra_flags=-I$GITHUB_WORKSPACE/include" \
-            --build-property "compiler.c.extra_flags=-I$GITHUB_WORKSPACE/include" \
-            ./Spray-controller.ino
+        env:
+          FQBN: ${{ matrix.fqbn }}
+        run: ./ci/compile-sketch.sh
