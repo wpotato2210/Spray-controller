@@ -29,4 +29,7 @@ run_step "Config completeness check" \
 run_step "P3 sensor robustness check" \
   python3 scripts/validate_p3_sensor_robustness.py
 
+run_step "P4 operator interface check" \
+  python3 scripts/validate_p4_operator_interface.py
+
 echo "== SUCCESS =="

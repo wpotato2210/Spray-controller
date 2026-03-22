@@ -57,7 +57,11 @@ TX-capacity gating to reduce control-loop jitter risk.
   `PHASE_FOUR_READINESS_AUDIT.md`; decision: **NO-GO for P4 closure readiness**
   with prioritized task backlog `P4-TSK-001` through `P4-TSK-007`.
 
-- **0.16** (2026-03-22): Executed `P4-TSK-001` by defining the deterministic operator-interface contract in `PROTOCOLS.md` and `USAGE.md`, including menu states/transitions, required `PV` preview payload fields (`speed_kmh,flow_lpm,pump_duty,active_sections,distance_m,area_ha`), fixed preview cadence rules, and explicit reset-confirm handshake semantics.
+- **0.16** (2026-03-22): Executed `P4-TSK-001` by defining the
+  deterministic operator-interface contract in `PROTOCOLS.md` and `USAGE.md`,
+  including menu states/transitions, required `PV` preview payload fields
+  (`speed_kmh,flow_lpm,pump_duty,active_sections,distance_m,area_ha`), fixed
+  preview cadence rules, and explicit reset-confirm handshake semantics.
 
 - **0.17** (2026-03-22): Executed `P4-TSK-003` by implementing fixed-cadence
   `PV` preview publishing in the main loop with
@@ -69,6 +73,12 @@ TX-capacity gating to reduce control-loop jitter risk.
   `RESET_CONFIRM` + `CFM`), deterministic reset action for counters and runtime
   calibration/sensor reset hooks, and observable reset/state telemetry frames
   (`MS:` and `RS:COUNTERS_CALIBRATION_RESET`).
+
+- **0.19** (2026-03-22): Executed `P4-TSK-006` by adding deterministic
+  P4 validation script `scripts/validate_p4_operator_interface.py`,
+  integrating it into canonical `./scripts/validate.sh` gate checks,
+  and documenting validator command/pass marker plus enforced
+  scenario coverage in `TESTING.md`.
 
 ## Placeholders
 
