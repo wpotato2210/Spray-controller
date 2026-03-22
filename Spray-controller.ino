@@ -100,6 +100,28 @@ void publishStatus(float flow_lpm, uint8_t pump_duty, bool run_enabled, uint8_t 
   Serial.print(MSG_TERMINATOR);
 }
 
+void publishPreview(
+    float speed_kmh,
+    float flow_lpm,
+    uint8_t pump_duty,
+    uint8_t active_sections,
+    float distance_m,
+    float area_ha) {
+  Serial.print(MSG_PREVIEW_PREFIX);
+  Serial.print(speed_kmh, 3);
+  Serial.print(',');
+  Serial.print(flow_lpm, 3);
+  Serial.print(',');
+  Serial.print(pump_duty);
+  Serial.print(',');
+  Serial.print(active_sections);
+  Serial.print(',');
+  Serial.print(distance_m, 3);
+  Serial.print(',');
+  Serial.print(area_ha, 6);
+  Serial.print(MSG_TERMINATOR);
+}
+
 #if ENABLE_PRESSURE_SENSOR
 void publishPressure(float pressure_kpa) {
   Serial.print(MSG_PRESSURE_PREFIX);
@@ -110,6 +132,10 @@ void publishPressure(float pressure_kpa) {
 
 bool shouldPublishTelemetry(uint32_t now_ms, uint32_t last_telemetry_ms) {
   return (now_ms - last_telemetry_ms) >= TELEMETRY_INTERVAL_MS;
+}
+
+bool shouldPublishPreview(uint32_t now_ms, uint32_t last_preview_ms) {
+  return (now_ms - last_preview_ms) >= PREVIEW_INTERVAL_MS;
 }
 
 bool hasTelemetryTxCapacity() {
@@ -143,6 +169,7 @@ void setup() {
 void loop() {
   static uint32_t last_loop_ms = 0U;
   static uint32_t last_telemetry_ms = 0U;
+  static uint32_t last_preview_ms = 0U;
   const uint32_t now_ms = millis();
   spray::g_operator_menu.update(now_ms, spray::OperatorMenuEvent::kNone);
   if ((now_ms - last_loop_ms) < spray::LOOP_INTERVAL_MS) {
@@ -157,6 +184,9 @@ void loop() {
   const bool run_enabled = spray::g_run_hold.readRunHold();
 
   const float active_width_m = spray::g_section_manager.getActiveWidth();
+  const uint8_t active_sections = spray::g_section_manager.getActiveCount();
+  const float distance_m = 0.0f;
+  const float area_ha = 0.0f;
 
   uint8_t duty = spray::PWM_MIN;
   if (run_enabled) {
@@ -167,6 +197,10 @@ void loop() {
 
   spray::g_pump.setDutyCycle(duty);
   spray::writeSections();
+  if (spray::shouldPublishPreview(now_ms, last_preview_ms) && spray::hasTelemetryTxCapacity()) {
+    spray::publishPreview(speed_kmh, measured_flow_lpm, duty, active_sections, distance_m, area_ha);
+    last_preview_ms = now_ms;
+  }
   if (spray::shouldPublishTelemetry(now_ms, last_telemetry_ms) && spray::hasTelemetryTxCapacity()) {
     spray::publishStatus(measured_flow_lpm, duty, run_enabled, spray::getStatusFaultBitfield());
 #if ENABLE_PRESSURE_SENSOR
