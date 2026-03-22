@@ -40,6 +40,8 @@ TX-capacity gating to reduce control-loop jitter risk.
 - **0.14** (2026-03-22): Executed Phase-Four readiness audit in `PHASE_FOUR_READINESS_AUDIT.md`; decision: **NO-GO for P4 closure** because operator menu state machine, distance/area accumulators, and explicit reset-confirm workflows are not yet implemented.
 
 
+- **0.15** (2026-03-22): Refined `PHASE_FOUR_READINESS_AUDIT.md` with a deterministic remediation task list (`P4-TSK-001` through `P4-TSK-006`) so each P4 closure action is uniquely tracked.
+
 ## Placeholders
 
 - Update dates.

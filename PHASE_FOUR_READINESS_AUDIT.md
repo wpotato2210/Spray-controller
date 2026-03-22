@@ -50,3 +50,15 @@ reset confirmation flows required by P4.
   3. Add deterministic checks for P4 behaviors and wire them into
      `./scripts/validate.sh`.
   4. Update `USAGE.md`/`PROTOCOLS.md` with finalized P4 behavior, then re-audit.
+
+## P4 remediation task list (unique IDs)
+
+| Task ID | Task | Exit criteria |
+| --- | --- | --- |
+| P4-TSK-001 | Implement deterministic operator menu state machine (`MENU_HOME`, `MENU_PREVIEW`, `MENU_COUNTERS`, `MENU_RESET_CONFIRM`). | Menu transitions are explicit, bounded, and documented in code + docs. |
+| P4-TSK-002 | Add live preview surface for `speed_kmh`, `flow_lpm`, `pump_duty`, `section_mask` at fixed interval. | Preview updates every configured interval with deterministic field ordering/units. |
+| P4-TSK-003 | Add wheel-based `distance_m` and active-width-based `area_m2` accumulators. | Counters increase deterministically during RUN and persist/reset per spec. |
+| P4-TSK-004 | Add explicit two-step reset confirmation workflow for counters and calibration values. | Reset path requires confirm action; cancel path is non-destructive and tested. |
+| P4-TSK-005 | Add deterministic P4 validation script and wire it into `./scripts/validate.sh`. | Validation emits stable success markers and fails on missing P4 behavior. |
+| P4-TSK-006 | Update `USAGE.md` and `PROTOCOLS.md` to remove placeholders and freeze P4 operator behavior contract. | Docs contain final P4 operator flows, fields, and reset semantics with no placeholders. |
+
