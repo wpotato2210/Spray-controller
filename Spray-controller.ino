@@ -53,7 +53,28 @@ uint8_t getSectionBitmask() {
   return mask;
 }
 
-void publishStatus(float flow_lpm, uint8_t pump_duty, bool run_enabled) {
+uint8_t getStatusFaultBitfield() {
+  uint8_t faults = 0U;
+  if (g_flow_sensor.isStaleFaultActive()) {
+    faults |= STATUS_FAULT_FLOW_STALE;
+  }
+  if (g_wheel_sensor.isTimeoutFaultActive()) {
+    faults |= STATUS_FAULT_WHEEL_TIMEOUT;
+  }
+  if (g_flow_sensor.isConfigFaultActive()) {
+    faults |= STATUS_FAULT_FLOW_CONFIG;
+  }
+  if (g_wheel_sensor.isConfigFaultActive()) {
+    faults |= STATUS_FAULT_WHEEL_CONFIG;
+  }
+  return faults;
+}
+
+const char* getStatusFaultText(uint8_t faults) {
+  return (faults == 0U) ? "OK" : "FAULT";
+}
+
+void publishStatus(float flow_lpm, uint8_t pump_duty, bool run_enabled, uint8_t fault_bits) {
   Serial.print(MSG_STATUS_PREFIX);
   Serial.print(flow_lpm, 3);
   Serial.print(',');
@@ -62,6 +83,10 @@ void publishStatus(float flow_lpm, uint8_t pump_duty, bool run_enabled) {
   Serial.print(run_enabled ? 1 : 0);
   Serial.print(',');
   Serial.print(getSectionBitmask());
+  Serial.print(',');
+  Serial.print(fault_bits);
+  Serial.print(',');
+  Serial.print(getStatusFaultText(fault_bits));
   Serial.print(MSG_TERMINATOR);
 }
 
@@ -120,7 +145,7 @@ void loop() {
   spray::g_pump.setDutyCycle(duty);
   spray::writeSections();
   if (spray::shouldPublishTelemetry(now_ms, last_telemetry_ms) && spray::hasTelemetryTxCapacity()) {
-    spray::publishStatus(measured_flow_lpm, duty, run_enabled);
+    spray::publishStatus(measured_flow_lpm, duty, run_enabled, spray::getStatusFaultBitfield());
     last_telemetry_ms = now_ms;
   }
 }
