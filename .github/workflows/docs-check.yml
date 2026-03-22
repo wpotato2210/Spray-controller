@@ -8,5 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Markdown Lint
-        uses: DavidAnson/markdownlint-cli2-action@v11
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Auto-fix Markdown
+        run: |
+          npx markdownlint-cli2 --fix "**/*.md"
+          git diff --exit-code
