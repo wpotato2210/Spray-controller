@@ -4,7 +4,7 @@ Spray Controller License
 
 ## License
 
-[Insert license text here]
+Insert license text here.
 
 ## Placeholders
 

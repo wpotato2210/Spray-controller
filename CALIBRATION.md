@@ -5,8 +5,8 @@ Calibration Procedures
 ## Flow Sensor Calibration
 
 - Sensor model: single YF-S201C total-flow sensor
-- Pulse-to-flow mapping: [placeholder]
-- Calibration constant: [placeholder]
+- Pulse-to-flow mapping: placeholder
+- Calibration constant: placeholder
 
 ## Pump Calibration
 
