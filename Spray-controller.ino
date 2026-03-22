@@ -5,6 +5,7 @@
 #include "pins.h"
 #include "protocol.h"
 #include "interrupt_guards.h"
+#include "operator_menu.h"
 
 namespace spray {
 namespace {
@@ -14,6 +15,7 @@ RunHoldSwitch g_run_hold(PIN_RUN_HOLD);
 SectionManager g_section_manager;
 FlowController g_flow_controller;
 PumpControl g_pump(PIN_PUMP_PWM);
+OperatorMenuStateMachine g_operator_menu;
 #if ENABLE_PRESSURE_SENSOR
 PressureSensor g_pressure_sensor(PIN_PRESSURE_SENSOR);
 #endif
@@ -142,6 +144,7 @@ void loop() {
   static uint32_t last_loop_ms = 0U;
   static uint32_t last_telemetry_ms = 0U;
   const uint32_t now_ms = millis();
+  spray::g_operator_menu.update(now_ms, spray::OperatorMenuEvent::kNone);
   if ((now_ms - last_loop_ms) < spray::LOOP_INTERVAL_MS) {
     return;
   }
