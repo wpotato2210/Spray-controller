@@ -1,0 +1,24 @@
+name: Arduino CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Arduino CLI
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+          export PATH="$HOME/bin:$PATH"
+          arduino-cli version
+
+      - name: Install AVR core
+        run: |
+          arduino-cli core update-index
+          arduino-cli core install arduino:avr
+
+      - name: Compile sketch
+        run: |
+          arduino-cli compile --fqbn arduino:avr:nano ./Spray-controller.ino
