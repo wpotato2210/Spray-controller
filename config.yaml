@@ -3,13 +3,23 @@ application:
   section_width_m: 0.5
 
 control:
-  kp: 2.0
+  gains:
+    kp: 2.0
+    ki: 0.2
   pwm_min: 0
   pwm_max: 255
+  integral_limits:
+    min: -80.0
+    max: 80.0
+  slew_limit_pwm_per_cycle: 12.0
 
 limits:
   min_speed_kmh: 0.5
   max_flow_lpm: 100.0
+  flow_fault_lpm_threshold: 0.03
+  min_target_flow_for_fault_lpm: 0.2
 
 timing:
   loop_interval_ms: 50
+  telemetry_interval_ms: 200
+  sensor_fault_timeout_ms: 1200
