@@ -4,6 +4,7 @@
 #include "interfaces.h"
 #include "pins.h"
 #include "protocol.h"
+#include "interrupt_guards.h"
 
 namespace spray {
 namespace {
@@ -68,6 +69,12 @@ void publishStatus(float flow_lpm, uint8_t pump_duty, bool run_enabled) {
 
 void setup() {
   Serial.begin(115200);
+  if (!spray::interruptPinsValid()) {
+    Serial.println("ERR: Interrupt pin configuration invalid for FLOW/WHEEL sensors.");
+    while (true) {
+      delay(1000);
+    }
+  }
   spray::setupPins();
   spray::g_flow_sensor.begin();
   spray::g_wheel_sensor.begin();
