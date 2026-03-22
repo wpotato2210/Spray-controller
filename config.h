@@ -28,6 +28,8 @@ constexpr float MIN_SPEED_KMH = 0.5f;
 constexpr float MAX_FLOW_LPM = 100.0f;
 
 constexpr uint32_t LOOP_INTERVAL_MS = 50UL;
+constexpr uint32_t TELEMETRY_INTERVAL_MS = 200UL;
+constexpr int TELEMETRY_MIN_TX_BUFFER_BYTES = 32;
 
 constexpr float FLOW_PULSES_PER_LITER = 450.0f;
 constexpr float WHEEL_CIRCUMFERENCE_M = 2.0f;
