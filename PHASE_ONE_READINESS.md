@@ -3,7 +3,9 @@
 Date: 2026-03-22 (UTC)
 
 ## Scope and gate
-This assessment checks P1 closure readiness against `DEVELOPMENT_ROADMAP.md` gate criteria.
+
+This assessment checks P1 closure readiness against `DEVELOPMENT_ROADMAP.md`
+gate criteria.
 
 ## P1 deliverable status
 
@@ -14,18 +16,22 @@ This assessment checks P1 closure readiness against `DEVELOPMENT_ROADMAP.md` gat
 | `CONFIGURATION.md` and `HARDWARE.md` updated to exact values | **Not complete** | `CONFIGURATION.md` still has `[TBD]` for `TARGET_RATE_LPHA`, `SECTION_WIDTH_M`, `KP`, `MIN_SPEED_KMH`. | Replace placeholders with exact values matching `config.yaml` and `config.h`. |
 
 ## Readiness verdict
+
 **P1 is not yet closure-ready.**
 
 Primary blockers:
+
 1. `CONFIGURATION.md` still contains `[TBD]` placeholders.
 2. No committed validation pass evidence for the YAML validation gate.
-3. Phase gate rule requires completed deliverables to be referenced from `CHANGELOG.md`; no explicit P1 closure entry is present.
+3. Phase gate rule requires completed deliverables to be referenced from
+   `CHANGELOG.md`; no explicit P1 closure entry is present.
 
 ## Tasks required to move to P2
 
 1. **Close configuration doc placeholders**
    - Fill `CONFIGURATION.md` with exact values aligned to:
-     - `config.yaml` (`target_rate_lpha`, `section_width_m`, `kp`, `min_speed_kmh`, loop interval).
+     - `config.yaml` (`target_rate_lpha`, `section_width_m`, `kp`,
+       `min_speed_kmh`, loop interval).
      - `config.h` compile-time constants.
 
 2. **Add deterministic validation execution + proof**
@@ -35,14 +41,17 @@ Primary blockers:
 
 3. **Cross-file consistency check**
    - Ensure `HARDWARE.md` pin mapping matches `pins.yaml` and board pin headers.
-   - Ensure loop interval is identical across docs and firmware constants (`50 ms` currently).
+   - Ensure loop interval is identical across docs and firmware constants
+     (`50 ms` currently).
 
 4. **Gate bookkeeping in changelog**
-   - Add explicit entry in `CHANGELOG.md` that P1 deliverables are complete (with date and validation reference).
+   - Add explicit entry in `CHANGELOG.md` that P1 deliverables are complete
+     (with date and validation reference).
 
 ## Suggested P2 entry checklist (once above is done)
 
 - P1 closure note added to `CHANGELOG.md`.
 - Deterministic validation passes with zero missing/extra keys.
 - No `[TBD]` placeholders in P1-owned docs.
-- Control-loop baseline confirmed at fixed interval before integrating full SEE->THINK->DO P2 behavior.
+- Control-loop baseline confirmed at fixed interval before integrating full
+  SEE->THINK->DO P2 behavior.

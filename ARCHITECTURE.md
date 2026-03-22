@@ -36,7 +36,9 @@ Spray Controller Architecture
 - Single `FlowSensor` measures total system flow.
 - Multiple `BoomSection` outputs are binary (ON/OFF).
 - `FlowController` is global and computes one pump command for the active boom
-  width.
+
+width.
+
 - `SectionManager` tracks active sections and exposes effective spray width.
 
 ## Frozen Module Interfaces

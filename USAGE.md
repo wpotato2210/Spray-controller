@@ -16,11 +16,16 @@ Spray Controller Usage Instructions
 ## How Rate Control Works
 
 - The controller maintains target application rate (L/ha) using vehicle speed
-  (km/h) and active spray width (m).
+
+(km/h) and active spray width (m).
+
 - Active spray width is the sum of ON boom sections (`SECTION_WIDTH_M` per
-  active section).
+
+active section).
+
 - Section changes affect effective width only; flow remains globally controlled
-  through one pump and one total flow sensor.
+
+through one pump and one total flow sensor.
 
 ## Notes
 
