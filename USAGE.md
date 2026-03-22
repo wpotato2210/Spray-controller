@@ -75,7 +75,11 @@ through one pump and one total flow sensor.
 - Flow calibration required before first operation.
 - Safety interlocks should be verified prior to field use.
 
-## Placeholders
+## Calibration and safety notes
 
-- Specific calibration values for `TARGET_RATE_LPHA` and `KP`
-- Safety and alarm behavior details
+- Runtime calibration reset is available only through the explicit menu path
+  `HOME -> MENU -> COUNTERS -> RESET_CONFIRM -> CONFIRM`.
+- Fault visibility is provided through status output (`ST`) using deterministic
+  `fault_bits` + `fault_text` fields.
+- `TARGET_RATE_LPHA` and loop gains (`KP`) remain configurable build constants
+  and should be set per sprayer hardware profile before field operation.
