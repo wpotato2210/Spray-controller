@@ -1,0 +1,82 @@
+{
+  "repo": "Spray-controller",
+  "analyzed_at_utc": "2026-03-22",
+  "scope": {
+    "entry_points": [
+      "Spray-controller.ino",
+      "src/flow_controller.cpp",
+      "src/flow_sensor.cpp",
+      "src/pump_control.cpp",
+      "src/run_hold_switch.cpp",
+      "src/section_manager.cpp",
+      "src/wheel_sensor.cpp"
+    ],
+    "tracked_files_only": true
+  },
+  "build_status": "FAIL",
+  "critical_errors": [
+    {
+      "id": "ENV_NO_ARDUINO_CLI",
+      "message": "arduino-cli is not installed in the analysis environment, so compile success could not be verified.",
+      "evidence_command": "arduino-cli version",
+      "impact": "Cannot confirm successful compilation of sketch and translation units in this environment."
+    }
+  ],
+  "warnings": [
+    {
+      "id": "DOC_DEP_MISMATCH",
+      "message": "README lists Servo and Wire as required libraries, but source files do not include Servo.h or Wire.h.",
+      "impact": "Dependency documentation may be stale or misleading."
+    },
+    {
+      "id": "ISR_PIN_VALIDATION_NOT_GUARDED",
+      "message": "Flow and wheel sensors rely on attachInterrupt(digitalPinToInterrupt(pin_)); no runtime check for invalid interrupt mapping.",
+      "impact": "If pin mappings are changed for unsupported boards, interrupts may silently fail."
+    }
+  ],
+  "checks": {
+    "include_reference_integrity": "PASS",
+    "local_header_presence": "PASS",
+    "board_guard": "PASS",
+    "pin_collision_check": "PASS",
+    "compile_execution": "BLOCKED"
+  },
+  "include_paths": {
+    "required_include_dirs": [
+      ".",
+      "include"
+    ],
+    "ci_script_adds_include": true,
+    "board_selection_required": true
+  },
+  "detected_dependencies": {
+    "toolchain": [
+      "Arduino core/toolchain (Arduino.h)",
+      "arduino-cli (for CI script)"
+    ],
+    "third_party_libraries_in_code": [],
+    "doc_declared_libraries": [
+      "Servo",
+      "Wire"
+    ]
+  },
+  "runtime_risks": [
+    {
+      "id": "RISK_INTERRUPT_MAPPING",
+      "severity": "medium",
+      "detail": "Sensor begin() functions assume configured pins map to external interrupts."
+    },
+    {
+      "id": "RISK_SERIAL_BLOCKING",
+      "severity": "low",
+      "detail": "loop() prints multiple lines every cycle at 115200; on constrained serial readers this can increase loop jitter."
+    }
+  ],
+  "suggested_fixes": [
+    "Install arduino-cli and run ci/compile-sketch.sh for both FQBNs: arduino:avr:nano and arduino:avr:uno.",
+    "Align README dependency list with actual includes or add explicit library usage if intended.",
+    "Add static_assert or compile-time pin capability checks for interrupt pins on each supported board.",
+    "Optionally gate status telemetry rate to reduce serial overhead."
+  ],
+  "firmware_upload_without_modification": "UNKNOWN (compile verification blocked by missing arduino-cli in environment)"
+}
