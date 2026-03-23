@@ -36,7 +36,7 @@ CHECKS: tuple[tuple[str, str], ...] = (
     ),
     (
         "flow_persistence_note",
-        r"- Persistence hand-off: until P6 storage is implemented, record the\s+accepted factor in `config\.h` as `FLOW_PULSES_PER_LITER` before the\s+next run\.",
+        r"- Persistence: accepted flow calibration is stored in non-volatile memory\s+with a validity marker and checksum; invalid or blank storage reloads the\s+`config\.h` default `FLOW_PULSES_PER_LITER` on boot\.",
     ),
 )
 

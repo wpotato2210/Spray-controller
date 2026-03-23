@@ -134,3 +134,10 @@ TX-capacity gating to reduce control-loop jitter risk.
 
 - Update dates.
 - Notes for future releases and bug fixes.
+
+- **0.31** (2026-03-23): Executed `P6-TSK-003` by adding EEPROM-backed
+  calibration persistence with a validity marker and checksum, loading
+  defaults on invalid storage at boot, routing flow/wheel conversions through
+  the active calibration profile, and wiring
+  `scripts/validate_p6_calibration_storage.py` into `./scripts/validate.sh`
+  and `TESTING.md`.

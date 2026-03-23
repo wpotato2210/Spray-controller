@@ -102,8 +102,8 @@ Spray Controller Testing Procedures
 - Deterministic checks enforced:
   - `CALIBRATION.md` includes an executable 5-step flow calibration sequence.
   - Documented sanity window for accepted `FLOW_PULSES_PER_LITER` values.
-  - Current hand-off note is explicit that accepted values are copied into
-    `config.h` until P6 persistence exists.
+  - Accepted flow calibration is stored persistently with validity fallback
+    to the `config.h` default at boot.
 
 ## P6 Wheel Calibration Workflow Validator
 
@@ -112,9 +112,20 @@ Spray Controller Testing Procedures
 - Deterministic checks enforced:
   - `CALIBRATION.md` includes an executable 5-step wheel calibration sequence.
   - Documented acceptance window for `wheel_distance_per_pulse_m`.
-  - Current hand-off note is explicit that accepted wheel calibration is
-    transferred into `config.h` through `WHEEL_CIRCUMFERENCE_M` and
-    `WHEEL_PULSES_PER_REV` until P6 persistence exists.
+  - Accepted wheel calibration is stored persistently with validity fallback
+    to the `config.h` defaults at boot.
+
+## P6 Calibration Storage Validator
+
+- Command: `python3 scripts/validate_p6_calibration_storage.py`
+- Expected pass marker: `p6_calibration_storage_ok`
+- Deterministic checks enforced:
+  - Dedicated calibration persistence module exists with a stored validity
+    marker and checksum.
+  - Boot path reloads persisted calibration and falls back to `config.h`
+    defaults when storage is blank or invalid.
+  - Flow and wheel sensor conversions consume the active persisted calibration
+    profile instead of compile-time constants directly.
 
 ## Synthetic Event Tests
 

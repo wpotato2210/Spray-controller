@@ -3,6 +3,7 @@
 #include <Arduino.h>
 
 #include "config.h"
+#include "calibration_store.h"
 
 namespace spray {
 
@@ -34,7 +35,8 @@ float FlowSensor::readFlow() {
   const bool pulse_timed_out = (now_ms - last_pulse_ms) >= FLOW_STALE_TIMEOUT_MS;
   const float elapsed_s = static_cast<float>(elapsed_ms) / 1000.0f;
   stale_fault_active_ = pulse_timed_out;
-  config_fault_active_ = (FLOW_PULSES_PER_LITER <= 0.0f || elapsed_s <= 0.0f);
+  const float flow_pulses_per_liter = activeFlowPulsesPerLiter();
+  config_fault_active_ = (flow_pulses_per_liter <= 0.0f || elapsed_s <= 0.0f);
   if (config_fault_active_) {
     last_total_pulses_ = total_pulses;
     last_read_ms_ = now_ms;
@@ -55,7 +57,7 @@ float FlowSensor::readFlow() {
     return 0.0f;
   }
   const float pulse_freq_hz = static_cast<float>(delta_pulses) / elapsed_s;
-  float flow_lpm = (pulse_freq_hz / FLOW_PULSES_PER_LITER) * 60.0f;
+  float flow_lpm = (pulse_freq_hz / flow_pulses_per_liter) * 60.0f;
 
   if (flow_lpm < 0.0f) {
     flow_lpm = 0.0f;

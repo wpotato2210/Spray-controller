@@ -40,7 +40,7 @@ CHECKS: tuple[tuple[str, str], ...] = (
     ),
     (
         "wheel_persistence_note",
-        r"- Persistence hand-off: until P6 storage is implemented, update `config\.h`\s+so `WHEEL_CIRCUMFERENCE_M / WHEEL_PULSES_PER_REV` matches the accepted\s+wheel distance per pulse before the next run\.",
+        r"- Persistence: accepted wheel calibration is stored in non-volatile memory\s+with a validity marker and checksum; invalid or blank storage reloads the\s+`config\.h` defaults for `WHEEL_CIRCUMFERENCE_M` and\s+`WHEEL_PULSES_PER_REV` on boot\.",
     ),
 )
 
