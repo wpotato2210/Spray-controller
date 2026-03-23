@@ -60,7 +60,15 @@ Calibration Procedures
 
 ## Placeholders
 
-- Operator override flag (use defaults versus calibrated values)
-- Operator override workflow (defaults vs calibrated constants)
+- Operator override flag: persisted `use_defaults_override` selector that
+  forces runtime flow and wheel conversions to use `config.h` defaults while
+  retaining the last accepted calibrated constants in storage.
+- Operator override workflow:
+  1. Set `use_defaults_override = true` before field validation when the
+     operator wants to ignore stored calibrated constants.
+  2. Verify runtime flow and wheel math resolve from `FLOW_PULSES_PER_LITER`,
+     `WHEEL_CIRCUMFERENCE_M`, and `WHEEL_PULSES_PER_REV`.
+  3. Set `use_defaults_override = false` to resume the persisted calibrated
+     profile without recomputing or re-entering the accepted constants.
 - Field calibration method
 - Acceptance tolerances beyond the flow sanity window

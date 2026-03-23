@@ -20,13 +20,16 @@ class CalibrationStore {
   bool load();
   bool save();
   bool setActiveProfile(const CalibrationProfile& profile);
+  bool setDefaultsOverrideEnabled(bool enabled);
   void resetToDefaults();
   const CalibrationProfile& active() const;
+  bool defaultsOverrideEnabled() const;
 
  private:
   struct PersistedCalibrationBlock {
     uint32_t magic;
     CalibrationProfile profile;
+    uint8_t use_defaults_override;
     uint16_t checksum;
   };
 
@@ -34,6 +37,7 @@ class CalibrationStore {
   static bool isProfileValid(const CalibrationProfile& profile);
 
   CalibrationProfile active_profile_;
+  bool use_defaults_override_;
 };
 
 CalibrationStore& calibrationStore();
