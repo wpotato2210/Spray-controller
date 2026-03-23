@@ -1,6 +1,7 @@
 #ifndef SPRAY_CONTROLLER_CONFIG_H
 #define SPRAY_CONTROLLER_CONFIG_H
 
+#include <array>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -10,6 +11,12 @@ constexpr size_t MAX_SECTIONS = 8U;
 constexpr size_t MAX_SENSORS = 4U;
 
 constexpr uint8_t SECTION_COUNT = 3U;
+
+struct SectionDescriptor {
+  uint8_t id;
+  uint8_t output_pin;
+  uint8_t switch_pin;
+};
 
 constexpr float TARGET_RATE_LPHA = 100.0f;
 constexpr float SECTION_WIDTH_M = 0.5f;
