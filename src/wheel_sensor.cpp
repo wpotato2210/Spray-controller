@@ -5,18 +5,9 @@
 #include "config.h"
 
 namespace spray {
-namespace {
-volatile uint32_t g_wheel_pulses = 0U;
-volatile uint32_t g_last_wheel_pulse_ms = 0U;
 
-void onWheelPulse() {
-  ++g_wheel_pulses;
-  g_last_wheel_pulse_ms = millis();
-}
-}  // namespace
-
-WheelSensor::WheelSensor(uint8_t pin)
-    : pin_(pin),
+WheelSensor::WheelSensor(PulseCounterAdapter& pulse_counter)
+    : pulse_counter_(pulse_counter),
       last_total_pulses_(0U),
       last_read_ms_(0U),
       last_pulse_ms_(0U),
@@ -24,16 +15,10 @@ WheelSensor::WheelSensor(uint8_t pin)
       config_fault_active_(false) {}
 
 void WheelSensor::begin() {
-  pinMode(pin_, INPUT_PULLUP);
-  const int interrupt_id = digitalPinToInterrupt(pin_);
-  if (interrupt_id != NOT_AN_INTERRUPT) {
-    attachInterrupt(interrupt_id, onWheelPulse, RISING);
-  }
+  pulse_counter_.begin();
   last_read_ms_ = millis();
   last_pulse_ms_ = last_read_ms_;
-  noInterrupts();
-  g_last_wheel_pulse_ms = last_pulse_ms_;
-  interrupts();
+  pulse_counter_.reset();
 }
 
 float WheelSensor::readSpeed() {
@@ -43,10 +28,8 @@ float WheelSensor::readSpeed() {
     return 0.0f;
   }
 
-  noInterrupts();
-  const uint32_t total_pulses = g_wheel_pulses;
-  const uint32_t last_pulse_ms = g_last_wheel_pulse_ms;
-  interrupts();
+  const uint32_t total_pulses = pulse_counter_.readCount();
+  const uint32_t last_pulse_ms = pulse_counter_.readLastPulseMs();
 
   const uint32_t delta_pulses = total_pulses - last_total_pulses_;
   const bool pulse_timed_out = (now_ms - last_pulse_ms) >= WHEEL_PULSE_TIMEOUT_MS;
@@ -75,11 +58,7 @@ float WheelSensor::readSpeed() {
 }
 
 void WheelSensor::reset() {
-  noInterrupts();
-  g_wheel_pulses = 0U;
-  g_last_wheel_pulse_ms = millis();
-  interrupts();
-
+  pulse_counter_.reset();
   last_total_pulses_ = 0U;
   last_read_ms_ = millis();
   last_pulse_ms_ = last_read_ms_;

@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "config.h"
+#include "arduino_adapters.h"
 #include "interfaces.h"
 #include "pins.h"
 #include "protocol.h"
@@ -10,31 +11,30 @@
 
 namespace spray {
 namespace {
-FlowSensor g_flow_sensor(PIN_FLOW_SENSOR);
-WheelSensor g_wheel_sensor(PIN_WHEEL_SENSOR);
-RunHoldSwitch g_run_hold(PIN_RUN_HOLD);
+ArduinoActiveLowInput g_run_hold_input(PIN_RUN_HOLD);
+ArduinoPwmOutput g_pump_output(PIN_PUMP_PWM);
+ArduinoActiveHighOutput g_section_indicator(PIN_LED_SECTION_1);
+ArduinoSectionHardwareAdapter g_section_hardware(kSectionDescriptors, g_section_indicator);
+#if ENABLE_PRESSURE_SENSOR
+ArduinoAnalogInput g_pressure_input(PIN_PRESSURE_SENSOR);
+#endif
+FlowSensor g_flow_sensor(flowPulseCounter());
+WheelSensor g_wheel_sensor(wheelPulseCounter());
+RunHoldSwitch g_run_hold(g_run_hold_input);
 SectionManager g_section_manager;
 FlowController g_flow_controller;
-PumpControl g_pump(PIN_PUMP_PWM);
+PumpControl g_pump(g_pump_output);
 OperatorMenuStateMachine g_operator_menu;
 CoverageAccumulator g_coverage_accumulator;
 #if ENABLE_PRESSURE_SENSOR
-PressureSensor g_pressure_sensor(PIN_PRESSURE_SENSOR);
+PressureSensor g_pressure_sensor(g_pressure_input);
 #endif
 
-void setupPins() {
-  for (const SectionDescriptor& section : kSectionDescriptors) {
-    pinMode(section.output_pin, OUTPUT);
-    pinMode(section.switch_pin, INPUT_PULLUP);
-    digitalWrite(section.output_pin, LOW);
-  }
-  pinMode(PIN_LED_SECTION_1, OUTPUT);
-  digitalWrite(PIN_LED_SECTION_1, LOW);
-}
+void setupPins() { g_section_hardware.begin(); }
 
 void readSections() {
   for (const SectionDescriptor& section : kSectionDescriptors) {
-    const bool is_enabled = (digitalRead(section.switch_pin) == LOW);
+    const bool is_enabled = g_section_hardware.readSwitch(section.id);
     g_section_manager.setSection(section.id, is_enabled);
   }
 }
@@ -42,7 +42,7 @@ void readSections() {
 bool isSectionSwitchEnabled(uint8_t section_id) {
   for (const SectionDescriptor& section : kSectionDescriptors) {
     if (section.id == section_id) {
-      return digitalRead(section.switch_pin) == LOW;
+      return g_section_hardware.readSwitch(section.id);
     }
   }
   return false;
@@ -50,9 +50,8 @@ bool isSectionSwitchEnabled(uint8_t section_id) {
 
 void writeSections() {
   for (const SectionDescriptor& section : kSectionDescriptors) {
-    digitalWrite(section.output_pin, g_section_manager.getSection(section.id) ? HIGH : LOW);
+    g_section_hardware.writeSection(section.id, g_section_manager.getSection(section.id));
   }
-  digitalWrite(PIN_LED_SECTION_1, g_section_manager.getSection(0U) ? HIGH : LOW);
 }
 
 uint8_t getSectionBitmask() {

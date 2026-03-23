@@ -94,6 +94,11 @@ TX-capacity gating to reduce control-loop jitter risk.
   `PHASE_FIVE_READINESS_AUDIT.md`; decision: **NO-GO for P5 closure readiness**
   with prioritized task backlog `P5-TSK-001` through `P5-TSK-006`.
 
+- **0.23** (2026-03-23): Executed `P5-TSK-004` by introducing
+  hardware adapter interfaces for digital input/output, PWM, analog,
+  pulse counting, and section I/O; rewired the sketch control path to
+  consume Arduino adapter implementations instead of raw GPIO calls.
+
 ## Placeholders
 
 - Update dates.

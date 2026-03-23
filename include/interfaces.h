@@ -8,9 +8,54 @@
 
 namespace spray {
 
+class DigitalInputAdapter {
+ public:
+  virtual ~DigitalInputAdapter() = default;
+  virtual void beginPullup() = 0;
+  virtual bool isActive() const = 0;
+};
+
+class DigitalOutputAdapter {
+ public:
+  virtual ~DigitalOutputAdapter() = default;
+  virtual void beginLow() = 0;
+  virtual void write(bool enabled) = 0;
+};
+
+class AnalogInputAdapter {
+ public:
+  virtual ~AnalogInputAdapter() = default;
+  virtual void begin() = 0;
+  virtual int readRaw() const = 0;
+};
+
+class PwmOutputAdapter {
+ public:
+  virtual ~PwmOutputAdapter() = default;
+  virtual void begin() = 0;
+  virtual void write(uint8_t duty) = 0;
+};
+
+class PulseCounterAdapter {
+ public:
+  virtual ~PulseCounterAdapter() = default;
+  virtual void begin() = 0;
+  virtual uint32_t readCount() const = 0;
+  virtual uint32_t readLastPulseMs() const = 0;
+  virtual void reset() = 0;
+};
+
+class SectionHardwareAdapter {
+ public:
+  virtual ~SectionHardwareAdapter() = default;
+  virtual void begin() = 0;
+  virtual bool readSwitch(uint8_t section_id) const = 0;
+  virtual void writeSection(uint8_t section_id, bool enabled) = 0;
+};
+
 class FlowSensor {
  public:
-  explicit FlowSensor(uint8_t pin);
+  explicit FlowSensor(PulseCounterAdapter& pulse_counter);
   void begin();
   float readFlow();
   void reset();
@@ -18,7 +63,7 @@ class FlowSensor {
   bool isConfigFaultActive() const;
 
  private:
-  uint8_t pin_;
+  PulseCounterAdapter& pulse_counter_;
   uint32_t last_total_pulses_;
   uint32_t last_read_ms_;
   uint32_t last_pulse_ms_;
@@ -28,7 +73,7 @@ class FlowSensor {
 
 class WheelSensor {
  public:
-  explicit WheelSensor(uint8_t pin);
+  explicit WheelSensor(PulseCounterAdapter& pulse_counter);
   void begin();
   float readSpeed();
   void reset();
@@ -36,7 +81,7 @@ class WheelSensor {
   bool isConfigFaultActive() const;
 
  private:
-  uint8_t pin_;
+  PulseCounterAdapter& pulse_counter_;
   uint32_t last_total_pulses_;
   uint32_t last_read_ms_;
   uint32_t last_pulse_ms_;
@@ -46,25 +91,25 @@ class WheelSensor {
 
 class PressureSensor {
  public:
-  explicit PressureSensor(uint8_t pin);
+  explicit PressureSensor(AnalogInputAdapter& analog_input);
   void begin();
   float readPressure();
   void reset();
   bool isConfigFaultActive() const;
 
  private:
-  uint8_t pin_;
+  AnalogInputAdapter& analog_input_;
   bool config_fault_active_;
 };
 
 class RunHoldSwitch {
  public:
-  explicit RunHoldSwitch(uint8_t pin);
+  explicit RunHoldSwitch(DigitalInputAdapter& input);
   void begin();
   bool readRunHold() const;
 
  private:
-  uint8_t pin_;
+  DigitalInputAdapter& input_;
 };
 
 class SectionManager {
@@ -97,13 +142,13 @@ class FlowController {
 
 class PumpControl {
  public:
-  explicit PumpControl(uint8_t pin);
+  explicit PumpControl(PwmOutputAdapter& pwm_output);
   void begin();
   void startPWM();
   void setDutyCycle(uint8_t duty);
 
  private:
-  uint8_t pin_;
+  PwmOutputAdapter& pwm_output_;
 };
 
 class CoverageAccumulator {

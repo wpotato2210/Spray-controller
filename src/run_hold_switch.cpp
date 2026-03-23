@@ -1,15 +1,11 @@
 #include "interfaces.h"
 
-#include <Arduino.h>
-
 namespace spray {
 
-RunHoldSwitch::RunHoldSwitch(uint8_t pin) : pin_(pin) {}
+RunHoldSwitch::RunHoldSwitch(DigitalInputAdapter& input) : input_(input) {}
 
-void RunHoldSwitch::begin() { pinMode(pin_, INPUT_PULLUP); }
+void RunHoldSwitch::begin() { input_.beginPullup(); }
 
-bool RunHoldSwitch::readRunHold() const {
-  return digitalRead(pin_) == LOW;
-}
+bool RunHoldSwitch::readRunHold() const { return input_.isActive(); }
 
 }  // namespace spray
