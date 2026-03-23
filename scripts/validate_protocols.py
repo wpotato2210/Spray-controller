@@ -44,6 +44,8 @@ REQUIRED_PATTERNS: tuple[tuple[str, str], ...] = (
     ("sensor_pressure_id", r"`2` = pressure sensor \(only emitted when pressure feature is enabled\)"),
     ("sensor_primary_field", r"`field_id=0` = primary measured value\."),
     ("sensor_fault_field", r"`field_id=1` = deterministic fault detail bits for that sensor\."),
+    ("sensor_field_contract", r"`kSensorTelemetryFrameContract`"),
+    ("sensor_order_contract", r"`kTelemetrySensorContracts` in declared order\."),
 )
 
 

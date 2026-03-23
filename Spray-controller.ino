@@ -109,79 +109,93 @@ void publishStatus(float flow_lpm, uint8_t pump_duty, bool run_enabled, uint8_t 
 
 void publishSectionTelemetry() {
   for (const SectionDescriptor& section : kSectionDescriptors) {
-    Serial.print(MSG_SECTION_PREFIX);
-    Serial.print(section.id);
-    Serial.print(',');
-    Serial.print(TELEMETRY_SECTION_FIELD_OUTPUT_STATE);
-    Serial.print(',');
-    Serial.print(g_section_manager.getSection(section.id) ? 1 : 0);
-    Serial.print(MSG_TERMINATOR);
+    for (const TelemetrySectionFrameContract& frame : kSectionTelemetryFrameContract) {
+      Serial.print(MSG_SECTION_PREFIX);
+      Serial.print(section.id);
+      Serial.print(',');
+      Serial.print(frame.field_id);
+      Serial.print(',');
+      switch (frame.field_id) {
+        case TELEMETRY_SECTION_FIELD_OUTPUT_STATE:
+          Serial.print(g_section_manager.getSection(section.id) ? 1 : 0);
+          break;
+        case TELEMETRY_SECTION_FIELD_SWITCH_STATE:
+          Serial.print(isSectionSwitchEnabled(section.id) ? 1 : 0);
+          break;
+      }
+      Serial.print(MSG_TERMINATOR);
+    }
+  }
+}
 
-    Serial.print(MSG_SECTION_PREFIX);
-    Serial.print(section.id);
-    Serial.print(',');
-    Serial.print(TELEMETRY_SECTION_FIELD_SWITCH_STATE);
-    Serial.print(',');
-    Serial.print(isSectionSwitchEnabled(section.id) ? 1 : 0);
-    Serial.print(MSG_TERMINATOR);
+void publishSensorPrimaryValue(TelemetrySensorId sensor_id, float flow_lpm, float speed_kmh) {
+  switch (sensor_id) {
+    case TELEMETRY_SENSOR_ID_FLOW:
+      Serial.print(flow_lpm, 3);
+      break;
+    case TELEMETRY_SENSOR_ID_WHEEL:
+      Serial.print(speed_kmh, 3);
+      break;
+    case TELEMETRY_SENSOR_ID_PRESSURE:
+#if ENABLE_PRESSURE_SENSOR
+      Serial.print(g_pressure_sensor.readPressure(), 2);
+#endif
+      break;
+  }
+}
+
+bool shouldEmitSensorContract(TelemetrySensorId sensor_id) {
+#if ENABLE_PRESSURE_SENSOR
+  (void)sensor_id;
+  return true;
+#else
+  return sensor_id != TELEMETRY_SENSOR_ID_PRESSURE;
+#endif
+}
+
+void publishSensorFaultValue(TelemetrySensorId sensor_id) {
+  switch (sensor_id) {
+    case TELEMETRY_SENSOR_ID_FLOW:
+      Serial.print(g_flow_sensor.isStaleFaultActive() ? 1 : 0);
+      Serial.print(',');
+      Serial.print(g_flow_sensor.isConfigFaultActive() ? 1 : 0);
+      break;
+    case TELEMETRY_SENSOR_ID_WHEEL:
+      Serial.print(g_wheel_sensor.isTimeoutFaultActive() ? 1 : 0);
+      Serial.print(',');
+      Serial.print(g_wheel_sensor.isConfigFaultActive() ? 1 : 0);
+      break;
+    case TELEMETRY_SENSOR_ID_PRESSURE:
+#if ENABLE_PRESSURE_SENSOR
+      Serial.print(g_pressure_sensor.isConfigFaultActive() ? 1 : 0);
+#endif
+      break;
   }
 }
 
 void publishSensorTelemetry(float flow_lpm, float speed_kmh) {
-  Serial.print(MSG_SENSOR_PREFIX);
-  Serial.print(TELEMETRY_SENSOR_ID_FLOW);
-  Serial.print(',');
-  Serial.print(TELEMETRY_SENSOR_FIELD_PRIMARY_VALUE);
-  Serial.print(',');
-  Serial.print(flow_lpm, 3);
-  Serial.print(MSG_TERMINATOR);
+  for (const TelemetrySensorContract& sensor : kTelemetrySensorContracts) {
+    if (!shouldEmitSensorContract(sensor.sensor_id)) {
+      continue;
+    }
 
-  Serial.print(MSG_SENSOR_PREFIX);
-  Serial.print(TELEMETRY_SENSOR_ID_FLOW);
-  Serial.print(',');
-  Serial.print(TELEMETRY_SENSOR_FIELD_FAULT_BITS);
-  Serial.print(',');
-  Serial.print(g_flow_sensor.isStaleFaultActive() ? 1 : 0);
-  Serial.print(',');
-  Serial.print(g_flow_sensor.isConfigFaultActive() ? 1 : 0);
-  Serial.print(MSG_TERMINATOR);
-
-  Serial.print(MSG_SENSOR_PREFIX);
-  Serial.print(TELEMETRY_SENSOR_ID_WHEEL);
-  Serial.print(',');
-  Serial.print(TELEMETRY_SENSOR_FIELD_PRIMARY_VALUE);
-  Serial.print(',');
-  Serial.print(speed_kmh, 3);
-  Serial.print(MSG_TERMINATOR);
-
-  Serial.print(MSG_SENSOR_PREFIX);
-  Serial.print(TELEMETRY_SENSOR_ID_WHEEL);
-  Serial.print(',');
-  Serial.print(TELEMETRY_SENSOR_FIELD_FAULT_BITS);
-  Serial.print(',');
-  Serial.print(g_wheel_sensor.isTimeoutFaultActive() ? 1 : 0);
-  Serial.print(',');
-  Serial.print(g_wheel_sensor.isConfigFaultActive() ? 1 : 0);
-  Serial.print(MSG_TERMINATOR);
-
-#if ENABLE_PRESSURE_SENSOR
-  const float pressure_kpa = g_pressure_sensor.readPressure();
-  Serial.print(MSG_SENSOR_PREFIX);
-  Serial.print(TELEMETRY_SENSOR_ID_PRESSURE);
-  Serial.print(',');
-  Serial.print(TELEMETRY_SENSOR_FIELD_PRIMARY_VALUE);
-  Serial.print(',');
-  Serial.print(pressure_kpa, 2);
-  Serial.print(MSG_TERMINATOR);
-
-  Serial.print(MSG_SENSOR_PREFIX);
-  Serial.print(TELEMETRY_SENSOR_ID_PRESSURE);
-  Serial.print(',');
-  Serial.print(TELEMETRY_SENSOR_FIELD_FAULT_BITS);
-  Serial.print(',');
-  Serial.print(g_pressure_sensor.isConfigFaultActive() ? 1 : 0);
-  Serial.print(MSG_TERMINATOR);
-#endif
+    for (const TelemetrySensorFrameContract& frame : kSensorTelemetryFrameContract) {
+      Serial.print(MSG_SENSOR_PREFIX);
+      Serial.print(sensor.sensor_id);
+      Serial.print(',');
+      Serial.print(frame.field_id);
+      Serial.print(',');
+      switch (frame.field_id) {
+        case TELEMETRY_SENSOR_FIELD_PRIMARY_VALUE:
+          publishSensorPrimaryValue(sensor.sensor_id, flow_lpm, speed_kmh);
+          break;
+        case TELEMETRY_SENSOR_FIELD_FAULT_BITS:
+          publishSensorFaultValue(sensor.sensor_id);
+          break;
+      }
+      Serial.print(MSG_TERMINATOR);
+    }
+  }
 }
 
 void publishPreview(
