@@ -38,4 +38,7 @@ run_step "P5 scalability invariant check" \
 run_step "P6 flow calibration workflow check" \
   python3 scripts/validate_p6_flow_calibration.py
 
+run_step "P6 wheel calibration workflow check" \
+  python3 scripts/validate_p6_wheel_calibration.py
+
 echo "== SUCCESS =="

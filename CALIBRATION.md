@@ -23,6 +23,29 @@ Calibration Procedures
   accepted factor in `config.h` as `FLOW_PULSES_PER_LITER` before the
   next run.
 
+## Wheel Calibration
+
+1. Reset any prior wheel-distance override to the default wheel geometry
+   constants.
+2. Mark a straight test course of known length (minimum 50 m recommended)
+   and set tire pressure to the normal operating value before moving.
+3. Drive the wheel sensor over the full measured course while recording
+   total wheel pulses and reject runs with zero pulses or wheel slip.
+4. Compute `wheel_distance_per_pulse_m = measured_distance_m /
+   total_wheel_pulses` and `wheel_pulses_per_100m = (total_wheel_pulses /
+   measured_distance_m) * 100.0`.
+5. Accept the calibration only when `0.02 <= wheel_distance_per_pulse_m <=
+   0.5` and repeated runs agree within 5%.
+
+- Sensor model: single wheel pickup using `WHEEL_CIRCUMFERENCE_M` and
+  `WHEEL_PULSES_PER_REV`.
+- Baseline defaults: `WHEEL_CIRCUMFERENCE_M = 2.0`,
+  `WHEEL_PULSES_PER_REV = 20.0`.
+- Derived default: `wheel_distance_per_pulse_m = 0.1`.
+- Persistence hand-off: until P6 storage is implemented, update `config.h`
+  so `WHEEL_CIRCUMFERENCE_M / WHEEL_PULSES_PER_REV` matches the accepted
+  wheel distance per pulse before the next run.
+
 ## Pump Calibration
 
 - PWM vs total-flow curve: [placeholder]
@@ -36,7 +59,6 @@ Calibration Procedures
 
 ## Placeholders
 
-- Wheel calibration sequence
 - Persistent calibration storage with validity marker/checksum
 - Operator override workflow (defaults vs calibrated constants)
 - Field calibration method
