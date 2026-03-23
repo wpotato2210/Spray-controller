@@ -1,17 +1,16 @@
 #include "interfaces.h"
 
-#include <Arduino.h>
-
 #include "config.h"
 
 namespace spray {
 
-PressureSensor::PressureSensor(uint8_t pin) : pin_(pin), config_fault_active_(false) {}
+PressureSensor::PressureSensor(AnalogInputAdapter& analog_input)
+    : analog_input_(analog_input), config_fault_active_(false) {}
 
-void PressureSensor::begin() { pinMode(pin_, INPUT); }
+void PressureSensor::begin() { analog_input_.begin(); }
 
 float PressureSensor::readPressure() {
-  const int raw = analogRead(pin_);
+  const int raw = analog_input_.readRaw();
   config_fault_active_ = PRESSURE_SENSOR_MAX_KPA < PRESSURE_SENSOR_MIN_KPA;
   if (config_fault_active_) {
     return PRESSURE_SENSOR_MIN_KPA;
