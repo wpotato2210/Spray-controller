@@ -40,9 +40,19 @@ CHECKS: tuple[tuple[str, Path, str], ...] = (
         r"\*\*GO for P0 closure\*\*",
     ),
     (
+        "audit_validation_evidence",
+        Path("PHASE_ZERO_READINESS_AUDIT.md"),
+        r"`\./scripts/validate\.sh` \(success: `yamllint_ok`, `protocols_ok`,\s+`config_ok`, `p3_sensor_robustness_ok`, `p0_closure_ok`",
+    ),
+    (
+        "audit_changelog_validation_note",
+        Path("PHASE_ZERO_READINESS_AUDIT.md"),
+        r"required P0 closure record is now validated directly against\s+`CHANGELOG\.md`",
+    ),
+    (
         "changelog_p0_closure_record",
         Path("CHANGELOG.md"),
-        r"Executed `P0-CLS-003` by extending\s+`scripts/validate_p0_closure\.py`\s+to enforce the required `CHANGELOG\.md`\s+closure record for P0",
+        r"Executed `P0-CLS-004` by extending\s+`scripts/validate_p0_closure\.py`\s+to enforce the required P0 audit evidence\s+and\s+`CHANGELOG\.md`\s+closure invariants together",
     ),
     (
         "interface_checklist_flow_controller_owner",
