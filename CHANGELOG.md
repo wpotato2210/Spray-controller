@@ -98,10 +98,10 @@ TX-capacity gating to reduce control-loop jitter risk.
   deterministic section/sensor telemetry contracts in `include/protocol.h`,
   routing firmware emission through ordered telemetry contract tables, and
   documenting the stable ID mapping rules in `PROTOCOLS.md`.
-- **0.23** (2026-03-23): Executed `P5-TSK-004` by introducing
-  hardware adapter interfaces for digital input/output, PWM, analog,
-  pulse counting, and section I/O; rewired the sketch control path to
-  consume Arduino adapter implementations instead of raw GPIO calls.
+- **0.25** (2026-03-23): Executed `P5-TSK-004` by tightening the
+  hardware adapter boundary: section switch/output access is now cached
+  behind `ArduinoSectionHardwareAdapter`, and Phase Five audit evidence
+  now records the control path as adapter-driven instead of direct GPIO.
 
 - **0.24** (2026-03-23): Executed `P5-TSK-005` by rewriting
   `ARCHITECTURE.md` to define scalable control-core, adapter, and
