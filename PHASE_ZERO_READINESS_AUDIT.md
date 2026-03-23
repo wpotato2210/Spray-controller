@@ -46,6 +46,9 @@ ownership, and aligned to repository paths.
 - The required P0 closure record is now validated directly against
   `CHANGELOG.md`, satisfying the roadmap rule that phase closure is recorded in
   the changelog before follow-on phase work proceeds.
+- The deterministic `p0_closure_ok` gate now enforces the Phase-Zero audit
+  evidence set and the `CHANGELOG.md` closure record together, so future P0
+  documentation drift fails the standard validation path immediately.
 
 ## Gate decision
 
