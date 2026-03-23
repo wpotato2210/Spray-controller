@@ -95,6 +95,16 @@ Spray Controller Testing Procedures
   - Reset action requires confirm token path and emits
     `RS:COUNTERS_CALIBRATION_RESET` only on confirmed reset.
 
+## P6 Flow Calibration Workflow Validator
+
+- Command: `python3 scripts/validate_p6_flow_calibration.py`
+- Expected pass marker: `p6_flow_calibration_ok`
+- Deterministic checks enforced:
+  - `CALIBRATION.md` includes an executable 5-step flow calibration sequence.
+  - Documented sanity window for accepted `FLOW_PULSES_PER_LITER` values.
+  - Current hand-off note is explicit that accepted values are copied into
+    `config.h` until P6 persistence exists.
+
 ## Synthetic Event Tests
 
 - Simulate run/hold switch toggle.
