@@ -59,23 +59,31 @@ The operator preview must include the following fields every publish cycle:
 ## How Rate Control Works
 
 - The controller maintains target application rate (L/ha) using vehicle speed
-
-(km/h) and active spray width (m).
-
-- Active spray width is the sum of ON boom sections (`SECTION_WIDTH_M` per
-
-active section).
-
+  (km/h), active spray width (m), and measured total flow.
+- Active spray width is the sum of ON boom sections using the frozen
+  `SECTION_WIDTH_M=0.5` value for each active section.
+- With three binary boom sections, active width is bounded to `0.0-1.5 m` in
+  `0.5 m` increments.
 - Section changes affect effective width only; flow remains globally controlled
+  through one pump and one total flow sensor.
 
-through one pump and one total flow sensor.
+## Safety and operator-visible runtime behavior
 
-## Notes
+- HOLD forces the controller into the safe output path: pump duty is clamped to
+  the configured minimum output and the run state in `ST:` becomes `0`.
+- RUN restores closed-loop pump control using current speed, target rate, and
+  active width.
+- Active faults are surfaced through the deterministic `ST:` fault fields and,
+  when the operator interface is connected, remain observable without changing
+  menu state semantics.
+- Optional pressure telemetry is diagnostic only and does not change pump or
+  section outputs.
 
-- Flow calibration required before first operation.
-- Safety interlocks should be verified prior to field use.
+## Calibration prerequisites
 
-## Placeholders
-
-- Specific calibration values for `TARGET_RATE_LPHA` and `KP`
-- Safety and alarm behavior details
+- Flow calibration must be completed before field use and stored calibration is
+  used unless the operator enables the documented defaults override workflow.
+- Wheel calibration must be completed before relying on distance, area, or
+  speed-derived rate control.
+- Target rate and control gain are supplied by the frozen configuration assets
+  and are not operator-tuned from the documented serial/menu contract.

@@ -175,10 +175,10 @@ Spray Controller Protocols
 
 ## Versioning
 
-- `PROTOCOL_V1`
-
-## Placeholders
-
-- Full byte-level serialization
-- Acknowledgment/error messages
-- Error codes/retry logic
+- Frozen interface tag: `PROTOCOL_V1`
+- Freeze date: `2026-03-23` (UTC)
+- The documented text protocol is ASCII line-oriented with newline-terminated
+  frames only; no alternate binary serialization is defined for this freeze.
+- There is no command acknowledgment, retry, or error-code subprotocol in the
+  frozen interface. Unsupported or malformed operator input is ignored while the
+  current deterministic state is preserved.

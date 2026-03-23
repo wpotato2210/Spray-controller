@@ -158,3 +158,9 @@ TX-capacity gating to reduce control-loop jitter risk.
   `PHASE_SEVEN_READINESS_AUDIT.md`; decision: **NO-GO for P7 closure
   readiness** pending documentation-freeze tasks `P7-TSK-001` through
   `P7-TSK-004`.
+
+- **0.35** (2026-03-23): Executed `RMAP-001` / `P7-TSK-001` by removing
+  the remaining placeholder sections from `PROTOCOLS.md`, `USAGE.md`, and
+  `TESTING.md`, replacing them with frozen protocol/version, operator,
+  safety, and validation-gate content, and re-running `./scripts/validate.sh`
+  successfully.
