@@ -1,9 +1,13 @@
 #ifndef SPRAY_CONTROLLER_CONFIG_H
 #define SPRAY_CONTROLLER_CONFIG_H
 
+#include <stddef.h>
 #include <stdint.h>
 
 namespace spray {
+
+constexpr size_t MAX_SECTIONS = 8U;
+constexpr size_t MAX_SENSORS = 4U;
 
 constexpr uint8_t SECTION_COUNT = 3U;
 
@@ -42,6 +46,14 @@ constexpr uint32_t WHEEL_PULSE_TIMEOUT_MS = 1200UL;
 constexpr bool ENABLE_PRESSURE_SENSOR = false;
 constexpr float PRESSURE_SENSOR_MIN_KPA = 0.0f;
 constexpr float PRESSURE_SENSOR_MAX_KPA = 1000.0f;
+
+constexpr uint8_t SENSOR_COUNT =
+    static_cast<uint8_t>(2U + (ENABLE_PRESSURE_SENSOR ? 1U : 0U));
+
+static_assert(SECTION_COUNT <= MAX_SECTIONS,
+              "SECTION_COUNT must not exceed MAX_SECTIONS.");
+static_assert(SENSOR_COUNT <= MAX_SENSORS,
+              "SENSOR_COUNT must not exceed MAX_SENSORS.");
 
 }  // namespace spray
 
