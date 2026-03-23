@@ -124,6 +124,12 @@ TX-capacity gating to reduce control-loop jitter risk.
   5-step procedure, adding `scripts/validate_p6_flow_calibration.py`, and
   wiring the new validator into `./scripts/validate.sh` and `TESTING.md`.
 
+- **0.30** (2026-03-23): Executed `P6-TSK-002` by replacing the
+  wheel-calibration placeholder in `CALIBRATION.md` with a deterministic
+  5-step distance-pulse procedure, adding
+  `scripts/validate_p6_wheel_calibration.py`, and wiring the new validator
+  into `./scripts/validate.sh` and `TESTING.md`.
+
 ## Placeholders
 
 - Update dates.

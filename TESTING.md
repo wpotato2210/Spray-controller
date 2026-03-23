@@ -105,6 +105,17 @@ Spray Controller Testing Procedures
   - Current hand-off note is explicit that accepted values are copied into
     `config.h` until P6 persistence exists.
 
+## P6 Wheel Calibration Workflow Validator
+
+- Command: `python3 scripts/validate_p6_wheel_calibration.py`
+- Expected pass marker: `p6_wheel_calibration_ok`
+- Deterministic checks enforced:
+  - `CALIBRATION.md` includes an executable 5-step wheel calibration sequence.
+  - Documented acceptance window for `wheel_distance_per_pulse_m`.
+  - Current hand-off note is explicit that accepted wheel calibration is
+    transferred into `config.h` through `WHEEL_CIRCUMFERENCE_M` and
+    `WHEEL_PULSES_PER_REV` until P6 persistence exists.
+
 ## Synthetic Event Tests
 
 - Simulate run/hold switch toggle.
