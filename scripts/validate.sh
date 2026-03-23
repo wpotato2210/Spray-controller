@@ -44,4 +44,7 @@ run_step "P6 wheel calibration workflow check" \
 run_step "P6 calibration storage check" \
   python3 scripts/validate_p6_calibration_storage.py
 
+run_step "P6 calibration override check" \
+  python3 scripts/validate_p6_calibration_override.py
+
 echo "== SUCCESS =="

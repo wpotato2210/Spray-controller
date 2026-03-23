@@ -151,3 +151,12 @@ rate (L/ha).
 - Expected total-flow ranges
 - Calibration tables and formulas
 - Bench test scripts for automation
+
+## P6 Calibration Override Validator
+
+- Command: `python3 scripts/validate_p6_calibration_override.py`
+- Expected pass marker: `p6_calibration_override_ok`
+- Confirms:
+  - Calibration persistence block stores an operator override selector.
+  - Runtime calibration accessors resolve to defaults when override is enabled.
+  - `CALIBRATION.md` documents the defaults-vs-calibrated operator workflow.

@@ -141,3 +141,9 @@ TX-capacity gating to reduce control-loop jitter risk.
   the active calibration profile, and wiring
   `scripts/validate_p6_calibration_storage.py` into `./scripts/validate.sh`
   and `TESTING.md`.
+
+- **0.32** (2026-03-23): Executed `P6-TSK-004` by persisting an
+  operator `use_defaults_override` flag in the calibration store, routing
+  active calibration accessors back to `config.h` defaults when the flag is
+  enabled, and documenting plus validating the defaults-vs-calibrated
+  override workflow.

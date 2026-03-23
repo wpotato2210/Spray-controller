@@ -18,7 +18,8 @@ CalibrationProfile defaultCalibrationProfile() {
 CalibrationStore g_calibration_store;
 }  // namespace
 
-CalibrationStore::CalibrationStore() : active_profile_(defaultCalibrationProfile()) {}
+CalibrationStore::CalibrationStore()
+    : active_profile_(defaultCalibrationProfile()), use_defaults_override_(false) {}
 
 void CalibrationStore::begin() {}
 
@@ -34,6 +35,7 @@ bool CalibrationStore::load() {
   }
 
   active_profile_ = block.profile;
+  use_defaults_override_ = block.use_defaults_override != 0U;
   return true;
 }
 
@@ -46,6 +48,7 @@ bool CalibrationStore::save() {
   PersistedCalibrationBlock block{};
   block.magic = CALIBRATION_STORAGE_MAGIC;
   block.profile = active_profile_;
+  block.use_defaults_override = use_defaults_override_ ? 1U : 0U;
   block.checksum = computeChecksum(block);
   EEPROM.put(kCalibrationStorageAddress, block);
   return true;
@@ -60,12 +63,26 @@ bool CalibrationStore::setActiveProfile(const CalibrationProfile& profile) {
   return save();
 }
 
+bool CalibrationStore::setDefaultsOverrideEnabled(bool enabled) {
+  use_defaults_override_ = enabled;
+  return save();
+}
+
 void CalibrationStore::resetToDefaults() {
   active_profile_ = defaultCalibrationProfile();
+  use_defaults_override_ = false;
   save();
 }
 
-const CalibrationProfile& CalibrationStore::active() const { return active_profile_; }
+const CalibrationProfile& CalibrationStore::active() const {
+  if (use_defaults_override_) {
+    static const CalibrationProfile kDefaultProfile = defaultCalibrationProfile();
+    return kDefaultProfile;
+  }
+  return active_profile_;
+}
+
+bool CalibrationStore::defaultsOverrideEnabled() const { return use_defaults_override_; }
 
 uint16_t CalibrationStore::computeChecksum(const PersistedCalibrationBlock& block) {
   PersistedCalibrationBlock copy = block;
