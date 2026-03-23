@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include <array>
 #include <string.h>
 
 #include "config.h"
@@ -23,40 +22,35 @@ CoverageAccumulator g_coverage_accumulator;
 PressureSensor g_pressure_sensor(PIN_PRESSURE_SENSOR);
 #endif
 
-const std::array<uint8_t, MAX_SECTIONS> kSectionOutputPins = {
-    PIN_BOOM_1, PIN_BOOM_2, PIN_BOOM_3};
-const std::array<uint8_t, MAX_SECTIONS> kSectionSwitchPins = {
-    PIN_SECTION_SW_1, PIN_SECTION_SW_2, PIN_SECTION_SW_3};
-
 void setupPins() {
-  for (uint8_t i = 0U; i < SECTION_COUNT; ++i) {
-    pinMode(kSectionOutputPins[i], OUTPUT);
-    pinMode(kSectionSwitchPins[i], INPUT_PULLUP);
-    digitalWrite(kSectionOutputPins[i], LOW);
+  for (const SectionDescriptor& section : kSectionDescriptors) {
+    pinMode(section.output_pin, OUTPUT);
+    pinMode(section.switch_pin, INPUT_PULLUP);
+    digitalWrite(section.output_pin, LOW);
   }
   pinMode(PIN_LED_SECTION_1, OUTPUT);
   digitalWrite(PIN_LED_SECTION_1, LOW);
 }
 
 void readSections() {
-  for (uint8_t i = 0U; i < SECTION_COUNT; ++i) {
-    const bool is_enabled = (digitalRead(kSectionSwitchPins[i]) == LOW);
-    g_section_manager.setSection(i, is_enabled);
+  for (const SectionDescriptor& section : kSectionDescriptors) {
+    const bool is_enabled = (digitalRead(section.switch_pin) == LOW);
+    g_section_manager.setSection(section.id, is_enabled);
   }
 }
 
 void writeSections() {
-  for (uint8_t i = 0U; i < SECTION_COUNT; ++i) {
-    digitalWrite(kSectionOutputPins[i], g_section_manager.getSection(i) ? HIGH : LOW);
+  for (const SectionDescriptor& section : kSectionDescriptors) {
+    digitalWrite(section.output_pin, g_section_manager.getSection(section.id) ? HIGH : LOW);
   }
   digitalWrite(PIN_LED_SECTION_1, g_section_manager.getSection(0U) ? HIGH : LOW);
 }
 
 uint8_t getSectionBitmask() {
   uint8_t mask = 0U;
-  for (uint8_t i = 0U; i < SECTION_COUNT; ++i) {
-    if (g_section_manager.getSection(i)) {
-      mask |= static_cast<uint8_t>(1U << i);
+  for (const SectionDescriptor& section : kSectionDescriptors) {
+    if (g_section_manager.getSection(section.id)) {
+      mask |= static_cast<uint8_t>(1U << section.id);
     }
   }
   return mask;
