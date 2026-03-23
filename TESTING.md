@@ -30,6 +30,7 @@ Spray Controller Testing Procedures
   - `== P3 sensor robustness check ==`
   - `== P0 closure artifact check ==`
   - `== P1 closure artifact check ==`
+  - `== P2 closure artifact check ==`
   - `== P4 operator interface check ==`
   - `== P5 scalability invariant check ==`
   - `== P6 flow calibration workflow check ==`
@@ -67,6 +68,22 @@ Spray Controller Testing Procedures
     `HARDWARE.md`.
   - `CHANGELOG.md` records the Phase-One closure task and the
     canonical gate includes the P1 closure check.
+
+## P2 Deterministic Closure Validator
+
+- Command: `python3 scripts/validate_p2_closure.py`
+- Expected pass marker: `p2_closure_ok`
+- Deterministic checks enforced:
+  - `PHASE_TWO_READINESS_AUDIT.md` records a canonical
+    **GO: P2 is ready to close.** decision.
+  - The Phase-Two audit cites the standard
+    `./scripts/validate.sh` gate with the required closure markers,
+    including `p2_closure_ok`.
+  - `Spray-controller.ino` preserves the fixed SEE -> THINK -> DO loop order:
+    section sample, sensor reads, active-width computation, run/hold-safe pump
+    command, and compact `ST:` status publish.
+  - `CHANGELOG.md` records the Phase-Two closure task and the canonical gate
+    includes the P2 closure check.
 
 ## P4 Deterministic Operator Interface Validator
 

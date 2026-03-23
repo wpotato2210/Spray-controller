@@ -35,6 +35,9 @@ run_step "P0 closure artifact check" \
 run_step "P1 closure artifact check" \
   python3 scripts/validate_p1_closure.py
 
+run_step "P2 closure artifact check" \
+  python3 scripts/validate_p2_closure.py
+
 run_step "P4 operator interface check" \
   python3 scripts/validate_p4_operator_interface.py
 
