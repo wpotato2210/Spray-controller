@@ -148,12 +148,23 @@ TX-capacity gating to reduce control-loop jitter risk.
   enabled, and documenting plus validating the defaults-vs-calibrated
   override workflow.
 
-- **0.33** (2026-03-23): Executed `P7-TSK-001` by aligning `PROTOCOLS.md`, `USAGE.md`, and `TESTING.md` with the implemented firmware contract, adding a deterministic `scripts/validate_p7_documentation.py` check to `./scripts/validate.sh`, and documenting the current cadence, reset, pin-map, and control-constant behavior for the frozen doc set.
+- **0.33** (2026-03-23): Executed `P7-TSK-001` by aligning
+  `PROTOCOLS.md`, `USAGE.md`, and `TESTING.md` with the implemented firmware
+  contract, adding a deterministic `scripts/validate_p7_documentation.py`
+  check to `./scripts/validate.sh`, and documenting the current cadence,
+  reset, pin-map, and control-constant behavior for the frozen doc set.
 - **0.33** (2026-03-23): Executed Phase-Six readiness audit in
   `PHASE_SIX_READINESS_AUDIT.md`; confirmed all P6 deterministic tasks and
   deliverables are complete, validated the canonical gate with
   `./scripts/validate.sh`, and recorded **GO** decision to close P6 and
   proceed to P7.
+
+- **0.35** (2026-03-23): Executed `P0-CLS-001` by replacing the
+  Phase-Zero baseline placeholders with a canonical SEE/THINK/DO loop-path
+  audit in `DEV_NOTES.md`, converting `include_path_audit.md` into a frozen
+  interface checklist mapped to implementation owners, and re-running the P0
+  audit to record a **GO** closure decision in
+  `PHASE_ZERO_READINESS_AUDIT.md`.
 
 - **0.34** (2026-03-23): Executed Phase-Seven readiness audit in
   `PHASE_SEVEN_READINESS_AUDIT.md`; decision: **NO-GO for P7 closure
