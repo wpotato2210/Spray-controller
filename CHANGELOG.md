@@ -99,6 +99,11 @@ TX-capacity gating to reduce control-loop jitter risk.
   pulse counting, and section I/O; rewired the sketch control path to
   consume Arduino adapter implementations instead of raw GPIO calls.
 
+- **0.24** (2026-03-23): Executed `P5-TSK-005` by rewriting
+  `ARCHITECTURE.md` to define scalable control-core, adapter, and
+  transport boundaries, including dependency direction and multi-MCU
+  bridge-ready seams for future distributed I/O.
+
 ## Placeholders
 
 - Update dates.
