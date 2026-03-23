@@ -43,6 +43,9 @@ ownership, and aligned to repository paths.
   roadmap text.
 - The canonical runtime cadence source remains `LOOP_INTERVAL_MS`, matching the
   control-loop guard used in `loop()`.
+- The required P0 closure record is now validated directly against
+  `CHANGELOG.md`, satisfying the roadmap rule that phase closure is recorded in
+  the changelog before follow-on phase work proceeds.
 
 ## Gate decision
 

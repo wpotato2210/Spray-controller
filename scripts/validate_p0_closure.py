@@ -40,6 +40,11 @@ CHECKS: tuple[tuple[str, Path, str], ...] = (
         r"\*\*GO for P0 closure\*\*",
     ),
     (
+        "changelog_p0_closure_record",
+        Path("CHANGELOG.md"),
+        r"Executed `P0-CLS-003` by extending\s+`scripts/validate_p0_closure\.py`\s+to enforce the required `CHANGELOG\.md`\s+closure record for P0",
+    ),
+    (
         "interface_checklist_flow_controller_owner",
         Path("include_path_audit.md"),
         r"\|`FlowController`\|`include/interfaces\.h`\|`src/flow_controller\.cpp`\|",
