@@ -28,6 +28,7 @@ Spray Controller Testing Procedures
   - `== Protocol structure check ==`
   - `== Config completeness check ==`
   - `== P3 sensor robustness check ==`
+  - `== P3 closure artifact check ==`
   - `== P0 closure artifact check ==`
   - `== P1 closure artifact check ==`
   - `== P2 closure artifact check ==`
@@ -54,6 +55,21 @@ Spray Controller Testing Procedures
   - Pressure telemetry compile-time guard
     (`ENABLE_PRESSURE_SENSOR=false` by default).
   - Status telemetry schema includes `fault_bits` and `fault_text`.
+
+## P3 Deterministic Closure Validator
+
+- Command: `python3 scripts/validate_p3_closure.py`
+- Expected pass marker: `p3_closure_ok`
+- Deterministic checks enforced:
+  - `PHASE_THREE_READINESS_AUDIT.md` preserves the canonical
+    **Ready to close P3 (GO).** closure decision.
+  - The Phase-Three audit continues to cite both
+    `./scripts/validate.sh` and
+    `python3 scripts/validate_p3_sensor_robustness.py` as deterministic
+    evidence.
+  - Phase-Three closure continues to require deterministic
+    fault-telemetry visibility (`fault_bits`, `fault_text`) and a
+    `CHANGELOG.md` closure record.
 
 ## P1 Deterministic Closure Validator
 

@@ -1,6 +1,6 @@
 # Phase-Three Readiness Audit (P3 Gate Check)
 
-Date: 2026-03-22 (UTC)
+Date: 2026-03-23 (UTC)
 
 Scope: Assess implementation readiness against P3 requirements in
 `DEVELOPMENT_ROADMAP.md` and issue a gate decision for P4 entry.
@@ -23,11 +23,12 @@ validated with deterministic repository checks.
 - Protocol fault bit definitions in `include/protocol.h`.
 - Runtime status/telemetry output in `Spray-controller.ino`.
 - Telemetry contract in `PROTOCOLS.md`.
-- Deterministic validation commands executed on 2026-03-22 (UTC):
+- Deterministic validation commands executed on 2026-03-23 (UTC):
   - `./scripts/validate.sh`
   - `python3 scripts/validate_p3_sensor_robustness.py`
+  - `python3 scripts/validate_p3_closure.py`
   - Result: success (`yamllint_ok`, `protocols_ok`, `config_ok`,
-    `p3_sensor_robustness_ok`, `== SUCCESS ==`).
+    `p3_sensor_robustness_ok`, `p3_closure_ok`, `== SUCCESS ==`).
 
 ## P3 deterministic task status
 
@@ -51,3 +52,5 @@ validated with deterministic repository checks.
 - **GO: Close P3 and proceed to P4 planning/execution.**
 - Keep `scripts/validate_p3_sensor_robustness.py` in the pre-merge check path
   to prevent regressions in P3 guarantees.
+- The required P3 closure record is now validated directly against
+  `CHANGELOG.md` via `scripts/validate_p3_closure.py`.

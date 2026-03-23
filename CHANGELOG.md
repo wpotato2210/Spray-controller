@@ -224,3 +224,11 @@ TX-capacity gating to reduce control-loop jitter risk.
 - **0.43** (2026-03-23): Executed `P2-CLS-003` by recording the final P2
   closure evidence checkpoint in `CHANGELOG.md` and marking the roadmap closure
   tracker complete for `P2-CLS-003`.
+
+- **0.44** (2026-03-23): Executed `P3-CLS-001` by adding deterministic
+  `scripts/validate_p3_closure.py` checks for the Phase-Three **GO** verdict,
+  required fault-telemetry evidence (`fault_bits`, `fault_text`), and
+  `CHANGELOG.md` closure record coverage; wired the new P3 closure gate into
+  `./scripts/validate.sh`, refreshed `PHASE_THREE_READINESS_AUDIT.md` and
+  `TESTING.md` with `p3_closure_ok`, and marked `ROADMAP_CLOSURE_TASKS.md`
+  complete for `P3-CLS-001`.

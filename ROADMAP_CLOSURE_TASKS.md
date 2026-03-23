@@ -32,7 +32,7 @@ Legend:
 
 ## P3 - Sensor Robustness
 
-- [ ] `P3-CLS-001` Preserve current P3 validator coverage and fault-telemetry
+- [x] `P3-CLS-001` Preserve current P3 validator coverage and fault-telemetry
   behavior; no blocking closure work is currently open.
 
 ## P4 - Operator Interface
