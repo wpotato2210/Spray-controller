@@ -12,6 +12,7 @@ namespace spray {
 
 class ArduinoActiveLowInput : public DigitalInputAdapter {
  public:
+  ArduinoActiveLowInput();
   explicit ArduinoActiveLowInput(uint8_t pin);
   void beginPullup() override;
   bool isActive() const override;
@@ -22,6 +23,7 @@ class ArduinoActiveLowInput : public DigitalInputAdapter {
 
 class ArduinoActiveHighOutput : public DigitalOutputAdapter {
  public:
+  ArduinoActiveHighOutput();
   explicit ArduinoActiveHighOutput(uint8_t pin);
   void beginLow() override;
   void write(bool enabled) override;
@@ -80,6 +82,8 @@ class ArduinoSectionHardwareAdapter : public SectionHardwareAdapter {
  private:
   const std::array<SectionDescriptor, SECTION_COUNT>& sections_;
   DigitalOutputAdapter& indicator_output_;
+  std::array<ArduinoActiveHighOutput, SECTION_COUNT> section_outputs_;
+  std::array<ArduinoActiveLowInput, SECTION_COUNT> section_inputs_;
 };
 
 ArduinoInterruptPulseCounter& flowPulseCounter();

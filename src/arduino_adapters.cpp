@@ -14,11 +14,15 @@ void onFlowPulse() { g_flow_pulse_counter.recordPulse(); }
 void onWheelPulse() { g_wheel_pulse_counter.recordPulse(); }
 }  // namespace
 
+ArduinoActiveLowInput::ArduinoActiveLowInput() : pin_(0U) {}
+
 ArduinoActiveLowInput::ArduinoActiveLowInput(uint8_t pin) : pin_(pin) {}
 
 void ArduinoActiveLowInput::beginPullup() { pinMode(pin_, INPUT_PULLUP); }
 
 bool ArduinoActiveLowInput::isActive() const { return digitalRead(pin_) == LOW; }
+
+ArduinoActiveHighOutput::ArduinoActiveHighOutput() : pin_(0U) {}
 
 ArduinoActiveHighOutput::ArduinoActiveHighOutput(uint8_t pin) : pin_(pin) {}
 
@@ -84,31 +88,37 @@ void ArduinoInterruptPulseCounter::recordPulse() {
 ArduinoSectionHardwareAdapter::ArduinoSectionHardwareAdapter(
     const std::array<SectionDescriptor, SECTION_COUNT>& sections,
     DigitalOutputAdapter& indicator_output)
-    : sections_(sections), indicator_output_(indicator_output) {}
+    : sections_(sections),
+      indicator_output_(indicator_output),
+      section_outputs_{},
+      section_inputs_{} {
+  for (size_t index = 0; index < SECTION_COUNT; ++index) {
+    section_outputs_[index] = ArduinoActiveHighOutput(sections_[index].output_pin);
+    section_inputs_[index] = ArduinoActiveLowInput(sections_[index].switch_pin);
+  }
+}
 
 void ArduinoSectionHardwareAdapter::begin() {
-  for (const SectionDescriptor& section : sections_) {
-    ArduinoActiveHighOutput output(section.output_pin);
-    ArduinoActiveLowInput input(section.switch_pin);
-    output.beginLow();
-    input.beginPullup();
+  for (size_t index = 0; index < SECTION_COUNT; ++index) {
+    section_outputs_[index].beginLow();
+    section_inputs_[index].beginPullup();
   }
   indicator_output_.beginLow();
 }
 
 bool ArduinoSectionHardwareAdapter::readSwitch(uint8_t section_id) const {
-  for (const SectionDescriptor& section : sections_) {
-    if (section.id == section_id) {
-      return ArduinoActiveLowInput(section.switch_pin).isActive();
+  for (size_t index = 0; index < SECTION_COUNT; ++index) {
+    if (sections_[index].id == section_id) {
+      return section_inputs_[index].isActive();
     }
   }
   return false;
 }
 
 void ArduinoSectionHardwareAdapter::writeSection(uint8_t section_id, bool enabled) {
-  for (const SectionDescriptor& section : sections_) {
-    if (section.id == section_id) {
-      ArduinoActiveHighOutput(section.output_pin).write(enabled);
+  for (size_t index = 0; index < SECTION_COUNT; ++index) {
+    if (sections_[index].id == section_id) {
+      section_outputs_[index].write(enabled);
       break;
     }
   }
