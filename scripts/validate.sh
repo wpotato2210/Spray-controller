@@ -32,4 +32,7 @@ run_step "P3 sensor robustness check" \
 run_step "P4 operator interface check" \
   python3 scripts/validate_p4_operator_interface.py
 
+run_step "P5 scalability invariant check" \
+  python3 scripts/validate_p5_scalability.py
+
 echo "== SUCCESS =="

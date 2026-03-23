@@ -26,6 +26,8 @@ Spray Controller Testing Procedures
   - `== Protocol structure check ==`
   - `== Config completeness check ==`
   - `== P3 sensor robustness check ==`
+  - `== P4 operator interface check ==`
+  - `== P5 scalability invariant check ==`
   - `== SUCCESS ==`
 
 - Optional artifact capture:
@@ -64,6 +66,18 @@ Spray Controller Testing Procedures
   - Stable `S:` section telemetry field contract and ascending section ordering.
   - Stable `SN:` sensor ID mapping and per-sensor field ordering.
   - Backward-compatible `ST:` status frame remains documented.
+
+## P5 Deterministic Scalability Invariant Validator
+
+- Command: `python3 scripts/validate_p5_scalability.py`
+- Expected pass marker: `p5_scalability_ok`
+- Deterministic checks enforced:
+  - `SECTION_COUNT` matches descriptor-table length on Nano and Uno pin maps.
+  - Section descriptor IDs remain ascending and stable for
+    backward-compatible 3-section output.
+  - Sensor telemetry IDs remain fixed (`flow=0`, `wheel=1`, optional `pressure=2`).
+  - Firmware status bitmask generation and telemetry loops stay
+    descriptor/contract driven.
 
 ## P4 Deterministic Operator Interface Validator
 
