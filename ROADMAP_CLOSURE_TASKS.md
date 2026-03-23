@@ -7,28 +7,28 @@ Legend:
 
 ## P0 - Baseline Audit Freeze
 
-- [ ] `P0-CLS-001` Add a deterministic loop-path audit to `DEV_NOTES.md`
+- [x] `P0-CLS-001` Add a deterministic loop-path audit to `DEV_NOTES.md`
   covering control-loop entrypoints, execution order, and SEE/THINK/DO
   ownership.
-- [ ] `P0-CLS-002` Create a frozen interface checklist mapping each
+- [x] `P0-CLS-002` Create a frozen interface checklist mapping each
   declaration in `include/interfaces.h` to its implementation file(s).
-- [ ] `P0-CLS-003` Record baseline assumptions for the current
+- [x] `P0-CLS-003` Record baseline assumptions for the current
   single-flow-sensor, single-pump, three-section control model.
-- [ ] `P0-CLS-004` Re-run and update the P0 readiness audit to mark P0 GO
+- [x] `P0-CLS-004` Re-run and update the P0 readiness audit to mark P0 GO
   once the missing artifacts exist.
 
 ## P1 - Pin + Config Finalization
 
-- [ ] `P1-CLS-001` Revalidate P1 closure after P0 closes, because current
+- [x] `P1-CLS-001` Revalidate P1 closure after P0 closes, because current
   roadmap makes P0 a hard prerequisite.
 
 ## P2 - Core Control Loop Integration
 
-- [ ] `P2-CLS-001` Produce a P2 closure/readiness audit tied to the current
+- [x] `P2-CLS-001` Produce a P2 closure/readiness audit tied to the current
   roadmap scope.
-- [ ] `P2-CLS-002` Add or record the required bench integration checkpoint
+- [x] `P2-CLS-002` Add or record the required bench integration checkpoint
   for run/hold, section-output, and pump-PWM timing.
-- [ ] `P2-CLS-003` Record P2 closure evidence in `CHANGELOG.md`.
+- [x] `P2-CLS-003` Record P2 closure evidence in `CHANGELOG.md`.
 
 ## P3 - Sensor Robustness
 
