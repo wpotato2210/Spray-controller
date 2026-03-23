@@ -42,12 +42,15 @@ Spray Controller Protocols
 #### SECTION ID contract
 
 - Section IDs are stable compile-time identities sourced from
-  `kSectionDescriptors`.
+  `kSectionDescriptors`; `section_id` must equal the descriptor `id` field and
+  must never be renumbered for an existing physical section.
 - Current canonical mapping:
   - `0` = section0
   - `1` = section1
   - `2` = section2
-- Output ordering is strictly ascending by `section_id`.
+- Output ordering is strictly ascending by `section_id`; firmware emits frames
+  by iterating `kSectionDescriptors` in descriptor order, which must stay sorted
+  by ascending `id`.
 - Each telemetry cycle emits exactly two `S:` frames per configured section:
   - `field_id=0` = output state currently driven by firmware.
   - `field_id=1` = operator switch state sampled from the section input.
@@ -64,13 +67,16 @@ Spray Controller Protocols
 #### SENSOR ID contract
 
 - Sensor IDs are stable compile-time identities defined in
-  `include/protocol.h`.
+  `include/protocol.h` via `kTelemetrySensorContracts`; existing IDs must never
+  be renumbered and new IDs append to the ordered contract.
 - Canonical mapping:
   - `0` = total flow sensor
   - `1` = wheel speed sensor
   - `2` = pressure sensor (only emitted when pressure feature is enabled)
-- Output ordering is strictly ascending by `sensor_id`.
-- Each telemetry cycle emits exactly two `SN:` frames per emitted sensor:
+- Output ordering is strictly ascending by `sensor_id`; firmware emits frames
+  by iterating `kTelemetrySensorContracts` in declared order.
+- Each telemetry cycle emits exactly two `SN:` frames per emitted sensor by
+  iterating the fixed field contract `kSensorTelemetryFrameContract`:
   - `field_id=0` = primary measured value.
   - `field_id=1` = deterministic fault detail bits for that sensor.
 - Primary value contract:
