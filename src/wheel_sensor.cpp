@@ -3,6 +3,7 @@
 #include <Arduino.h>
 
 #include "config.h"
+#include "calibration_store.h"
 
 namespace spray {
 
@@ -35,7 +36,10 @@ float WheelSensor::readSpeed() {
   const bool pulse_timed_out = (now_ms - last_pulse_ms) >= WHEEL_PULSE_TIMEOUT_MS;
   const float elapsed_s = static_cast<float>(elapsed_ms) / 1000.0f;
   timeout_fault_active_ = pulse_timed_out;
-  config_fault_active_ = (WHEEL_PULSES_PER_REV <= 0.0f || elapsed_s <= 0.0f);
+  const float wheel_pulses_per_rev = activeWheelPulsesPerRev();
+  const float wheel_circumference_m = activeWheelCircumferenceM();
+  config_fault_active_ =
+      (wheel_pulses_per_rev <= 0.0f || wheel_circumference_m <= 0.0f || elapsed_s <= 0.0f);
   if (config_fault_active_ || pulse_timed_out) {
     last_total_pulses_ = total_pulses;
     last_read_ms_ = now_ms;
@@ -45,7 +49,7 @@ float WheelSensor::readSpeed() {
   const float pulse_freq_hz = static_cast<float>(delta_pulses) / elapsed_s;
 
   float speed_kmh =
-      (pulse_freq_hz / WHEEL_PULSES_PER_REV) * WHEEL_CIRCUMFERENCE_M * 3.6f;
+      (pulse_freq_hz / wheel_pulses_per_rev) * wheel_circumference_m * 3.6f;
 
   if (speed_kmh < 0.0f) {
     speed_kmh = 0.0f;

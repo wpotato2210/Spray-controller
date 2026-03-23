@@ -19,9 +19,9 @@ Calibration Procedures
 - Baseline default: `FLOW_PULSES_PER_LITER = 450.0`.
 - Sanity window: accept only `300.0 <= flow_pulses_per_liter <= 700.0`
   for the YF-S201C baseline build.
-- Persistence hand-off: until P6 storage is implemented, record the
-  accepted factor in `config.h` as `FLOW_PULSES_PER_LITER` before the
-  next run.
+- Persistence: accepted flow calibration is stored in non-volatile memory
+  with a validity marker and checksum; invalid or blank storage reloads the
+  `config.h` default `FLOW_PULSES_PER_LITER` on boot.
 
 ## Wheel Calibration
 
@@ -42,9 +42,10 @@ Calibration Procedures
 - Baseline defaults: `WHEEL_CIRCUMFERENCE_M = 2.0`,
   `WHEEL_PULSES_PER_REV = 20.0`.
 - Derived default: `wheel_distance_per_pulse_m = 0.1`.
-- Persistence hand-off: until P6 storage is implemented, update `config.h`
-  so `WHEEL_CIRCUMFERENCE_M / WHEEL_PULSES_PER_REV` matches the accepted
-  wheel distance per pulse before the next run.
+- Persistence: accepted wheel calibration is stored in non-volatile memory
+  with a validity marker and checksum; invalid or blank storage reloads the
+  `config.h` defaults for `WHEEL_CIRCUMFERENCE_M` and
+  `WHEEL_PULSES_PER_REV` on boot.
 
 ## Pump Calibration
 
@@ -59,7 +60,7 @@ Calibration Procedures
 
 ## Placeholders
 
-- Persistent calibration storage with validity marker/checksum
+- Operator override flag (use defaults versus calibrated values)
 - Operator override workflow (defaults vs calibrated constants)
 - Field calibration method
 - Acceptance tolerances beyond the flow sanity window

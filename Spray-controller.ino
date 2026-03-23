@@ -3,6 +3,7 @@
 
 #include "config.h"
 #include "arduino_adapters.h"
+#include "calibration_store.h"
 #include "interfaces.h"
 #include "pins.h"
 #include "protocol.h"
@@ -320,6 +321,7 @@ void executeResetIfConfirmed() {
     return;
   }
   g_coverage_accumulator.reset();
+  calibrationStore().resetToDefaults();
   g_flow_sensor.reset();
   g_wheel_sensor.reset();
 #if ENABLE_PRESSURE_SENSOR
@@ -339,6 +341,8 @@ void setup() {
     }
   }
   spray::setupPins();
+  spray::calibrationStore().begin();
+  spray::calibrationStore().load();
   spray::g_flow_sensor.begin();
   spray::g_wheel_sensor.begin();
   spray::g_run_hold.begin();
