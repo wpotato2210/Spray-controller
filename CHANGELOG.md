@@ -114,6 +114,11 @@ TX-capacity gating to reduce control-loop jitter risk.
   plus enforced descriptor/ID/backward-compatibility invariants in
   `TESTING.md`.
 
+- **0.28** (2026-03-23): Re-ran Phase-Five readiness audit in
+  `PHASE_FIVE_READINESS_AUDIT.md`; confirmed all P5 deterministic tasks and
+  deliverables are complete, validated the canonical gate with
+  `./scripts/validate.sh`, and recorded **GO** decision to proceed to P6.
+
 ## Placeholders
 
 - Update dates.
