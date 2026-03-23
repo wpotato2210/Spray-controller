@@ -1,39 +1,55 @@
-# Phase One (P1) Completion Readiness Assessment
+# Phase-One Readiness Audit (P1 Gate Check)
 
-Date: 2026-03-22 (UTC)
+Date: 2026-03-23 (UTC)
 
-## Scope and gate
+Scope: Assess P1 closure readiness against `DEVELOPMENT_ROADMAP.md` gate
+criteria.
 
-This audit checks P1 closure readiness against `DEVELOPMENT_ROADMAP.md`. Per
-phase-gate rules, P1 can close only when all P1 deliverables are complete
-**and** closure is referenced from `CHANGELOG.md`.
+## Verdict
 
-## Evidence collected
+**GO: P1 is ready to close.**
 
-- `pins.yaml` and `config.yaml` reviewed for finalized keys and values.
-- `CONFIGURATION.md` and `HARDWARE.md` reviewed for exact concrete values.
-- Deterministic validation command executed:
-  - `./scripts/validate.sh`
-  - Result: success (`yamllint_ok`, `protocols_ok`, `config_ok`).
-- Closure evidence recorded in `CHANGELOG.md` (v0.7, dated 2026-03-22) and
-  references `validation/validation_pass.txt`.
+Reason: the finalized pin map, runtime configuration schema, deterministic
+validation path, and synchronized docs are present and now enforced by a
+dedicated P1 closure artifact check.
+
+## Evidence reviewed
+
+- P1 objective, inputs, outputs, validation, and failure-recovery rules in
+  `DEVELOPMENT_ROADMAP.md`.
+- Finalized configuration assets: `pins.yaml`, `config.yaml`, `validation.yaml`,
+  and `openspec.yaml`.
+- Exact-value docs: `CONFIGURATION.md` and `HARDWARE.md`.
+- Existing closure record in `CHANGELOG.md` version `0.7` dated 2026-03-22.
+- Deterministic repository checks (2026-03-23 UTC):
+  - `./scripts/validate.sh` (success: `yamllint_ok`, `protocols_ok`,
+    `config_ok`, `p3_sensor_robustness_ok`, `p0_closure_ok`, `p1_closure_ok`,
+    `p4_operator_interface_ok`, `p5_scalability_ok`,
+    `p6_flow_calibration_ok`, `p6_wheel_calibration_ok`,
+    `p6_calibration_storage_ok`, `p6_calibration_override_ok`,
+    `p7_documentation_ok`).
 
 ## P1 deliverable status
 
-|P1 Deliverable|Status|Evidence|Notes|
+|P1 deliverable (roadmap)|Status|Evidence|Gap/Action|
 |---|---|---|---|
-|Final `pins.yaml` + `config.yaml` schema (no TODO fields)|**Complete**|Concrete values in both files.|Nano + Uno pin profiles; finalized control/timing keys.|
-|Validation pass output with no missing/extra keys|**Complete**|`./scripts/validate.sh` passed.|Pass artifact committed at `validation/validation_pass.txt`.|
-|`CONFIGURATION.md` + `HARDWARE.md` updated to exact values|**Complete**|Exact numeric defaults and board pin map documented.|Values aligned across configuration assets and docs.|
-|Gate bookkeeping: phase closure referenced in changelog|**Complete**|`CHANGELOG.md` v0.7 explicitly states “P1 closed”.|Entry references command/result markers and pass artifact.|
+|Finalized pin map in `pins.yaml` for the Arduino Nano production map|**Complete**|`pins.yaml` defines the frozen Nano/Uno board profiles with three section outputs, one pump PWM output, one flow input, one wheel input, and one run/hold input.|No gap.|
+|Finalized runtime configuration schema in `config.yaml`|**Complete**|`config.yaml` contains concrete gains, limits, timing values, and feature toggles with no placeholder TODO keys.|No gap.|
+|Deterministic validation command covering YAML and config completeness|**Complete**|`./scripts/validate.sh` runs YAML schema, protocol, config, and closure validators in one canonical path.|No gap.|
+|Documentation synchronized to exact pin/config values|**Complete**|`pins.yaml`, `config.yaml`, `CONFIGURATION.md`, and `HARDWARE.md` remain aligned on the finalized P1 values.|No gap.|
+|Closure bookkeeping recorded in changelog|**Complete**|`CHANGELOG.md` v0.7 records P1 closure and `v0.39` records the deterministic P1 closure validator task.|No gap.|
 
-## Readiness verdict
+## Additional observations
 
-**P1 is gate-closed and ready to transition to P2.**
+- The canonical loop interval remains defined once through the finalized
+  configuration constant path documented in `CONFIGURATION.md` and consumed by
+  firmware through `config.h`.
+- The standard validation path now fails immediately if the P1 closure audit,
+  testing markers, or changelog evidence drift from the required closure state.
+- No remaining P1-specific recovery action is open because the pin map, config
+  schema, validation gate, and synchronized docs are all present together.
 
-## Closure checklist
+## Gate decision
 
-- [x] Finalized `pins.yaml` and `config.yaml` with no TODOs.
-- [x] Deterministic validation pass artifact committed.
-- [x] `CONFIGURATION.md` and `HARDWARE.md` aligned with finalized values.
-- [x] P1 closure explicitly referenced from `CHANGELOG.md`.
+- **GO for P1 closure**. Phase-One outputs are frozen, the validation path is
+  deterministic, and the required closure evidence is recorded and checked.

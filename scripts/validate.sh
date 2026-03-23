@@ -32,6 +32,9 @@ run_step "P3 sensor robustness check" \
 run_step "P0 closure artifact check" \
   python3 scripts/validate_p0_closure.py
 
+run_step "P1 closure artifact check" \
+  python3 scripts/validate_p1_closure.py
+
 run_step "P4 operator interface check" \
   python3 scripts/validate_p4_operator_interface.py
 

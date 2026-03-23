@@ -8,7 +8,8 @@ Spray Controller Testing Procedures
 - Verify total-flow pulse input on pin `3`.
 - Verify wheel pulse input on pin `2`.
 - Verify boom section outputs on pins `12`, `13`, and `A1`.
-- Verify run/hold input on pin `A3` and section switch inputs on `A4`, `A5`, and `4`.
+- Verify run/hold input on pin `A3` and section switch inputs on `A4`,
+  `A5`, and `4`.
 
 ## Deterministic Compile Verification
 
@@ -27,6 +28,8 @@ Spray Controller Testing Procedures
   - `== Protocol structure check ==`
   - `== Config completeness check ==`
   - `== P3 sensor robustness check ==`
+  - `== P0 closure artifact check ==`
+  - `== P1 closure artifact check ==`
   - `== P4 operator interface check ==`
   - `== P5 scalability invariant check ==`
   - `== P6 flow calibration workflow check ==`
@@ -47,19 +50,38 @@ Spray Controller Testing Procedures
 - Deterministic checks enforced:
   - Wheel timeout constant + timeout-to-zero behavior in `readSpeed()`.
   - Flow stale-timeout constant + stale fallback and max clamp behavior.
-  - Pressure telemetry compile-time guard (`ENABLE_PRESSURE_SENSOR=false` by default).
+  - Pressure telemetry compile-time guard
+    (`ENABLE_PRESSURE_SENSOR=false` by default).
   - Status telemetry schema includes `fault_bits` and `fault_text`.
+
+## P1 Deterministic Closure Validator
+
+- Command: `python3 scripts/validate_p1_closure.py`
+- Expected pass marker: `p1_closure_ok`
+- Deterministic checks enforced:
+  - `PHASE_ONE_READINESS.md` records a canonical **GO for P1 closure** decision.
+  - The Phase-One audit cites the standard `./scripts/validate.sh`
+    gate with the required closure markers.
+  - Phase-One closure alignment is explicitly stated across
+    `pins.yaml`, `config.yaml`, `CONFIGURATION.md`, and
+    `HARDWARE.md`.
+  - `CHANGELOG.md` records the Phase-One closure task and the
+    canonical gate includes the P1 closure check.
 
 ## P4 Deterministic Operator Interface Validator
 
 - Command: `python3 scripts/validate_p4_operator_interface.py`
 - Expected pass marker: `p4_operator_interface_ok`
 - Deterministic checks enforced:
-  - Menu state/event contract and explicit transitions (`HOME`, `MENU`, `COUNTERS`, `RESET_CONFIRM`).
+  - Menu state/event contract and explicit transitions
+    (`HOME`, `MENU`, `COUNTERS`, `RESET_CONFIRM`).
   - `ME:NAV|SEL|CAN|CFM` event parsing and `MS:` state output wiring.
-  - Fixed-cadence preview gate (`PREVIEW_INTERVAL_MS`) and bounded `PV` publish path in loop cadence.
-  - Distance/area counter update path uses wheel speed and active section width every deterministic loop tick.
-  - Reset action requires confirm token path and emits `RS:COUNTERS_CALIBRATION_RESET` only on confirmed reset.
+  - Fixed-cadence preview gate (`PREVIEW_INTERVAL_MS`) and
+    bounded `PV` publish path in loop cadence.
+  - Distance/area counter update path uses wheel speed and active
+    section width every deterministic loop tick.
+  - Reset action requires confirm token path and emits
+    `RS:COUNTERS_CALIBRATION_RESET` only on confirmed reset.
 
 ## P5 Deterministic Telemetry Mapping Validator
 
@@ -76,9 +98,12 @@ Spray Controller Testing Procedures
 - Expected pass marker: `p5_scalability_ok`
 - Deterministic checks enforced:
   - `SECTION_COUNT` matches descriptor-table length on Nano and Uno pin maps.
-  - Section descriptor IDs remain ascending and stable for backward-compatible 3-section output.
-  - Sensor telemetry IDs remain fixed (`flow=0`, `wheel=1`, optional `pressure=2`).
-  - Firmware status bitmask generation and telemetry loops stay descriptor/contract driven.
+  - Section descriptor IDs remain ascending and stable for
+    backward-compatible 3-section output.
+  - Sensor telemetry IDs remain fixed (`flow=0`, `wheel=1`,
+    optional `pressure=2`).
+  - Firmware status bitmask generation and telemetry loops stay
+    descriptor/contract driven.
 
 ## P6 Flow Calibration Workflow Validator
 
@@ -87,7 +112,8 @@ Spray Controller Testing Procedures
 - Deterministic checks enforced:
   - `CALIBRATION.md` includes an executable 5-step flow calibration sequence.
   - Documented sanity window for accepted `FLOW_PULSES_PER_LITER` values.
-  - Accepted flow calibration is stored persistently with validity fallback to the `config.h` default at boot.
+  - Accepted flow calibration is stored persistently with
+    validity fallback to the `config.h` default at boot.
 
 ## P6 Wheel Calibration Workflow Validator
 
@@ -96,16 +122,21 @@ Spray Controller Testing Procedures
 - Deterministic checks enforced:
   - `CALIBRATION.md` includes an executable 5-step wheel calibration sequence.
   - Documented acceptance window for `wheel_distance_per_pulse_m`.
-  - Accepted wheel calibration is stored persistently with validity fallback to the `config.h` defaults at boot.
+  - Accepted wheel calibration is stored persistently with
+    validity fallback to the `config.h` defaults at boot.
 
 ## P6 Calibration Storage Validator
 
 - Command: `python3 scripts/validate_p6_calibration_storage.py`
 - Expected pass marker: `p6_calibration_storage_ok`
 - Deterministic checks enforced:
-  - Dedicated calibration persistence module exists with a stored validity marker and checksum.
-  - Boot path reloads persisted calibration and falls back to `config.h` defaults when storage is blank or invalid.
-  - Flow and wheel sensor conversions consume the active persisted calibration profile instead of compile-time constants directly.
+  - Dedicated calibration persistence module exists with a
+    stored validity marker and checksum.
+  - Boot path reloads persisted calibration and falls back to
+    `config.h` defaults when storage is blank or invalid.
+  - Flow and wheel sensor conversions consume the active
+    persisted calibration profile instead of compile-time constants
+    directly.
 
 ## P6 Calibration Override Validator
 
@@ -122,22 +153,30 @@ Spray Controller Testing Procedures
 - Expected pass marker: `p7_documentation_ok`
 - Deterministic checks enforced:
   - Core docs align with current protocol tokens, cadence, and reset behavior.
-  - Core docs record the current three-section pin map and key control constants.
-  - No `## Placeholders` section remains in `PROTOCOLS.md`, `USAGE.md`, or `TESTING.md`.
+  - Core docs record the current three-section pin map and key
+    control constants.
+  - No `## Placeholders` section remains in `PROTOCOLS.md`,
+    `USAGE.md`, or `TESTING.md`.
 
 ## Synthetic Event Tests
 
 - Simulate run/hold switch toggle and verify `run=0` drives pump duty to `0`.
-- Simulate total-flow sensor dropouts/spikes and verify stale fault bit behavior.
-- Toggle all section combinations and verify active width calculation in `0.5 m` increments.
+- Simulate total-flow sensor dropouts/spikes and verify stale
+  fault bit behavior.
+- Toggle all section combinations and verify active width
+  calculation in `0.5 m` increments.
 - Validate reset-confirm workflow:
   - Send `ME:NAV`, `ME:SEL`, `ME:SEL`, `ME:CFM` over serial.
-  - Verify `MS:` state transitions and a single `RS:COUNTERS_CALIBRATION_RESET` frame on confirm.
+  - Verify `MS:` state transitions and a single
+    `RS:COUNTERS_CALIBRATION_RESET` frame on confirm.
   - Repeat with `ME:CAN` in `RESET_CONFIRM` and verify no `RS:` frame.
 
 ## Calibration Procedures
 
 - Map PWM duty cycle to total flow rate across the intended operating range.
-- Verify total-flow sensor readings against a known-volume timed collection test.
-- Validate rate-control response using speed (km/h), width (m), and target rate (`100.0 L/ha`).
-- Verify wheel timeout and flow stale timeout behavior at `1200 ms` fault thresholds.
+- Verify total-flow sensor readings against a known-volume timed
+  collection test.
+- Validate rate-control response using speed (km/h), width (m),
+  and target rate (`100.0 L/ha`).
+- Verify wheel timeout and flow stale timeout behavior at
+  `1200 ms` fault thresholds.
