@@ -220,3 +220,7 @@ TX-capacity gating to reduce control-loop jitter risk.
   closure record for P2, refreshing `PHASE_TWO_READINESS_AUDIT.md` to cite that
   deterministic closure evidence, and preserving the existing **GO** closure
   decision for Phase Two.
+
+- **0.43** (2026-03-23): Executed `P2-CLS-003` by recording the final P2
+  closure evidence checkpoint in `CHANGELOG.md` and marking the roadmap closure
+  tracker complete for `P2-CLS-003`.

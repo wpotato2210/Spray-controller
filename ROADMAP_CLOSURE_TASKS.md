@@ -28,7 +28,7 @@ Legend:
   roadmap scope.
 - [ ] `P2-CLS-002` Add or record the required bench integration checkpoint
   for run/hold, section-output, and pump-PWM timing.
-- [ ] `P2-CLS-003` Record P2 closure evidence in `CHANGELOG.md`.
+- [x] `P2-CLS-003` Record P2 closure evidence in `CHANGELOG.md`.
 
 ## P3 - Sensor Robustness
 
