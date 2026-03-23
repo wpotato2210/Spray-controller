@@ -207,3 +207,16 @@ TX-capacity gating to reduce control-loop jitter risk.
   `PHASE_SEVEN_READINESS_AUDIT.md`; decision: **NO-GO for P7 closure
   readiness** pending documentation-freeze tasks `P7-TSK-001` through
   `P7-TSK-004`.
+
+- **0.41** (2026-03-23): P2 closed. Integrated deterministic SEE -> THINK ->
+  DO control-cycle behavior, validated with `./scripts/validate.sh` (success
+  markers: `yamllint_ok`, `protocols_ok`, `config_ok`,
+  `p3_sensor_robustness_ok`, `p0_closure_ok`, `p1_closure_ok`,
+  `p2_closure_ok`), and recorded the Phase-Two **GO** closure decision in
+  `PHASE_TWO_READINESS_AUDIT.md`.
+
+- **0.42** (2026-03-23): Executed `P2-CLS-002` by extending
+  `scripts/validate_p2_closure.py` to enforce the required `CHANGELOG.md`
+  closure record for P2, refreshing `PHASE_TWO_READINESS_AUDIT.md` to cite that
+  deterministic closure evidence, and preserving the existing **GO** closure
+  decision for Phase Two.
