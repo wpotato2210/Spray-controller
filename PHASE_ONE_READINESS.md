@@ -44,6 +44,9 @@ dedicated P1 closure artifact check.
 - The canonical loop interval remains defined once through the finalized
   configuration constant path documented in `CONFIGURATION.md` and consumed by
   firmware through `config.h`.
+- The required P1 closure record is now validated directly against
+  `CHANGELOG.md`, satisfying the roadmap rule that phase closure is recorded in
+  the changelog before follow-on phase work proceeds.
 - The standard validation path now fails immediately if the P1 closure audit,
   testing markers, or changelog evidence drift from the required closure state.
 - No remaining P1-specific recovery action is open because the pin map, config

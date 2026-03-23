@@ -197,6 +197,11 @@ TX-capacity gating to reduce control-loop jitter risk.
   and compact `ST:` status publish evidence, wiring that validator into
   `./scripts/validate.sh`, and refreshing `PHASE_TWO_READINESS_AUDIT.md` plus
   `TESTING.md` with the current deterministic P2 closure gate.
+- **0.40** (2026-03-23): Executed `P1-CLS-002` by extending
+  `scripts/validate_p1_closure.py` to enforce the required `CHANGELOG.md`
+  closure record for P1, refreshing `PHASE_ONE_READINESS.md` to cite that
+  deterministic closure evidence, and preserving the existing **GO** closure
+  decision for Phase One.
 
 - **0.34** (2026-03-23): Executed Phase-Seven readiness audit in
   `PHASE_SEVEN_READINESS_AUDIT.md`; decision: **NO-GO for P7 closure
