@@ -47,4 +47,7 @@ run_step "P6 calibration storage check" \
 run_step "P6 calibration override check" \
   python3 scripts/validate_p6_calibration_override.py
 
+run_step "P7 documentation alignment check" \
+  python3 scripts/validate_p7_documentation.py
+
 echo "== SUCCESS =="

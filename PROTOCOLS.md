@@ -9,12 +9,12 @@ Spray Controller Protocols
 - Format:
 - `ST:<lpm>,<pump_duty>,<run>,<section_mask>,<fault_bits>,<fault_text>\n`
 - Description:
-- Deterministic status frame.
+- Deterministic status frame emitted on the telemetry cadence.
 
 #### STATUS field contract
 
-- `lpm` is the measured total flow (3 decimal precision).
-- `pump_duty` is the PWM duty in range `0-255`.
+- `lpm` is the measured total flow in L/min with 3 decimal places.
+- `pump_duty` is the PWM duty in range `0-255`; firmware publishes the commanded pump duty.
 - `run` is `1` for RUN and `0` for HOLD.
 - `section_mask` packs section states in LSB-first order:
 - `bit0=section0`
@@ -25,8 +25,7 @@ Spray Controller Protocols
   - `bit1` = wheel pulse timeout active.
   - `bit2` = flow sensor configuration invalid.
   - `bit3` = wheel sensor configuration invalid.
-  - `bit4` = pressure sensor configuration invalid (only when pressure feature
-    is enabled).
+  - `bit4` = pressure sensor configuration invalid when `ENABLE_PRESSURE_SENSOR=true`.
 - `fault_text` is deterministic status text:
   - `OK` when `fault_bits == 0`.
   - `FAULT` when any fault bit is set.
@@ -36,21 +35,16 @@ Spray Controller Protocols
 - Format:
 - `S:<section_id>,<field_id>,<value>\n`
 - Description:
-- Deterministic per-section telemetry emitted for every configured section in
-  ascending `section_id` order on each telemetry cadence.
+- Deterministic per-section telemetry emitted for every configured section in ascending `section_id` order on each telemetry cadence.
 
 #### SECTION ID contract
 
-- Section IDs are stable compile-time identities sourced from
-  `kSectionDescriptors`; `section_id` must equal the descriptor `id` field and
-  must never be renumbered for an existing physical section.
+- Section IDs are stable compile-time identities sourced from `kSectionDescriptors`; `section_id` must equal the descriptor `id` field and must never be renumbered for an existing physical section.
 - Current canonical mapping:
   - `0` = section0
   - `1` = section1
   - `2` = section2
-- Output ordering is strictly ascending by `section_id`; firmware emits frames
-  by iterating `kSectionDescriptors` in descriptor order, which must stay sorted
-  by ascending `id`.
+- Output ordering is strictly ascending by `section_id`; firmware emits frames by iterating `kSectionDescriptors` in descriptor order, which must stay sorted by ascending `id`.
 - Each telemetry cycle emits exactly two `S:` frames per configured section:
   - `field_id=0` = output state currently driven by firmware.
   - `field_id=1` = operator switch state sampled from the section input.
@@ -61,22 +55,17 @@ Spray Controller Protocols
 - Format:
 - `SN:<sensor_id>,<field_id>,<value>[,<detail>]\n`
 - Description:
-- Deterministic per-sensor telemetry emitted in ascending `sensor_id` order on
-  each telemetry cadence.
+- Deterministic per-sensor telemetry emitted in ascending `sensor_id` order on each telemetry cadence.
 
 #### SENSOR ID contract
 
-- Sensor IDs are stable compile-time identities defined in
-  `include/protocol.h` via `kTelemetrySensorContracts`; existing IDs must never
-  be renumbered and new IDs append to the ordered contract.
+- Sensor IDs are stable compile-time identities defined in `include/protocol.h` via `kTelemetrySensorContracts`; existing IDs must never be renumbered and new IDs append to the ordered contract.
 - Canonical mapping:
   - `0` = total flow sensor
   - `1` = wheel speed sensor
   - `2` = pressure sensor (only emitted when pressure feature is enabled)
-- Output ordering is strictly ascending by `sensor_id`; firmware emits frames
-  by iterating `kTelemetrySensorContracts` in declared order.
-- Each telemetry cycle emits exactly two `SN:` frames per emitted sensor by
-  iterating the fixed field contract `kSensorTelemetryFrameContract`:
+- Output ordering is strictly ascending by `sensor_id`; firmware emits frames by iterating `kTelemetrySensorContracts` in declared order.
+- Each telemetry cycle emits exactly two `SN:` frames per emitted sensor by iterating the fixed field contract `kSensorTelemetryFrameContract`:
   - `field_id=0` = primary measured value.
   - `field_id=1` = deterministic fault detail bits for that sensor.
 - Primary value contract:
@@ -98,18 +87,18 @@ Spray Controller Protocols
 
 #### PREVIEW field contract
 
-- `speed_kmh`: Wheel-derived speed in km/h (3 decimal precision).
-- `flow_lpm`: Total measured flow in L/min (3 decimal precision).
+- `speed_kmh`: Wheel-derived speed in km/h with 3 decimal places.
+- `flow_lpm`: Total measured flow in L/min with 3 decimal places.
 - `pump_duty`: Current pump PWM duty in range `0-255`.
 - `active_sections`: Count of enabled boom sections in range `0-3`.
-- `distance_m`: Accumulated travel distance in meters (3 decimal precision).
-- `area_ha`: Accumulated sprayed area in hectares (6 decimal precision).
+- `distance_m`: Accumulated travel distance in meters with 3 decimal places.
+- `area_ha`: Accumulated sprayed area in hectares with 6 decimal places.
 
 #### PREVIEW cadence
 
-- Publish at a deterministic fixed interval owned by main loop timing.
-- Cadence target is tied to the canonical loop interval; no burst/backfill
-  publishing is allowed.
+- Publish at the fixed main-loop cadence owned by `PREVIEW_INTERVAL_MS`.
+- Default cadence equals `LOOP_INTERVAL_MS`, which is `50 ms` in `config.h`.
+- No burst or backfill publishing is allowed.
 
 ### OPERATOR MENU STATE (P4 operator interface)
 
@@ -119,13 +108,13 @@ Spray Controller Protocols
   - `COUNTERS`: Distance/area view.
   - `RESET_CONFIRM`: Explicit destructive-action confirmation view.
 - Allowed transitions:
-  - `HOME -> MENU` (navigate)
-  - `MENU -> HOME` (cancel/back)
-  - `MENU -> COUNTERS` (select counters)
-  - `COUNTERS -> MENU` (cancel/back)
-  - `COUNTERS -> RESET_CONFIRM` (select reset)
-  - `RESET_CONFIRM -> COUNTERS` (cancel)
-  - `RESET_CONFIRM -> COUNTERS` (confirm reset complete)
+  - `HOME -> MENU` via `NAV`
+  - `MENU -> HOME` via `CAN`
+  - `MENU -> COUNTERS` via `SEL`
+  - `COUNTERS -> MENU` via `CAN`
+  - `COUNTERS -> RESET_CONFIRM` via `SEL`
+  - `RESET_CONFIRM -> COUNTERS` via `CAN`
+  - `RESET_CONFIRM -> COUNTERS` via `CFM` after reset completes
 - Any undefined transition request must be ignored and state preserved.
 
 #### MENU command input
@@ -143,42 +132,32 @@ Spray Controller Protocols
 
 - Format:
 - `MS:<state>\n`
-- Output is emitted when a valid menu event is accepted and processed at the
-  deterministic menu cadence.
+- Output is emitted only when a valid menu event is accepted and processed.
 
 ### RESET CONFIRM HANDSHAKE (P4 operator interface)
 
 - Reset action is two-step and explicit:
   1. Enter `RESET_CONFIRM` from `COUNTERS` via a reset-select event.
-  2. Accept only a `CONFIRM` event to execute reset.
-- `CANCEL` must abort reset and return to `COUNTERS` with values unchanged.
-- On successful `CONFIRM`, both `distance_m` and `area_ha` are set to zero in a
-  single deterministic update cycle.
-- Successful reset also clears runtime calibration/sensor state via module
-  reset hooks and emits a deterministic reset event frame.
+  2. Accept only a `CFM` event to execute reset.
+- `CAN` aborts reset and returns to `COUNTERS` with values unchanged.
+- On successful `CFM`, both `distance_m` and `area_ha` are set to zero in a single deterministic update cycle.
+- Successful reset also restores the persisted calibration profile to defaults, resets runtime sensor/controller state, and emits a deterministic reset event frame.
 
 #### RESET event output
 
 - Format:
 - `RS:COUNTERS_CALIBRATION_RESET\n`
-- Emitted exactly once per successful `CONFIRM` reset action.
+- Emitted exactly once per successful `CFM` reset action.
 
 ### PRESSURE (optional, compile-time gated)
 
-- Enabled only when `ENABLE_PRESSURE_SENSOR=true` in `config.h` (default is
-  `false`).
+- Enabled only when `ENABLE_PRESSURE_SENSOR=true` in `config.h`; default is `false`.
 - Format:
 - `PR:<pressure_kpa>\n`
 - Description:
-- Telemetry-only pressure reading in kPa (2 decimal precision). No control loop
-  coupling.
+- Telemetry-only pressure reading in kPa with 2 decimal places. No control-loop coupling.
 
 ## Versioning
 
-- `PROTOCOL_V1`
-
-## Placeholders
-
-- Full byte-level serialization
-- Acknowledgment/error messages
-- Error codes/retry logic
+- Frozen protocol identifier: `PROTOCOL_V1`
+- Documentation alignment date for this protocol contract: `2026-03-23`
