@@ -1,6 +1,6 @@
 # Phase-Zero Readiness Audit (P0 Gate Check)
 
-Date: 2026-03-22 (UTC)
+Date: 2026-03-23 (UTC)
 
 Scope: Assess P0 closure readiness against `DEVELOPMENT_ROADMAP.md` gate
 criteria.
@@ -20,9 +20,13 @@ ownership, and aligned to repository paths.
   `src/main.cpp`).
 - Baseline developer note in `DEV_NOTES.md`.
 - Existing include/interface support notes in `include_path_audit.md`.
-- Deterministic repository checks (2026-03-22 UTC):
+- Deterministic repository checks (2026-03-23 UTC):
   - `./scripts/validate.sh` (success: `yamllint_ok`, `protocols_ok`,
-    `config_ok`, `p3_sensor_robustness_ok`).
+    `config_ok`, `p3_sensor_robustness_ok`, `p0_closure_ok`,
+    `p4_operator_interface_ok`, `p5_scalability_ok`,
+    `p6_flow_calibration_ok`, `p6_wheel_calibration_ok`,
+    `p6_calibration_storage_ok`, `p6_calibration_override_ok`,
+    `p7_documentation_ok`).
 
 ## P0 deliverable status
 
