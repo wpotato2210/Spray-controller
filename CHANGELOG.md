@@ -103,10 +103,10 @@ TX-capacity gating to reduce control-loop jitter risk.
   behind `ArduinoSectionHardwareAdapter`, and Phase Five audit evidence
   now records the control path as adapter-driven instead of direct GPIO.
 
-- **0.24** (2026-03-23): Executed `P5-TSK-005` by rewriting
-  `ARCHITECTURE.md` to define scalable control-core, adapter, and
-  transport boundaries, including dependency direction and multi-MCU
-  bridge-ready seams for future distributed I/O.
+- **0.26** (2026-03-23): Executed `P5-TSK-005` by finalizing
+  `ARCHITECTURE.md` with scalable control-core, frozen-adapter, and
+  concrete-transport boundaries, explicit dependency direction, and
+  multi-MCU bridge-ready seams for future distributed I/O.
 
 ## Placeholders
 
