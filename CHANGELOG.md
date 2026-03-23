@@ -147,3 +147,14 @@ TX-capacity gating to reduce control-loop jitter risk.
   active calibration accessors back to `config.h` defaults when the flag is
   enabled, and documenting plus validating the defaults-vs-calibrated
   override workflow.
+
+- **0.33** (2026-03-23): Executed Phase-Six readiness audit in
+  `PHASE_SIX_READINESS_AUDIT.md`; confirmed all P6 deterministic tasks and
+  deliverables are complete, validated the canonical gate with
+  `./scripts/validate.sh`, and recorded **GO** decision to close P6 and
+  proceed to P7.
+
+- **0.34** (2026-03-23): Executed Phase-Seven readiness audit in
+  `PHASE_SEVEN_READINESS_AUDIT.md`; decision: **NO-GO for P7 closure
+  readiness** pending documentation-freeze tasks `P7-TSK-001` through
+  `P7-TSK-004`.
