@@ -133,13 +133,15 @@ burst conditions.
 
 ### Deterministic tasks (7)
 
-1. Define flow calibration sequence (pulses/L or factor).
-1. Define wheel calibration sequence (distance pulses).
-1. Store and reload calibration constants with defaults and a checksum or
+1. `P6-TSK-001` Define flow calibration sequence (pulses/L or factor).
+1. `P6-TSK-002` Define wheel calibration sequence (distance pulses).
+1. `P6-TSK-003` Store and reload calibration constants with defaults and a
 
-validity marker.
+   checksum or validity marker.
 
-1. Add operator override flag (use defaults versus calibrated values).
+1. `P6-TSK-004` Add operator override flag (use defaults versus calibrated
+
+   values).
 
 ### Deliverables (done = all complete) (7)
 

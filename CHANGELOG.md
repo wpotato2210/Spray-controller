@@ -119,7 +119,7 @@ TX-capacity gating to reduce control-loop jitter risk.
   deliverables are complete, validated the canonical gate with
   `./scripts/validate.sh`, and recorded **GO** decision to proceed to P6.
 
-- **0.29** (2026-03-23): Executed the first P6 task by replacing the
+- **0.29** (2026-03-23): Executed `P6-TSK-001` by replacing the
   flow-calibration placeholder in `CALIBRATION.md` with a deterministic
   5-step procedure, adding `scripts/validate_p6_flow_calibration.py`, and
   wiring the new validator into `./scripts/validate.sh` and `TESTING.md`.
