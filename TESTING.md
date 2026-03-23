@@ -56,6 +56,15 @@ Spray Controller Testing Procedures
     default).
   - Status telemetry schema includes `fault_bits` and `fault_text`.
 
+## P5 Deterministic Telemetry Mapping Validator
+
+- Command: `python3 scripts/validate_protocols.py`
+- Expected pass marker: `protocols_ok`
+- Deterministic checks enforced:
+  - Stable `S:` section telemetry field contract and ascending section ordering.
+  - Stable `SN:` sensor ID mapping and per-sensor field ordering.
+  - Backward-compatible `ST:` status frame remains documented.
+
 ## P4 Deterministic Operator Interface Validator
 
 - Command: `python3 scripts/validate_p4_operator_interface.py`
