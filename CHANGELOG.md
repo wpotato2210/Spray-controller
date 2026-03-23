@@ -108,6 +108,12 @@ TX-capacity gating to reduce control-loop jitter risk.
   concrete-transport boundaries, explicit dependency direction, and
   multi-MCU bridge-ready seams for future distributed I/O.
 
+- **0.27** (2026-03-23): Executed `P5-TSK-006` by adding
+  `scripts/validate_p5_scalability.py`, wiring the new P5 invariant check
+  into `./scripts/validate.sh`, and documenting the required pass markers
+  plus enforced descriptor/ID/backward-compatibility invariants in
+  `TESTING.md`.
+
 ## Placeholders
 
 - Update dates.
