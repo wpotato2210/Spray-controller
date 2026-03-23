@@ -19,6 +19,7 @@ the Phase-Two evidence set.
 - P2 objective, inputs, outputs, validation, and failure-recovery rules in
   `DEVELOPMENT_ROADMAP.md`.
 - Main-loop execution order and timing guards in `Spray-controller.ino`.
+- Existing closure record in `CHANGELOG.md` version `0.41` dated 2026-03-23.
 - Control-path modules: `src/flow_controller.cpp`, `src/pump_control.cpp`, and
   `src/section_manager.cpp`.
 - Compact status-frame contract in `PROTOCOLS.md` and operating behavior in
@@ -42,6 +43,11 @@ the Phase-Two evidence set.
 
 ## Additional observations
 
+- The required P2 closure record is now validated directly against
+  `CHANGELOG.md`, satisfying the roadmap rule that phase closure is recorded in
+  the changelog before follow-on phase work proceeds.
+- The standard validation path now fails immediately if the P2 closure audit,
+  testing markers, or changelog evidence drift from the required closure state.
 - The loop determinism guard is still anchored to `LOOP_INTERVAL_MS` through
   the `if ((now_ms - last_loop_ms) < spray::LOOP_INTERVAL_MS) { return; }`
   cadence gate in `Spray-controller.ino`.
