@@ -172,6 +172,12 @@ TX-capacity gating to reduce control-loop jitter risk.
   into `./scripts/validate.sh`, and refreshing `PHASE_ZERO_READINESS_AUDIT.md`
   with the 2026-03-23 validation evidence set.
 
+- **0.37** (2026-03-23): Executed `P0-CLS-003` by extending
+  `scripts/validate_p0_closure.py` to enforce the required `CHANGELOG.md`
+  closure record for P0, refreshing `PHASE_ZERO_READINESS_AUDIT.md` to cite
+  that deterministic closure evidence, and preserving the existing **GO**
+  closure decision for Phase Zero.
+
 - **0.34** (2026-03-23): Executed Phase-Seven readiness audit in
   `PHASE_SEVEN_READINESS_AUDIT.md`; decision: **NO-GO for P7 closure
   readiness** pending documentation-freeze tasks `P7-TSK-001` through
