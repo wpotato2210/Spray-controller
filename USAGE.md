@@ -4,14 +4,13 @@ Spray Controller Usage Instructions
 
 ## Operation Steps
 
-1. Power on the system.
-1. Set the run/hold switch:
-
-- Run: normal operation
-- Hold: stops pump; optional bypass solenoid activated if configured
-
-1. Enable or disable boom sections as needed.
-1. Observe LED indicators for each active boom section.
+1. Power on the system and wait for serial startup at `115200` baud.
+2. Set the run/hold switch:
+   - Run: closed switch enables closed-loop pump control.
+   - Hold: pump duty is forced to `0` and the flow controller is stopped.
+3. Enable or disable boom sections as needed using the three section toggle inputs.
+4. Observe the section indicator/output state for each active boom section.
+5. Monitor `PV:` preview telemetry and `ST:` status telemetry during operation.
 
 ## Operator Interface (P4 deterministic contract)
 
@@ -24,24 +23,23 @@ Spray Controller Usage Instructions
 
 ### Required preview payload
 
-The operator preview must include the following fields every publish cycle:
+The operator preview publishes the following fields every preview cycle in this exact order:
 
 1. `speed_kmh`
-1. `flow_lpm`
-1. `pump_duty`
-1. `active_sections`
-1. `distance_m`
-1. `area_ha`
+2. `flow_lpm`
+3. `pump_duty`
+4. `active_sections`
+5. `distance_m`
+6. `area_ha`
 
 ### Reset confirmation sequence
 
 1. Navigate `HOME -> MENU -> COUNTERS`.
-1. Select reset to enter `RESET_CONFIRM`.
-1. Choose one action:
-   - `CONFIRM`: reset both distance and area counters to zero.
-   - `CANCEL`: return to `COUNTERS` with counters unchanged.
-1. On `CONFIRM`, runtime calibration/sensor state is reset via module reset
-   hooks and one reset event frame is emitted: `RS:COUNTERS_CALIBRATION_RESET`.
+2. Select reset to enter `RESET_CONFIRM`.
+3. Choose one action:
+   - `CFM`: reset both distance and area counters to zero, restore persisted calibration to defaults, and reset runtime controller/sensor state.
+   - `CAN`: return to `COUNTERS` with counters unchanged.
+4. On `CFM`, one reset event frame is emitted: `RS:COUNTERS_CALIBRATION_RESET`.
 
 ### Operator command/event tokens
 
@@ -53,29 +51,21 @@ The operator preview must include the following fields every publish cycle:
 ### Determinism rules
 
 - Undefined menu transitions are ignored.
-- Preview cadence follows the canonical fixed loop interval.
+- Preview cadence follows `PREVIEW_INTERVAL_MS`; the default publish interval is `50 ms`.
 - Counter reset occurs atomically in one deterministic update cycle.
+- Telemetry emission is gated by serial TX capacity; the controller never backfills skipped frames.
 
 ## How Rate Control Works
 
-- The controller maintains target application rate (L/ha) using vehicle speed
+- The controller maintains target application rate using vehicle speed (km/h), active spray width (m), and target rate `TARGET_RATE_LPHA = 100.0`.
+- Active spray width is the sum of enabled boom sections at `SECTION_WIDTH_M = 0.5` meters per section.
+- Pump duty is bounded to `0-255` and updated by the PI controller using `KP = 2.0` and `KI = 0.2`.
+- Below `MIN_SPEED_KMH = 0.5`, requested target flow collapses to zero and the controller ramps duty toward the safe fallback path.
+- Section changes affect effective width only; flow remains globally controlled through one pump and one total-flow sensor.
 
-(km/h) and active spray width (m).
+## Operating Notes
 
-- Active spray width is the sum of ON boom sections (`SECTION_WIDTH_M` per
-
-active section).
-
-- Section changes affect effective width only; flow remains globally controlled
-
-through one pump and one total flow sensor.
-
-## Notes
-
-- Flow calibration required before first operation.
-- Safety interlocks should be verified prior to field use.
-
-## Placeholders
-
-- Specific calibration values for `TARGET_RATE_LPHA` and `KP`
-- Safety and alarm behavior details
+- Flow and wheel calibration should be completed before first field use.
+- Pressure telemetry is optional and disabled by default (`ENABLE_PRESSURE_SENSOR=false`).
+- Verify run/hold, section switches, and sensor wiring before enabling spray output.
+- Review `ST:` fault bits; `fault_text=FAULT` indicates at least one sensor/configuration fault is active.

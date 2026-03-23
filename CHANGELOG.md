@@ -147,3 +147,5 @@ TX-capacity gating to reduce control-loop jitter risk.
   active calibration accessors back to `config.h` defaults when the flag is
   enabled, and documenting plus validating the defaults-vs-calibrated
   override workflow.
+
+- **0.33** (2026-03-23): Executed `P7-TSK-001` by aligning `PROTOCOLS.md`, `USAGE.md`, and `TESTING.md` with the implemented firmware contract, adding a deterministic `scripts/validate_p7_documentation.py` check to `./scripts/validate.sh`, and documenting the current cadence, reset, pin-map, and control-constant behavior for the frozen doc set.
