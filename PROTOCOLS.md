@@ -11,7 +11,7 @@ Spray Controller Protocols
 - Description:
 - Deterministic status frame.
 
-## Notes
+#### STATUS field contract
 
 - `lpm` is the measured total flow (3 decimal precision).
 - `pump_duty` is the PWM duty in range `0-255`.
@@ -30,6 +30,58 @@ Spray Controller Protocols
 - `fault_text` is deterministic status text:
   - `OK` when `fault_bits == 0`.
   - `FAULT` when any fault bit is set.
+
+### SECTION TELEMETRY (P5 scalability mapping)
+
+- Format:
+- `S:<section_id>,<field_id>,<value>\n`
+- Description:
+- Deterministic per-section telemetry emitted for every configured section in
+  ascending `section_id` order on each telemetry cadence.
+
+#### SECTION ID contract
+
+- Section IDs are stable compile-time identities sourced from
+  `kSectionDescriptors`.
+- Current canonical mapping:
+  - `0` = section0
+  - `1` = section1
+  - `2` = section2
+- Output ordering is strictly ascending by `section_id`.
+- Each telemetry cycle emits exactly two `S:` frames per configured section:
+  - `field_id=0` = output state currently driven by firmware.
+  - `field_id=1` = operator switch state sampled from the section input.
+- `value` is `1` when active/enabled and `0` when inactive/disabled.
+
+### SENSOR TELEMETRY (P5 scalability mapping)
+
+- Format:
+- `SN:<sensor_id>,<field_id>,<value>[,<detail>]\n`
+- Description:
+- Deterministic per-sensor telemetry emitted in ascending `sensor_id` order on
+  each telemetry cadence.
+
+#### SENSOR ID contract
+
+- Sensor IDs are stable compile-time identities defined in
+  `include/protocol.h`.
+- Canonical mapping:
+  - `0` = total flow sensor
+  - `1` = wheel speed sensor
+  - `2` = pressure sensor (only emitted when pressure feature is enabled)
+- Output ordering is strictly ascending by `sensor_id`.
+- Each telemetry cycle emits exactly two `SN:` frames per emitted sensor:
+  - `field_id=0` = primary measured value.
+  - `field_id=1` = deterministic fault detail bits for that sensor.
+- Primary value contract:
+  - `sensor_id=0`: `value=<flow_lpm>` with 3 decimal precision.
+  - `sensor_id=1`: `value=<speed_kmh>` with 3 decimal precision.
+  - `sensor_id=2`: `value=<pressure_kpa>` with 2 decimal precision.
+- Fault detail contract:
+  - `sensor_id=0`: `value=<stale_fault>,<config_fault>`.
+  - `sensor_id=1`: `value=<timeout_fault>,<config_fault>`.
+  - `sensor_id=2`: `value=<config_fault>`.
+- Fault detail values are binary (`0` or `1`) and preserve fixed field order.
 
 ### PREVIEW (P4 operator interface)
 

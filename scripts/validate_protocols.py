@@ -33,6 +33,17 @@ REQUIRED_PATTERNS: tuple[tuple[str, str], ...] = (
     ("note_fault_text", r"`fault_text` is deterministic status text:"),
     ("note_fault_ok", r"`OK` when `fault_bits == 0`\."),
     ("note_fault_fault", r"`FAULT` when any fault bit is set\."),
+    ("section_heading", r"(?m)^### SECTION TELEMETRY \(P5 scalability mapping\)$"),
+    ("section_frame", r"`S:<section_id>,<field_id>,<value>\\n`"),
+    ("section_output_field", r"`field_id=0` = output state currently driven by firmware\."),
+    ("section_switch_field", r"`field_id=1` = operator switch state sampled from the section input\."),
+    ("sensor_heading", r"(?m)^### SENSOR TELEMETRY \(P5 scalability mapping\)$"),
+    ("sensor_frame", r"`SN:<sensor_id>,<field_id>,<value>\[,<detail>\]\\n`"),
+    ("sensor_flow_id", r"`0` = total flow sensor"),
+    ("sensor_wheel_id", r"`1` = wheel speed sensor"),
+    ("sensor_pressure_id", r"`2` = pressure sensor \(only emitted when pressure feature is enabled\)"),
+    ("sensor_primary_field", r"`field_id=0` = primary measured value\."),
+    ("sensor_fault_field", r"`field_id=1` = deterministic fault detail bits for that sensor\."),
 )
 
 

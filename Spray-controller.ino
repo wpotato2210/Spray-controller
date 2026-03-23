@@ -39,6 +39,15 @@ void readSections() {
   }
 }
 
+bool isSectionSwitchEnabled(uint8_t section_id) {
+  for (const SectionDescriptor& section : kSectionDescriptors) {
+    if (section.id == section_id) {
+      return digitalRead(section.switch_pin) == LOW;
+    }
+  }
+  return false;
+}
+
 void writeSections() {
   for (const SectionDescriptor& section : kSectionDescriptors) {
     digitalWrite(section.output_pin, g_section_manager.getSection(section.id) ? HIGH : LOW);
@@ -96,6 +105,84 @@ void publishStatus(float flow_lpm, uint8_t pump_duty, bool run_enabled, uint8_t 
   Serial.print(',');
   Serial.print(getStatusFaultText(fault_bits));
   Serial.print(MSG_TERMINATOR);
+}
+
+
+void publishSectionTelemetry() {
+  for (const SectionDescriptor& section : kSectionDescriptors) {
+    Serial.print(MSG_SECTION_PREFIX);
+    Serial.print(section.id);
+    Serial.print(',');
+    Serial.print(TELEMETRY_SECTION_FIELD_OUTPUT_STATE);
+    Serial.print(',');
+    Serial.print(g_section_manager.getSection(section.id) ? 1 : 0);
+    Serial.print(MSG_TERMINATOR);
+
+    Serial.print(MSG_SECTION_PREFIX);
+    Serial.print(section.id);
+    Serial.print(',');
+    Serial.print(TELEMETRY_SECTION_FIELD_SWITCH_STATE);
+    Serial.print(',');
+    Serial.print(isSectionSwitchEnabled(section.id) ? 1 : 0);
+    Serial.print(MSG_TERMINATOR);
+  }
+}
+
+void publishSensorTelemetry(float flow_lpm, float speed_kmh) {
+  Serial.print(MSG_SENSOR_PREFIX);
+  Serial.print(TELEMETRY_SENSOR_ID_FLOW);
+  Serial.print(',');
+  Serial.print(TELEMETRY_SENSOR_FIELD_PRIMARY_VALUE);
+  Serial.print(',');
+  Serial.print(flow_lpm, 3);
+  Serial.print(MSG_TERMINATOR);
+
+  Serial.print(MSG_SENSOR_PREFIX);
+  Serial.print(TELEMETRY_SENSOR_ID_FLOW);
+  Serial.print(',');
+  Serial.print(TELEMETRY_SENSOR_FIELD_FAULT_BITS);
+  Serial.print(',');
+  Serial.print(g_flow_sensor.isStaleFaultActive() ? 1 : 0);
+  Serial.print(',');
+  Serial.print(g_flow_sensor.isConfigFaultActive() ? 1 : 0);
+  Serial.print(MSG_TERMINATOR);
+
+  Serial.print(MSG_SENSOR_PREFIX);
+  Serial.print(TELEMETRY_SENSOR_ID_WHEEL);
+  Serial.print(',');
+  Serial.print(TELEMETRY_SENSOR_FIELD_PRIMARY_VALUE);
+  Serial.print(',');
+  Serial.print(speed_kmh, 3);
+  Serial.print(MSG_TERMINATOR);
+
+  Serial.print(MSG_SENSOR_PREFIX);
+  Serial.print(TELEMETRY_SENSOR_ID_WHEEL);
+  Serial.print(',');
+  Serial.print(TELEMETRY_SENSOR_FIELD_FAULT_BITS);
+  Serial.print(',');
+  Serial.print(g_wheel_sensor.isTimeoutFaultActive() ? 1 : 0);
+  Serial.print(',');
+  Serial.print(g_wheel_sensor.isConfigFaultActive() ? 1 : 0);
+  Serial.print(MSG_TERMINATOR);
+
+#if ENABLE_PRESSURE_SENSOR
+  const float pressure_kpa = g_pressure_sensor.readPressure();
+  Serial.print(MSG_SENSOR_PREFIX);
+  Serial.print(TELEMETRY_SENSOR_ID_PRESSURE);
+  Serial.print(',');
+  Serial.print(TELEMETRY_SENSOR_FIELD_PRIMARY_VALUE);
+  Serial.print(',');
+  Serial.print(pressure_kpa, 2);
+  Serial.print(MSG_TERMINATOR);
+
+  Serial.print(MSG_SENSOR_PREFIX);
+  Serial.print(TELEMETRY_SENSOR_ID_PRESSURE);
+  Serial.print(',');
+  Serial.print(TELEMETRY_SENSOR_FIELD_FAULT_BITS);
+  Serial.print(',');
+  Serial.print(g_pressure_sensor.isConfigFaultActive() ? 1 : 0);
+  Serial.print(MSG_TERMINATOR);
+#endif
 }
 
 void publishPreview(
@@ -293,6 +380,8 @@ void loop() {
   }
   if (spray::shouldPublishTelemetry(now_ms, last_telemetry_ms) && spray::hasTelemetryTxCapacity()) {
     spray::publishStatus(measured_flow_lpm, duty, run_enabled, spray::getStatusFaultBitfield());
+    spray::publishSectionTelemetry();
+    spray::publishSensorTelemetry(measured_flow_lpm, speed_kmh);
 #if ENABLE_PRESSURE_SENSOR
     spray::publishPressure(spray::g_pressure_sensor.readPressure());
 #endif
