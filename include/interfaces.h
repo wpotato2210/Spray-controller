@@ -1,6 +1,7 @@
 #ifndef SPRAY_CONTROLLER_INTERFACES_H
 #define SPRAY_CONTROLLER_INTERFACES_H
 
+#include <array>
 #include <stdint.h>
 
 #include "config.h"
@@ -75,7 +76,7 @@ class SectionManager {
   float getActiveWidth() const;
 
  private:
-  bool sections_[SECTION_COUNT];
+  std::array<bool, MAX_SECTIONS> sections_;
 };
 
 class FlowController {
