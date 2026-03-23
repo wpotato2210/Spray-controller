@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <array>
 #include <string.h>
 
 #include "config.h"
@@ -22,8 +23,9 @@ CoverageAccumulator g_coverage_accumulator;
 PressureSensor g_pressure_sensor(PIN_PRESSURE_SENSOR);
 #endif
 
-const uint8_t kSectionOutputPins[SECTION_COUNT] = {PIN_BOOM_1, PIN_BOOM_2, PIN_BOOM_3};
-const uint8_t kSectionSwitchPins[SECTION_COUNT] = {
+const std::array<uint8_t, MAX_SECTIONS> kSectionOutputPins = {
+    PIN_BOOM_1, PIN_BOOM_2, PIN_BOOM_3};
+const std::array<uint8_t, MAX_SECTIONS> kSectionSwitchPins = {
     PIN_SECTION_SW_1, PIN_SECTION_SW_2, PIN_SECTION_SW_3};
 
 void setupPins() {
