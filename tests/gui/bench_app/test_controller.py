@@ -4,6 +4,29 @@ from gui.bench_app.controller import BenchAppController, ControllerState
 
 
 class BenchAppControllerTests(unittest.TestCase):
+    def test_transition_relies_on_entered_callback_to_commit_runtime_state(self) -> None:
+        controller = BenchAppController()
+
+        observed_runtime_state_before_commit: list[ControllerState] = []
+
+        def tracking_entered(state: ControllerState) -> None:
+            observed_runtime_state_before_commit.append(controller.runtime_state.controller_state)
+            controller.runtime_state.controller_state = state
+            controller._cycle_timer_running = state in (ControllerState.REPLAY, ControllerState.LIVE)
+            controller._button_state = state
+            controller.overlay_text = f"{state.value.title()} mode"
+
+        controller._on_controller_state_entered = tracking_entered  # type: ignore[method-assign]
+
+        controller._transition_to(ControllerState.LIVE)
+
+        self.assertEqual(observed_runtime_state_before_commit, [ControllerState.IDLE])
+        self.assertEqual(controller.runtime_state.controller_state, ControllerState.LIVE)
+        self.assertTrue(controller._cycle_timer_running)
+        self.assertEqual(controller._button_state, ControllerState.LIVE)
+        self.assertEqual(controller.overlay_text, "Live mode")
+        self.assertEqual(controller._transition_log, ["start_live"])
+
     def test_replay_to_live_illegal_transition_keeps_runtime_ui_and_timer(self) -> None:
         controller = BenchAppController()
 
