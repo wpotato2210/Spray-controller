@@ -53,12 +53,19 @@ class BenchAppController:
             ControllerState.IDLE: self._emit_stop,
         }
         transition = transition_map[state]
+        prior_state = self.runtime_state.controller_state
+        prior_timer_running = self._cycle_timer_running
+        prior_button_state = self._button_state
+        prior_overlay_text = self.overlay_text
 
         try:
             transition()
         except ValueError:
-            # Invalid transition: keep state as-is and do not show text implying a change.
-            pass
+            # Invalid transition: keep the previously stable runtime/UI/timer state.
+            self.runtime_state.controller_state = prior_state
+            self._cycle_timer_running = prior_timer_running
+            self._button_state = prior_button_state
+            self.overlay_text = prior_overlay_text
 
     def _on_controller_state_entered(self, state: ControllerState) -> None:
         self.runtime_state.controller_state = state
