@@ -255,3 +255,13 @@ TX-capacity gating to reduce control-loop jitter risk.
   P6 closure gate into `./scripts/validate.sh`, refreshing `TESTING.md` with
   `p6_closure_ok`, and marking `ROADMAP_CLOSURE_TASKS.md` complete for
   `P6-CLS-001`.
+
+- **0.48** (2026-03-24): Re-ran the Phase-Seven readiness audit in
+  `PHASE_SEVEN_READINESS_AUDIT.md`, confirmed documentation-freeze gate
+  completion against current deterministic validators (`p7_documentation_ok`
+  in `./scripts/validate.sh`), and recorded a **GO** decision to close P7.
+
+- **0.49** (2026-03-24): Executed the Phase-Eight readiness audit in
+  `PHASE_EIGHT_READINESS_AUDIT.md`; decision: **NO-GO for P8 closure
+  readiness** pending prioritized release tasks `P8-RA-001` through
+  `P8-RA-007`.

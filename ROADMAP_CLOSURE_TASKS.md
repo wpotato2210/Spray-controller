@@ -58,11 +58,11 @@ Legend:
 
 ## P7 - Documentation Freeze
 
-- [ ] `P7-CLS-001` Add a documentation-freeze closure entry to
+- [x] `P7-CLS-001` Add a documentation-freeze closure entry to
   `CHANGELOG.md` with version/date and gate evidence.
-- [ ] `P7-CLS-002` Re-run and update the P7 audit so it matches current docs
+- [x] `P7-CLS-002` Re-run and update the P7 audit so it matches current docs
   and validator results.
-- [ ] `P7-CLS-003` Record the final documentation consistency checkpoint
+- [x] `P7-CLS-003` Record the final documentation consistency checkpoint
   across pins, fields, units, states, and calibration steps.
 
 ## P8 - Release Readiness
