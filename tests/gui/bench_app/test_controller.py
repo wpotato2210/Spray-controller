@@ -40,19 +40,31 @@ class BenchAppControllerTests(unittest.TestCase):
         controller._on_controller_state_entered = tracking_entered  # type: ignore[method-assign]
 
         controller._transition_to(ControllerState.REPLAY)
+        state_before_illegal_transition = controller.runtime_state.controller_state
+        timer_before_illegal_transition = controller._cycle_timer_running
+        button_before_illegal_transition = controller._button_state
         overlay_before_illegal_transition = controller.overlay_text
-        self.assertEqual(controller.runtime_state.controller_state, ControllerState.REPLAY)
-        self.assertTrue(controller._cycle_timer_running)
-        self.assertEqual(controller._button_state, ControllerState.REPLAY)
+        self.assertEqual(state_before_illegal_transition, ControllerState.REPLAY)
+        self.assertTrue(timer_before_illegal_transition)
+        self.assertEqual(button_before_illegal_transition, ControllerState.REPLAY)
         self.assertEqual(controller.overlay_text, "Replay mode")
 
         controller._transition_to(ControllerState.LIVE)
 
         # Invalid transition replay->live should keep the prior stable state.
         self.assertEqual(entered_states, [ControllerState.REPLAY])
-        self.assertEqual(controller.runtime_state.controller_state, ControllerState.REPLAY)
-        self.assertTrue(controller._cycle_timer_running)
-        self.assertEqual(controller._button_state, ControllerState.REPLAY)
+        self.assertEqual(
+            controller.runtime_state.controller_state,
+            state_before_illegal_transition,
+        )
+        self.assertEqual(
+            controller._cycle_timer_running,
+            timer_before_illegal_transition,
+        )
+        self.assertEqual(
+            controller._button_state,
+            button_before_illegal_transition,
+        )
         self.assertEqual(controller.overlay_text, overlay_before_illegal_transition)
         self.assertNotEqual(controller.overlay_text, "Live mode")
         self.assertEqual(controller._transition_log, ["start_replay", "start_live"])
