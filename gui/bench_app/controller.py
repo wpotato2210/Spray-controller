@@ -40,6 +40,11 @@ class BenchAppController:
         self._on_controller_state_entered(ControllerState.IDLE)
 
     def _transition_to(self, state: ControllerState) -> None:
+        """Request a transition via state-machine triggers.
+
+        Runtime/UI state is committed only by `_on_controller_state_entered` after
+        a transition completes successfully.
+        """
         transition_map = {
             ControllerState.REPLAY: self._emit_start_replay,
             ControllerState.LIVE: self._emit_start_live,
