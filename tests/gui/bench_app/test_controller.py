@@ -63,12 +63,14 @@ class BenchAppControllerTests(unittest.TestCase):
         observed_state_during_transition: list[ControllerState] = []
         observed_timer_during_transition: list[bool] = []
         observed_button_during_transition: list[ControllerState] = []
+        observed_overlay_during_transition: list[str | None] = []
 
         def fail_live_transition() -> None:
             controller._transition_log.append("start_live")
             observed_state_during_transition.append(controller.runtime_state.controller_state)
             observed_timer_during_transition.append(controller._cycle_timer_running)
             observed_button_during_transition.append(controller._button_state)
+            observed_overlay_during_transition.append(controller.overlay_text)
             raise ValueError("Illegal transition replay->live")
 
         original_entered = controller._on_controller_state_entered
@@ -86,6 +88,7 @@ class BenchAppControllerTests(unittest.TestCase):
         self.assertEqual(observed_state_during_transition, [ControllerState.REPLAY])
         self.assertEqual(observed_timer_during_transition, [True])
         self.assertEqual(observed_button_during_transition, [ControllerState.REPLAY])
+        self.assertEqual(observed_overlay_during_transition, ["Replay mode"])
         self.assertEqual(controller.runtime_state.controller_state, ControllerState.REPLAY)
         self.assertTrue(controller._cycle_timer_running)
         self.assertEqual(controller._button_state, ControllerState.REPLAY)
