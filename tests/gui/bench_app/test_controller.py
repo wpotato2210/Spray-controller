@@ -8,13 +8,11 @@ class BenchAppControllerTests(unittest.TestCase):
         controller = BenchAppController()
 
         observed_runtime_state_before_commit: list[ControllerState] = []
+        original_entered = controller._on_controller_state_entered
 
         def tracking_entered(state: ControllerState) -> None:
             observed_runtime_state_before_commit.append(controller.runtime_state.controller_state)
-            controller.runtime_state.controller_state = state
-            controller._cycle_timer_running = state in (ControllerState.REPLAY, ControllerState.LIVE)
-            controller._button_state = state
-            controller.overlay_text = f"{state.value.title()} mode"
+            original_entered(state)
 
         controller._on_controller_state_entered = tracking_entered  # type: ignore[method-assign]
 
