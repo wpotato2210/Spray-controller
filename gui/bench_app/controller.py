@@ -44,7 +44,8 @@ class BenchAppController:
 
         Runtime/UI state is committed only by `_on_controller_state_entered` after
         a transition completes successfully. This method intentionally does not
-        pre-assign `runtime_state.controller_state` before the trigger executes.
+        pre-assign `runtime_state.controller_state` before the trigger executes,
+        while still emitting the state-machine trigger signal.
         """
         transition_map = {
             ControllerState.REPLAY: self._emit_start_replay,
@@ -57,7 +58,7 @@ class BenchAppController:
             transition()
         except ValueError:
             # Invalid transition: keep state as-is and do not show text implying a change.
-            return
+            pass
 
     def _on_controller_state_entered(self, state: ControllerState) -> None:
         self.runtime_state.controller_state = state
