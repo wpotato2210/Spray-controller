@@ -232,3 +232,11 @@ TX-capacity gating to reduce control-loop jitter risk.
   `./scripts/validate.sh`, refreshed `PHASE_THREE_READINESS_AUDIT.md` and
   `TESTING.md` with `p3_closure_ok`, and marked `ROADMAP_CLOSURE_TASKS.md`
   complete for `P3-CLS-001`.
+
+- **0.45** (2026-03-23): Executed `P4-CLS-001` by adding deterministic
+  `scripts/validate_p4_closure.py` checks for the Phase-Four **GO** verdict,
+  frozen operator reset/menu contract coverage, and `CHANGELOG.md` closure
+  record evidence; wired the new P4 closure gate into `./scripts/validate.sh`,
+  refreshed `PHASE_FOUR_READINESS_AUDIT.md` and `TESTING.md` with
+  `p4_closure_ok`, and marked `ROADMAP_CLOSURE_TASKS.md` complete for
+  `P4-CLS-001`.

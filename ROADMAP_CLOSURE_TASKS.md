@@ -37,7 +37,7 @@ Legend:
 
 ## P4 - Operator Interface
 
-- [ ] `P4-CLS-001` Preserve current operator reset/menu contract and
+- [x] `P4-CLS-001` Preserve current operator reset/menu contract and
   validation coverage; no blocking closure work is currently open.
 
 ## P5 - Scalability Preparation

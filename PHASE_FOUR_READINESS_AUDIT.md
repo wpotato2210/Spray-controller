@@ -1,6 +1,6 @@
 # Phase-Four Readiness Audit (P4 Gate Check)
 
-Date: 2026-03-22 (UTC)
+Date: 2026-03-23 (UTC)
 
 Scope: Assess implementation readiness against P4 requirements in
 `DEVELOPMENT_ROADMAP.md` and issue a gate decision for P4 closure readiness.
@@ -25,6 +25,8 @@ documentation.
 - Protocol + operator docs in `PROTOCOLS.md`, `USAGE.md`, and `DIAGRAMS.md`.
 - Deterministic P4 gate validator in `scripts/validate_p4_operator_interface.py`
   and canonical gate execution in `scripts/validate.sh`.
+- Deterministic P4 closure validator in `scripts/validate_p4_closure.py`,
+  which validates this audit and required closure records.
 
 ## P4 deterministic task status
 
@@ -47,7 +49,14 @@ documentation.
 
 No remaining required tasks. All P4 closure criteria are satisfied.
 
+operator reset/menu contract remains frozen and is enforced by deterministic validation coverage.
+required P4 closure record is now validated directly against `CHANGELOG.md` through `scripts/validate_p4_closure.py`.
+
 ## Gate decision
 
 - **GO for P4 closure readiness.**
 - P4 can be marked closed and execution may proceed to P5.
+- Validation evidence snapshot:
+  - `./scripts/validate.sh` (includes `p4_closure_ok`)
+  - `python3 scripts/validate_p4_operator_interface.py`
+  - `python3 scripts/validate_p4_closure.py`

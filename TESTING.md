@@ -32,6 +32,7 @@ Spray Controller Testing Procedures
   - `== P0 closure artifact check ==`
   - `== P1 closure artifact check ==`
   - `== P2 closure artifact check ==`
+  - `== P4 closure artifact check ==`
   - `== P4 operator interface check ==`
   - `== P5 scalability invariant check ==`
   - `== P6 flow calibration workflow check ==`
@@ -115,6 +116,20 @@ Spray Controller Testing Procedures
     section width every deterministic loop tick.
   - Reset action requires confirm token path and emits
     `RS:COUNTERS_CALIBRATION_RESET` only on confirmed reset.
+
+## P4 Deterministic Closure Validator
+
+- Command: `python3 scripts/validate_p4_closure.py`
+- Expected pass marker: `p4_closure_ok`
+- Deterministic checks enforced:
+  - `PHASE_FOUR_READINESS_AUDIT.md` preserves the canonical
+    **Ready to close P4 (GO).** closure decision.
+  - The Phase-Four audit continues to cite both
+    `./scripts/validate.sh` and
+    `python3 scripts/validate_p4_operator_interface.py` as deterministic
+    evidence.
+  - Phase-Four closure continues to require deterministic
+    operator reset/menu contract coverage and a `CHANGELOG.md` closure record.
 
 ## P5 Deterministic Telemetry Mapping Validator
 
