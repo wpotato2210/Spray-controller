@@ -50,6 +50,9 @@ run_step "P4 operator interface check" \
 run_step "P5 scalability invariant check" \
   python3 scripts/validate_p5_scalability.py
 
+run_step "P5 closure artifact check" \
+  python3 scripts/validate_p5_closure.py
+
 run_step "P6 flow calibration workflow check" \
   python3 scripts/validate_p6_flow_calibration.py
 

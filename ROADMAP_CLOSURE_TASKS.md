@@ -42,7 +42,7 @@ Legend:
 
 ## P5 - Scalability Preparation
 
-- [ ] `P5-CLS-001` Preserve descriptor-driven topology and P5 invariant
+- [x] `P5-CLS-001` Preserve descriptor-driven topology and P5 invariant
   validation; no blocking closure work is currently open.
 
 ## P6 - Calibration Workflow

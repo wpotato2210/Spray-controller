@@ -240,3 +240,11 @@ TX-capacity gating to reduce control-loop jitter risk.
   refreshed `PHASE_FOUR_READINESS_AUDIT.md` and `TESTING.md` with
   `p4_closure_ok`, and marked `ROADMAP_CLOSURE_TASKS.md` complete for
   `P4-CLS-001`.
+
+- **0.46** (2026-03-24): Executed `P5-CLS-001` by adding deterministic
+  `scripts/validate_p5_closure.py` checks for the Phase-Five **GO** verdict,
+  frozen descriptor-driven topology and P5 invariant coverage, and
+  `CHANGELOG.md` closure record evidence; wired the new P5 closure gate into
+  `./scripts/validate.sh`, refreshed `PHASE_FIVE_READINESS_AUDIT.md` and
+  `TESTING.md` with `p5_closure_ok`, and marked `ROADMAP_CLOSURE_TASKS.md`
+  complete for `P5-CLS-001`.
