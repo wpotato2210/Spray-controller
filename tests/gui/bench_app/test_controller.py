@@ -30,6 +30,15 @@ class BenchAppControllerTests(unittest.TestCase):
     def test_replay_to_live_illegal_transition_keeps_runtime_ui_and_timer(self) -> None:
         controller = BenchAppController()
 
+        entered_states: list[ControllerState] = []
+        original_entered = controller._on_controller_state_entered
+
+        def tracking_entered(state: ControllerState) -> None:
+            entered_states.append(state)
+            original_entered(state)
+
+        controller._on_controller_state_entered = tracking_entered  # type: ignore[method-assign]
+
         controller._transition_to(ControllerState.REPLAY)
         self.assertEqual(controller.runtime_state.controller_state, ControllerState.REPLAY)
         self.assertTrue(controller._cycle_timer_running)
@@ -39,6 +48,7 @@ class BenchAppControllerTests(unittest.TestCase):
         controller._transition_to(ControllerState.LIVE)
 
         # Invalid transition replay->live should keep the prior stable state.
+        self.assertEqual(entered_states, [ControllerState.REPLAY])
         self.assertEqual(controller.runtime_state.controller_state, ControllerState.REPLAY)
         self.assertTrue(controller._cycle_timer_running)
         self.assertEqual(controller._button_state, ControllerState.REPLAY)
