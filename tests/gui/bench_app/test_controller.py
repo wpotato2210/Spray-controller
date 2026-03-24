@@ -53,6 +53,15 @@ class BenchAppControllerTests(unittest.TestCase):
         self.assertEqual(controller.overlay_text, "Replay mode")
         self.assertEqual(controller._transition_log, ["start_replay", "start_live"])
 
+    def test_invalid_transition_does_not_emit_overlay_for_target_state(self) -> None:
+        controller = BenchAppController()
+        controller._transition_to(ControllerState.REPLAY)
+
+        controller._transition_to(ControllerState.LIVE)
+
+        self.assertEqual(controller.overlay_text, "Replay mode")
+        self.assertNotEqual(controller.overlay_text, "Live mode")
+
 
 if __name__ == "__main__":
     unittest.main()

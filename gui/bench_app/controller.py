@@ -43,7 +43,8 @@ class BenchAppController:
         """Request a transition via state-machine triggers.
 
         Runtime/UI state is committed only by `_on_controller_state_entered` after
-        a transition completes successfully.
+        a transition completes successfully. This method intentionally does not
+        pre-assign `runtime_state.controller_state` before the trigger executes.
         """
         transition_map = {
             ControllerState.REPLAY: self._emit_start_replay,
