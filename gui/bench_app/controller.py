@@ -52,7 +52,9 @@ class BenchAppController:
             ControllerState.LIVE: self._emit_start_live,
             ControllerState.IDLE: self._emit_stop,
         }
-        transition = transition_map[state]
+        transition = transition_map.get(state)
+        if transition is None:
+            raise ValueError(f"Unknown controller state: {state}")
         try:
             transition()
         except ValueError:
