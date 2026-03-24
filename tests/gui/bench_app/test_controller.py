@@ -22,7 +22,6 @@ class BenchAppControllerTests(unittest.TestCase):
         self.assertEqual(controller.overlay_text, "Replay mode")
         self.assertEqual(controller._transition_log, ["start_replay", "start_live"])
 
-
     def test_invalid_transition_does_not_mutate_runtime_state_before_completion(self) -> None:
         controller = BenchAppController()
         controller._transition_to(ControllerState.REPLAY)
