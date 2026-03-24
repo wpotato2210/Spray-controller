@@ -23,5 +23,34 @@ class BenchAppControllerTests(unittest.TestCase):
         self.assertEqual(controller._transition_log, ["start_replay", "start_live"])
 
 
+    def test_invalid_transition_does_not_mutate_runtime_state_before_completion(self) -> None:
+        controller = BenchAppController()
+        controller._transition_to(ControllerState.REPLAY)
+
+        entered_states: list[ControllerState] = []
+
+        def fail_live_transition() -> None:
+            controller._transition_log.append("start_live")
+            raise ValueError("Illegal transition replay->live")
+
+        original_entered = controller._on_controller_state_entered
+
+        def tracking_entered(state: ControllerState) -> None:
+            entered_states.append(state)
+            original_entered(state)
+
+        controller._emit_start_live = fail_live_transition  # type: ignore[method-assign]
+        controller._on_controller_state_entered = tracking_entered  # type: ignore[method-assign]
+
+        controller._transition_to(ControllerState.LIVE)
+
+        self.assertEqual(entered_states, [])
+        self.assertEqual(controller.runtime_state.controller_state, ControllerState.REPLAY)
+        self.assertTrue(controller._cycle_timer_running)
+        self.assertEqual(controller._button_state, ControllerState.REPLAY)
+        self.assertEqual(controller.overlay_text, "Replay mode")
+        self.assertEqual(controller._transition_log, ["start_replay", "start_live"])
+
+
 if __name__ == "__main__":
     unittest.main()
