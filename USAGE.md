@@ -44,9 +44,12 @@ The operator preview publishes the following fields every preview cycle in this 
 ### Operator command/event tokens
 
 - Input command frame: `ME:<event>`
-  - `ME:NAV`, `ME:SEL`, `ME:CAN`, `ME:CFM`
+  - `ME:NAV`, `ME:SEL`, `ME:CAN`, `ME:CFM`, `ME:FCL`, `ME:WCL`
 - State output frame: `MS:<state>`
   - `HOME`, `MENU`, `COUNTERS`, `RESET_CONFIRM`
+- Event output frame: `RS:<event>`
+  - `COUNTERS_CALIBRATION_RESET`, `FLOW_CALIBRATION_ENTRYPOINT`,
+    `WHEEL_CALIBRATION_ENTRYPOINT`
 
 ### Determinism rules
 

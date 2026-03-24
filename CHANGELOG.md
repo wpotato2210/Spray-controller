@@ -248,3 +248,10 @@ TX-capacity gating to reduce control-loop jitter risk.
   `./scripts/validate.sh`, refreshed `PHASE_FIVE_READINESS_AUDIT.md` and
   `TESTING.md` with `p5_closure_ok`, and marked `ROADMAP_CLOSURE_TASKS.md`
   complete for `P5-CLS-001`.
+
+- **0.47** (2026-03-24): Executed `P6-CLS-001` by adding deterministic
+  `scripts/validate_p6_closure.py` checks for operator entrypoint coverage of
+  flow and wheel calibration workflows (`ME:FCL` and `ME:WCL`), wiring the new
+  P6 closure gate into `./scripts/validate.sh`, refreshing `TESTING.md` with
+  `p6_closure_ok`, and marking `ROADMAP_CLOSURE_TASKS.md` complete for
+  `P6-CLS-001`.

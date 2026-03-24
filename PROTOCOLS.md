@@ -39,12 +39,16 @@ Spray Controller Protocols
 
 #### SECTION ID contract
 
-- Section IDs are stable compile-time identities sourced from `kSectionDescriptors`; `section_id` must equal the descriptor `id` field and must never be renumbered for an existing physical section.
+- Section IDs are stable compile-time identities sourced from
+  `kSectionDescriptors`; `section_id` must equal the descriptor `id` field and
+  must never be renumbered for an existing physical section.
 - Current canonical mapping:
   - `0` = section0
   - `1` = section1
   - `2` = section2
-- Output ordering is strictly ascending by `section_id`; firmware emits frames by iterating `kSectionDescriptors` in descriptor order, which must stay sorted by ascending `id`.
+- Output ordering is strictly ascending by `section_id`; firmware emits frames
+  by iterating `kSectionDescriptors` in descriptor order, which must stay
+  sorted by ascending `id`.
 - Each telemetry cycle emits exactly two `S:` frames per configured section:
   - `field_id=0` = output state currently driven by firmware.
   - `field_id=1` = operator switch state sampled from the section input.
@@ -59,7 +63,9 @@ Spray Controller Protocols
 
 #### SENSOR ID contract
 
-- Sensor IDs are stable compile-time identities defined in `include/protocol.h` via `kTelemetrySensorContracts`; existing IDs must never be renumbered and new IDs append to the ordered contract.
+- Sensor IDs are stable compile-time identities defined in
+  `include/protocol.h` via `kTelemetrySensorContracts`; existing IDs must never
+  be renumbered and new IDs append to the ordered contract.
 - Canonical mapping:
   - `0` = total flow sensor
   - `1` = wheel speed sensor
@@ -126,6 +132,8 @@ Spray Controller Protocols
   - `SEL` = select
   - `CAN` = cancel/back
   - `CFM` = confirm
+  - `FCL` = flow calibration entrypoint (accepted from `MENU`)
+  - `WCL` = wheel calibration entrypoint (accepted from `MENU`)
 - Unknown tokens are ignored with no state change.
 
 #### MENU state output
@@ -141,13 +149,18 @@ Spray Controller Protocols
   2. Accept only a `CFM` event to execute reset.
 - `CAN` aborts reset and returns to `COUNTERS` with values unchanged.
 - On successful `CFM`, both `distance_m` and `area_ha` are set to zero in a single deterministic update cycle.
-- Successful reset also restores the persisted calibration profile to defaults, resets runtime sensor/controller state, and emits a deterministic reset event frame.
+- Successful reset also restores the persisted calibration profile to defaults,
+  resets runtime sensor/controller state, and emits a deterministic reset event
+  frame.
 
 #### RESET event output
 
 - Format:
 - `RS:COUNTERS_CALIBRATION_RESET\n`
 - Emitted exactly once per successful `CFM` reset action.
+- Additional deterministic calibration-entrypoint event outputs:
+  - `RS:FLOW_CALIBRATION_ENTRYPOINT\n`
+  - `RS:WHEEL_CALIBRATION_ENTRYPOINT\n`
 
 ### PRESSURE (optional, compile-time gated)
 

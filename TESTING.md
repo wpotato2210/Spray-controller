@@ -40,6 +40,7 @@ Spray Controller Testing Procedures
   - `== P6 wheel calibration workflow check ==`
   - `== P6 calibration storage check ==`
   - `== P6 calibration override check ==`
+  - `== P6 closure artifact check ==`
   - `== P7 documentation alignment check ==`
   - `== SUCCESS ==`
 
@@ -210,6 +211,18 @@ Spray Controller Testing Procedures
   - Calibration persistence block stores an operator override selector.
   - Runtime calibration accessors resolve to defaults when override is enabled.
   - `CALIBRATION.md` documents the defaults-vs-calibrated operator workflow.
+
+## P6 Deterministic Closure Validator
+
+- Command: `python3 scripts/validate_p6_closure.py`
+- Expected pass marker: `p6_closure_ok`
+- Deterministic checks enforced:
+  - Operator-interface command contract includes explicit flow and wheel
+    calibration entrypoint events.
+  - Entry events are accepted from operator commands and surfaced as
+    deterministic telemetry markers.
+  - `CHANGELOG.md` records `P6-CLS-001` closure and
+    `ROADMAP_CLOSURE_TASKS.md` marks the closure task complete.
 
 ## P7 Documentation Alignment Validator
 

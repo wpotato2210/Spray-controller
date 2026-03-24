@@ -19,7 +19,9 @@ enum class OperatorMenuEvent : uint8_t {
   kNavigate = 1U,
   kSelect = 2U,
   kCancel = 3U,
-  kConfirm = 4U
+  kConfirm = 4U,
+  kFlowCalibrate = 5U,
+  kWheelCalibrate = 6U
 };
 
 class OperatorMenuStateMachine {
@@ -28,11 +30,15 @@ class OperatorMenuStateMachine {
   bool update(uint32_t now_ms, OperatorMenuEvent event);
   OperatorMenuState getState() const;
   bool consumeResetConfirmed();
+  bool consumeFlowCalibrationRequested();
+  bool consumeWheelCalibrationRequested();
 
  private:
   OperatorMenuState state_;
   uint32_t last_update_ms_;
   bool reset_confirmed_;
+  bool flow_calibration_requested_;
+  bool wheel_calibration_requested_;
 };
 
 }  // namespace spray

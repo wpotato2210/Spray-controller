@@ -267,6 +267,18 @@ void publishResetEvent() {
   Serial.print(MSG_TERMINATOR);
 }
 
+void publishFlowCalibrationEntrypointEvent() {
+  Serial.print(MSG_RESET_EVENT_PREFIX);
+  Serial.print("FLOW_CALIBRATION_ENTRYPOINT");
+  Serial.print(MSG_TERMINATOR);
+}
+
+void publishWheelCalibrationEntrypointEvent() {
+  Serial.print(MSG_RESET_EVENT_PREFIX);
+  Serial.print("WHEEL_CALIBRATION_ENTRYPOINT");
+  Serial.print(MSG_TERMINATOR);
+}
+
 OperatorMenuEvent parseMenuEventToken(const char* token) {
   if (strcmp(token, "NAV") == 0) {
     return OperatorMenuEvent::kNavigate;
@@ -279,6 +291,12 @@ OperatorMenuEvent parseMenuEventToken(const char* token) {
   }
   if (strcmp(token, "CFM") == 0) {
     return OperatorMenuEvent::kConfirm;
+  }
+  if (strcmp(token, "FCL") == 0) {
+    return OperatorMenuEvent::kFlowCalibrate;
+  }
+  if (strcmp(token, "WCL") == 0) {
+    return OperatorMenuEvent::kWheelCalibrate;
   }
   return OperatorMenuEvent::kNone;
 }
@@ -329,6 +347,15 @@ void executeResetIfConfirmed() {
 #endif
   publishResetEvent();
 }
+
+void executeCalibrationEntrypointEvents() {
+  if (g_operator_menu.consumeFlowCalibrationRequested()) {
+    publishFlowCalibrationEntrypointEvent();
+  }
+  if (g_operator_menu.consumeWheelCalibrationRequested()) {
+    publishWheelCalibrationEntrypointEvent();
+  }
+}
 }  // namespace
 }  // namespace spray
 
@@ -364,6 +391,7 @@ void loop() {
   const uint32_t now_ms = millis();
   spray::processOperatorCommand(now_ms);
   spray::g_operator_menu.update(now_ms, spray::OperatorMenuEvent::kNone);
+  spray::executeCalibrationEntrypointEvents();
   spray::executeResetIfConfirmed();
   if ((now_ms - last_loop_ms) < spray::LOOP_INTERVAL_MS) {
     return;
