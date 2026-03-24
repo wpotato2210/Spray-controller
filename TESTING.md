@@ -35,6 +35,7 @@ Spray Controller Testing Procedures
   - `== P4 closure artifact check ==`
   - `== P4 operator interface check ==`
   - `== P5 scalability invariant check ==`
+  - `== P5 closure artifact check ==`
   - `== P6 flow calibration workflow check ==`
   - `== P6 wheel calibration workflow check ==`
   - `== P6 calibration storage check ==`
@@ -152,6 +153,21 @@ Spray Controller Testing Procedures
     optional `pressure=2`).
   - Firmware status bitmask generation and telemetry loops stay
     descriptor/contract driven.
+
+## P5 Deterministic Closure Validator
+
+- Command: `python3 scripts/validate_p5_closure.py`
+- Expected pass marker: `p5_closure_ok`
+- Deterministic checks enforced:
+  - `PHASE_FIVE_READINESS_AUDIT.md` preserves the canonical
+    **Ready to close P5 (GO).** closure decision.
+  - The Phase-Five audit continues to cite both
+    `./scripts/validate.sh` and
+    `python3 scripts/validate_p5_scalability.py` as deterministic
+    evidence.
+  - Phase-Five closure continues to require deterministic
+    descriptor-driven topology + P5 invariants coverage and a
+    `CHANGELOG.md` closure record.
 
 ## P6 Flow Calibration Workflow Validator
 

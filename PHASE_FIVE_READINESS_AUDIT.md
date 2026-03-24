@@ -48,7 +48,14 @@ and deterministic P5 validator coverage are all present and passing.
 
 No remaining required tasks. All P5 closure criteria are satisfied.
 
+descriptor-driven topology and P5 invariants remain frozen and are enforced by deterministic validation coverage.
+required P5 closure record is now validated directly against `CHANGELOG.md` through `scripts/validate_p5_closure.py`.
+
 ## Gate decision
 
 - **GO for P5 closure readiness.**
 - P5 can be marked closed and execution may proceed to P6.
+- Validation evidence snapshot:
+  - `./scripts/validate.sh` (includes `p5_closure_ok`)
+  - `python3 scripts/validate_p5_scalability.py`
+  - `python3 scripts/validate_p5_closure.py`
