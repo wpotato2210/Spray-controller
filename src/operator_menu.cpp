@@ -6,7 +6,11 @@ constexpr uint32_t kMenuUpdateIntervalMs = LOOP_INTERVAL_MS;
 }  // namespace
 
 OperatorMenuStateMachine::OperatorMenuStateMachine()
-    : state_(OperatorMenuState::kHome), last_update_ms_(0U), reset_confirmed_(false) {}
+    : state_(OperatorMenuState::kHome),
+      last_update_ms_(0U),
+      reset_confirmed_(false),
+      flow_calibration_requested_(false),
+      wheel_calibration_requested_(false) {}
 
 bool OperatorMenuStateMachine::update(uint32_t now_ms, OperatorMenuEvent event) {
   if ((now_ms - last_update_ms_) < kMenuUpdateIntervalMs) {
@@ -14,6 +18,8 @@ bool OperatorMenuStateMachine::update(uint32_t now_ms, OperatorMenuEvent event) 
   }
   last_update_ms_ = now_ms;
   reset_confirmed_ = false;
+  flow_calibration_requested_ = false;
+  wheel_calibration_requested_ = false;
 
   switch (state_) {
     case OperatorMenuState::kHome:
@@ -26,6 +32,10 @@ bool OperatorMenuStateMachine::update(uint32_t now_ms, OperatorMenuEvent event) 
         state_ = OperatorMenuState::kHome;
       } else if (event == OperatorMenuEvent::kSelect) {
         state_ = OperatorMenuState::kCounters;
+      } else if (event == OperatorMenuEvent::kFlowCalibrate) {
+        flow_calibration_requested_ = true;
+      } else if (event == OperatorMenuEvent::kWheelCalibrate) {
+        wheel_calibration_requested_ = true;
       }
       break;
     case OperatorMenuState::kCounters:
@@ -54,6 +64,18 @@ bool OperatorMenuStateMachine::consumeResetConfirmed() {
   const bool reset_confirmed = reset_confirmed_;
   reset_confirmed_ = false;
   return reset_confirmed;
+}
+
+bool OperatorMenuStateMachine::consumeFlowCalibrationRequested() {
+  const bool requested = flow_calibration_requested_;
+  flow_calibration_requested_ = false;
+  return requested;
+}
+
+bool OperatorMenuStateMachine::consumeWheelCalibrationRequested() {
+  const bool requested = wheel_calibration_requested_;
+  wheel_calibration_requested_ = false;
+  return requested;
 }
 
 }  // namespace spray

@@ -24,11 +24,14 @@ profile, and the operator defaults override path is implemented and validated.
 - Boot-time calibration load path in `Spray-controller.ino`.
 - Runtime flow and wheel calibration consumers in `src/flow_sensor.cpp` and
   `src/wheel_sensor.cpp`.
+- Operator calibration entrypoints in `include/operator_menu.h`,
+  `src/operator_menu.cpp`, and `Spray-controller.ino` (`ME:FCL`/`ME:WCL`).
 - Deterministic P6 validators in `scripts/validate_p6_flow_calibration.py`,
   `scripts/validate_p6_wheel_calibration.py`,
   `scripts/validate_p6_calibration_storage.py`,
-  `scripts/validate_p6_calibration_override.py`, and canonical gate execution
-  in `scripts/validate.sh`.
+  `scripts/validate_p6_calibration_override.py`,
+  `scripts/validate_p6_closure.py`, and canonical gate execution in
+  `scripts/validate.sh`.
 
 ## P6 deterministic task status
 

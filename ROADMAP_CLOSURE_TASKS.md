@@ -47,7 +47,7 @@ Legend:
 
 ## P6 - Calibration Workflow
 
-- [ ] `P6-CLS-001` Implement operator entrypoints for both flow and wheel
+- [x] `P6-CLS-001` Implement operator entrypoints for both flow and wheel
   calibration workflows.
 - [ ] `P6-CLS-002` Emit and document deterministic failure signaling when
   calibration storage is invalid, missing, or corrupt and defaults are loaded.
