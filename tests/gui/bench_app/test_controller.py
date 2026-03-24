@@ -95,6 +95,28 @@ class BenchAppControllerTests(unittest.TestCase):
         self.assertEqual(controller.overlay_text, "Replay stable")
         self.assertNotEqual(controller.overlay_text, "Live mode")
 
+    def test_invalid_transition_restores_state_if_trigger_mutates_then_fails(self) -> None:
+        controller = BenchAppController()
+        controller._transition_to(ControllerState.REPLAY)
+
+        def bad_live_transition() -> None:
+            controller._transition_log.append("start_live")
+            controller.runtime_state.controller_state = ControllerState.LIVE
+            controller._cycle_timer_running = False
+            controller._button_state = ControllerState.LIVE
+            controller.overlay_text = "Live mode"
+            raise ValueError("Illegal transition replay->live")
+
+        controller._emit_start_live = bad_live_transition  # type: ignore[method-assign]
+
+        controller._transition_to(ControllerState.LIVE)
+
+        self.assertEqual(controller.runtime_state.controller_state, ControllerState.REPLAY)
+        self.assertTrue(controller._cycle_timer_running)
+        self.assertEqual(controller._button_state, ControllerState.REPLAY)
+        self.assertEqual(controller.overlay_text, "Replay mode")
+        self.assertEqual(controller._transition_log, ["start_replay", "start_live"])
+
 
 if __name__ == "__main__":
     unittest.main()
