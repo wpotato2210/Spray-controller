@@ -56,8 +56,8 @@ class BenchAppController:
         try:
             transition()
         except ValueError:
-            # Invalid transition: state remains unchanged because only
-            # `_on_controller_state_entered` commits runtime/UI/timer values.
+            # Invalid transition: leave runtime/UI/timer/overlay untouched.
+            # `_on_controller_state_entered` remains the single commit point.
             return
 
     def _on_controller_state_entered(self, state: ControllerState) -> None:
