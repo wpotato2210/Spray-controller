@@ -49,7 +49,8 @@ class BenchAppControllerTests(unittest.TestCase):
 
         controller._transition_to(ControllerState.LIVE)
 
-        # Invalid transition replay->live should keep the prior stable state.
+        # Invalid transition replay->live should keep the prior stable state,
+        # while still emitting the underlying trigger signal.
         self.assertEqual(entered_states, [ControllerState.REPLAY])
         self.assertEqual(
             controller.runtime_state.controller_state,
@@ -65,6 +66,28 @@ class BenchAppControllerTests(unittest.TestCase):
         )
         self.assertEqual(controller.overlay_text, overlay_before_illegal_transition)
         self.assertNotEqual(controller.overlay_text, "Live mode")
+        self.assertEqual(controller._transition_log, ["start_replay", "start_live"])
+
+    def test_replay_to_live_illegal_transition_never_enters_live_state(self) -> None:
+        controller = BenchAppController()
+        controller._transition_to(ControllerState.REPLAY)
+
+        entered_states: list[ControllerState] = []
+        original_entered = controller._on_controller_state_entered
+
+        def tracking_entered(state: ControllerState) -> None:
+            entered_states.append(state)
+            original_entered(state)
+
+        controller._on_controller_state_entered = tracking_entered  # type: ignore[method-assign]
+
+        controller._transition_to(ControllerState.LIVE)
+
+        self.assertEqual(controller.runtime_state.controller_state, ControllerState.REPLAY)
+        self.assertTrue(controller._cycle_timer_running)
+        self.assertEqual(controller._button_state, ControllerState.REPLAY)
+        self.assertEqual(controller.overlay_text, "Replay mode")
+        self.assertEqual(entered_states, [])
         self.assertEqual(controller._transition_log, ["start_replay", "start_live"])
 
     def test_invalid_transition_does_not_mutate_runtime_state_before_completion(self) -> None:
