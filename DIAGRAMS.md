@@ -32,6 +32,7 @@ System Diagrams
 ```text
 Input command (serial): ME:<event>
 Accepted events: NAV, SEL, CAN, CFM
+Input guard: overlong command line -> discard bytes until newline
 
 HOME --NAV--> MENU --SEL--> COUNTERS --SEL--> RESET_CONFIRM --CFM--> COUNTERS
   ^              |             ^                  |                     |
@@ -39,6 +40,7 @@ HOME --NAV--> MENU --SEL--> COUNTERS --SEL--> RESET_CONFIRM --CFM--> COUNTERS
   +------------------------------(MENU CAN -> HOME)
 
 Undefined event/state pairs: ignored (state preserved).
+Valid events: processed immediately (event-driven, not idle-gated).
 ```
 
 ## Operator preview + reset dependencies

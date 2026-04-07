@@ -45,6 +45,7 @@ The operator preview publishes the following fields every preview cycle in this 
 
 - Input command frame: `ME:<event>`
   - `ME:NAV`, `ME:SEL`, `ME:CAN`, `ME:CFM`, `ME:FCL`, `ME:WCL`
+  - Overlong command lines are dropped until newline (safety against partial-frame parse).
 - State output frame: `MS:<state>`
   - `HOME`, `MENU`, `COUNTERS`, `RESET_CONFIRM`
 - Event output frame: `RS:<event>`
@@ -54,6 +55,7 @@ The operator preview publishes the following fields every preview cycle in this 
 ### Determinism rules
 
 - Undefined menu transitions are ignored.
+- Valid menu events are handled immediately when received; periodic cadence applies to idle maintenance ticks.
 - Preview cadence follows `PREVIEW_INTERVAL_MS`; the default publish interval is `50 ms`.
 - Counter reset occurs atomically in one deterministic update cycle.
 - Telemetry emission is gated by serial TX capacity; the controller never backfills skipped frames.

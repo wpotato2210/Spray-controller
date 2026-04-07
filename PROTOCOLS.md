@@ -135,12 +135,16 @@ Spray Controller Protocols
   - `FCL` = flow calibration entrypoint (accepted from `MENU`)
   - `WCL` = wheel calibration entrypoint (accepted from `MENU`)
 - Unknown tokens are ignored with no state change.
+- Overlong command lines are discarded until newline; no partial token is
+  processed after buffer overflow.
 
 #### MENU state output
 
 - Format:
 - `MS:<state>\n`
 - Output is emitted only when a valid menu event is accepted and processed.
+- Valid non-`None` menu events are processed immediately (event-driven), while
+  idle state maintenance remains cadence-gated.
 
 ### RESET CONFIRM HANDSHAKE (P4 operator interface)
 
