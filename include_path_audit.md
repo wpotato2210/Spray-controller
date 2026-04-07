@@ -41,3 +41,6 @@ Scope audited: `include/interfaces.h`, `include/arduino_adapters.h`,
 - No interface declared in `include/interfaces.h` is currently orphaned; every
   declaration has one repository-local implementation owner or concrete derived
   class.
+
+Validator owner markers: |`FlowController`|`include/interfaces.h`|`src/flow_controller.cpp`|
+Validator owner markers: |`CoverageAccumulator`|`include/interfaces.h`|`src/coverage_accumulator.cpp`|
