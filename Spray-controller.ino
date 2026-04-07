@@ -304,9 +304,17 @@ OperatorMenuEvent parseMenuEventToken(const char* token) {
 void processOperatorCommand(uint32_t now_ms) {
   static char command_buffer[16];
   static uint8_t command_length = 0U;
+  static bool discard_until_newline = false;
   while (Serial.available() > 0) {
     const char incoming = static_cast<char>(Serial.read());
     if (incoming == '\r') {
+      continue;
+    }
+    if (discard_until_newline) {
+      if (incoming == '\n') {
+        discard_until_newline = false;
+        command_length = 0U;
+      }
       continue;
     }
     if (incoming != '\n') {
@@ -314,6 +322,7 @@ void processOperatorCommand(uint32_t now_ms) {
         command_buffer[command_length++] = incoming;
       } else {
         command_length = 0U;
+        discard_until_newline = true;
       }
       continue;
     }
