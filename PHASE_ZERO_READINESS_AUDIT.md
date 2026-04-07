@@ -30,11 +30,11 @@ ownership, and aligned to repository paths.
 
 ## P0 deliverable status
 
-|P0 deliverable (roadmap)|Status|Evidence|Gap/Action|
-|---|---|---|---|
-|Audit note in `DEV_NOTES.md` with current loop path and ownership|**Complete**|`DEV_NOTES.md` now records the canonical loop path, cadence source, SEE/THINK/DO ownership, and P0 baseline assumptions.|No gap.|
-|Interface checklist matching source files|**Complete**|`include_path_audit.md` now maps every frozen interface in `include/interfaces.h` to its repository-local implementation owner and method coverage.|No gap.|
-|No interface signature drift from baseline|**Complete**|Public interfaces remain centralized in `include/interfaces.h`, and the checklist confirms one implementation owner per frozen contract without contradictory duplicate declarations.|No gap.|
+| P0 deliverable (roadmap) | Status | Evidence | Gap/Action |
+| --- | --- | --- | --- |
+| Audit note in `DEV_NOTES.md` with current loop path and ownership | **Complete** | `DEV_NOTES.md` now records the canonical loop path, cadence source, SEE/THINK/DO ownership, and P0 baseline assumptions. | No gap. |
+| Interface checklist matching source files | **Complete** | `include_path_audit.md` now maps every frozen interface in `include/interfaces.h` to its repository-local implementation owner and method coverage. | No gap. |
+| No interface signature drift from baseline | **Complete** | Public interfaces remain centralized in `include/interfaces.h`, and the checklist confirms one implementation owner per frozen contract without contradictory duplicate declarations. | No gap. |
 
 ## Additional observations
 

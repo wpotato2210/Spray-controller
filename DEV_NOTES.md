@@ -25,19 +25,19 @@ Developer Notes
 
 ### Execution order ownership map
 
-|Stage|Order in `loop()`|Owner|Frozen I/O boundary|
-|---|---|---|---|
-|Pre-loop command handling|`processOperatorCommand(now_ms)` -> `g_operator_menu.update(now_ms, kNone)` -> `executeResetIfConfirmed()`|Operator menu + calibration/reset path|Consumes `ME:*` serial input with overlong-line discard-until-newline guard; valid events are processed immediately and may emit `MS:` / `RS:` frames; does not alter frozen sensor/pump method signatures.|
-|SEE 1|`readSections()`|`SectionHardwareAdapter` + `SectionManager`|Reads section switches through `SectionHardwareAdapter::readSwitch()` and stores state through `SectionManager::setSection()`.|
-|SEE 2|`g_flow_sensor.readFlow()`|`FlowSensor`|Consumes `PulseCounterAdapter`; returns measured flow in L/min.|
-|SEE 3|`g_wheel_sensor.readSpeed()`|`WheelSensor`|Consumes `PulseCounterAdapter`; returns speed in km/h.|
-|SEE 4|`g_run_hold.readRunHold()`|`RunHoldSwitch`|Consumes `DigitalInputAdapter`; returns run/hold boolean.|
-|THINK 1|`g_section_manager.getActiveWidth()` + `getActiveCount()`|`SectionManager`|Derives active width/count from frozen section state.|
-|THINK 2|`g_coverage_accumulator.update(...)`|`CoverageAccumulator`|Integrates distance/area from SEE values plus fixed loop interval.|
-|THINK 3|`g_flow_controller.computePumpDuty(...)` or `stop()`|`FlowController`|Consumes speed, active width, measured flow; returns one pump PWM duty command.|
-|DO 1|`g_pump.setDutyCycle(duty)`|`PumpControl`|Writes PWM through `PwmOutputAdapter::write()`.|
-|DO 2|`writeSections()`|`SectionHardwareAdapter`|Writes section outputs through `SectionHardwareAdapter::writeSection()`.|
-|DO 3|`publishPreview(...)` / `publishStatus(...)` / `publishSectionTelemetry()` / `publishSensorTelemetry()` / optional `publishPressure(...)`|Protocol publisher helpers in `Spray-controller.ino`|Emits deterministic serial frames without changing control decisions.|
+| Stage | Order in `loop()` | Owner | Frozen I/O boundary |
+| --- | --- | --- | --- |
+| Pre-loop command handling | `processOperatorCommand(now_ms)` -> `g_operator_menu.update(now_ms, kNone)` -> `executeResetIfConfirmed()` | Operator menu + calibration/reset path | Consumes `ME:*` serial input; may emit `MS:` / `RS:` frames; does not alter frozen sensor/pump method signatures. |
+| SEE 1 | `readSections()` | `SectionHardwareAdapter` + `SectionManager` | Reads section switches through `SectionHardwareAdapter::readSwitch()` and stores state through `SectionManager::setSection()`. |
+| SEE 2 | `g_flow_sensor.readFlow()` | `FlowSensor` | Consumes `PulseCounterAdapter`; returns measured flow in L/min. |
+| SEE 3 | `g_wheel_sensor.readSpeed()` | `WheelSensor` | Consumes `PulseCounterAdapter`; returns speed in km/h. |
+| SEE 4 | `g_run_hold.readRunHold()` | `RunHoldSwitch` | Consumes `DigitalInputAdapter`; returns run/hold boolean. |
+| THINK 1 | `g_section_manager.getActiveWidth()` + `getActiveCount()` | `SectionManager` | Derives active width/count from frozen section state. |
+| THINK 2 | `g_coverage_accumulator.update(...)` | `CoverageAccumulator` | Integrates distance/area from SEE values plus fixed loop interval. |
+| THINK 3 | `g_flow_controller.computePumpDuty(...)` or `stop()` | `FlowController` | Consumes speed, active width, measured flow; returns one pump PWM duty command. |
+| DO 1 | `g_pump.setDutyCycle(duty)` | `PumpControl` | Writes PWM through `PwmOutputAdapter::write()`. |
+| DO 2 | `writeSections()` | `SectionHardwareAdapter` | Writes section outputs through `SectionHardwareAdapter::writeSection()`. |
+| DO 3 | `publishPreview(...)` / `publishStatus(...)` / `publishSectionTelemetry()` / `publishSensorTelemetry()` / optional `publishPressure(...)` | Protocol publisher helpers in `Spray-controller.ino` | Emits deterministic serial frames without changing control decisions. |
 
 ### Baseline assumptions frozen for P0
 

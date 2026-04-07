@@ -34,12 +34,12 @@ the Phase-Two evidence set.
 
 ## P2 deliverable status
 
-|P2 deliverable (roadmap)|Status|Evidence|Gap/Action|
-|---|---|---|---|
-|Stable deterministic control cycle in `Spray-controller.ino`|**Complete**|`Spray-controller.ino` preserves the deterministic SEE -> THINK -> DO ordering with run/hold gating, active-width computation, pump command, and compact `ST:` status telemetry.|No gap.|
-|Control-path alignment across `src/flow_controller.cpp`, `src/pump_control.cpp`, and `src/section_manager.cpp`|**Complete**|The flow controller consumes active width from the section manager, HOLD leaves pump duty at `PWM_MIN`, and pump output remains bounded through `PumpControl::setDutyCycle()`.|No gap.|
-|Reproducible status-frame contract|**Complete**|`PROTOCOLS.md` defines `ST:<lpm>,<pump_duty>,<run>,<section_mask>,<fault_bits>,<fault_text>` in fixed field order, and `publishStatus()` emits that compact frame on the telemetry cadence.|No gap.|
-|Bench integration checkpoint for run/hold and output timing|**Complete**|`TESTING.md` records the bench checks for run/hold input, section outputs, pump PWM output, and the synthetic run/hold assertion that `run=0` drives pump duty to `0`.|No gap.|
+| P2 deliverable (roadmap) | Status | Evidence | Gap/Action |
+| --- | --- | --- | --- |
+| Stable deterministic control cycle in `Spray-controller.ino` | **Complete** | `Spray-controller.ino` preserves the deterministic SEE -> THINK -> DO ordering with run/hold gating, active-width computation, pump command, and compact `ST:` status telemetry. | No gap. |
+| Control-path alignment across `src/flow_controller.cpp`, `src/pump_control.cpp`, and `src/section_manager.cpp` | **Complete** | The flow controller consumes active width from the section manager, HOLD leaves pump duty at `PWM_MIN`, and pump output remains bounded through `PumpControl::setDutyCycle()`. | No gap. |
+| Reproducible status-frame contract | **Complete** | `PROTOCOLS.md` defines `ST:<lpm>,<pump_duty>,<run>,<section_mask>,<fault_bits>,<fault_text>` in fixed field order, and `publishStatus()` emits that compact frame on the telemetry cadence. | No gap. |
+| Bench integration checkpoint for run/hold and output timing | **Complete** | `TESTING.md` records the bench checks for run/hold input, section outputs, pump PWM output, and the synthetic run/hold assertion that `run=0` drives pump duty to `0`. | No gap. |
 
 ## Additional observations
 

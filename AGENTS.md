@@ -13,12 +13,12 @@ Automation agents assist with:
 
 ## Tasks
 
-|Agent Name|Task Description|Trigger / Schedule|
-|---|---|---|
-|DocUpdater|Updates docs for interface or wiring changes|Commit/manual|
-|InterfaceValidator|Verifies frozen interfaces|Nightly/prerelease|
-|TestScriptGen|Generates synthetic SEE/THINK/DO tests|Manual/CI|
-|EventMonitor|Logs system events for analysis|Continuous during operation|
+| Agent Name | Task Description | Trigger / Schedule |
+| --- | --- | --- |
+| DocUpdater | Updates docs for interface or wiring changes | Commit/manual |
+| InterfaceValidator | Verifies frozen interfaces | Nightly/prerelease |
+| TestScriptGen | Generates synthetic SEE/THINK/DO tests | Manual/CI |
+| EventMonitor | Logs system events for analysis | Continuous during operation |
 
 ## Placeholders
 

@@ -26,20 +26,20 @@ canonical `./scripts/validate.sh` run.
 
 ## P7 deterministic task status
 
-|P7 task (roadmap)|Status|Findings|
-|---|---|---|
-|Align `ARCHITECTURE.md`, `PROTOCOLS.md`, `USAGE.md`, and `TESTING.md` with implemented firmware|**Complete**|Core protocol/cadence/reset and operator/testing references align with the deterministic validators and current implementation contracts.|
-|Replace placeholder diagrams in `DIAGRAMS.md` with final SEE/THINK/DO, wiring, and state flow|**Complete**|`DIAGRAMS.md` contains implemented textual diagrams for SEE/THINK/DO, state flow, reset dependencies, and wiring; no placeholder marker remains.|
-|Mark frozen interface version and date|**Complete**|The protocol/interface freeze metadata is recorded and covered by the documentation alignment gate.|
-|Add a documentation consistency checkpoint across pins, fields, units, states, and calibration steps|**Complete**|`scripts/validate_p7_documentation.py` and linked documentation checks provide deterministic checkpoint coverage; canonical gate passes.|
+| P7 task (roadmap) | Status | Findings |
+| --- | --- | --- |
+| Align `ARCHITECTURE.md`, `PROTOCOLS.md`, `USAGE.md`, and `TESTING.md` with implemented firmware | **Complete** | Core protocol/cadence/reset and operator/testing references align with the deterministic validators and current implementation contracts. |
+| Replace placeholder diagrams in `DIAGRAMS.md` with final SEE/THINK/DO, wiring, and state flow | **Complete** | `DIAGRAMS.md` contains implemented textual diagrams for SEE/THINK/DO, state flow, reset dependencies, and wiring; no placeholder marker remains. |
+| Mark frozen interface version and date | **Complete** | The protocol/interface freeze metadata is recorded and covered by the documentation alignment gate. |
+| Add a documentation consistency checkpoint across pins, fields, units, states, and calibration steps | **Complete** | `scripts/validate_p7_documentation.py` and linked documentation checks provide deterministic checkpoint coverage; canonical gate passes. |
 
 ## Deliverable status snapshot
 
-|P7 deliverable (roadmap)|Status|Evidence summary|
-|---|---|---|
-|Doc set is internally consistent (pins, fields, units, and states)|**Complete**|Core docs and validator assertions align on status payload fields, cadence, reset semantics, pin mappings, and operator constants.|
-|No placeholder markers remain in core docs|**Complete**|No placeholder-section markers remain in `PROTOCOLS.md`, `USAGE.md`, or `TESTING.md`.|
-|Frozen-doc tag recorded in `CHANGELOG.md`|**Complete**|P7 closure record is captured in `CHANGELOG.md` with date and gate evidence linkage.|
+| P7 deliverable (roadmap) | Status | Evidence summary |
+| --- | --- | --- |
+| Doc set is internally consistent (pins, fields, units, and states) | **Complete** | Core docs and validator assertions align on status payload fields, cadence, reset semantics, pin mappings, and operator constants. |
+| No placeholder markers remain in core docs | **Complete** | No placeholder-section markers remain in `PROTOCOLS.md`, `USAGE.md`, or `TESTING.md`. |
+| Frozen-doc tag recorded in `CHANGELOG.md` | **Complete** | P7 closure record is captured in `CHANGELOG.md` with date and gate evidence linkage. |
 
 ## Gate decision
 

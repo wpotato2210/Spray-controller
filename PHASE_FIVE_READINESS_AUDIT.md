@@ -27,22 +27,22 @@ and deterministic P5 validator coverage are all present and passing.
 
 ## P5 deterministic task status
 
-|P5 task (roadmap)|Status|Findings|
-|---|---|---|
-|Replace hard-coded section arrays with config-driven descriptors|**Complete**|Section topology is defined by `kSectionDescriptors` in board pin headers, and `Spray-controller.ino` iterates descriptors for switch reads, output writes, telemetry, and bitmask generation.|
-|Introduce compile-time max constants (`MAX_SECTIONS`, `MAX_SENSORS`)|**Complete**|`config.h` defines `MAX_SECTIONS` and `MAX_SENSORS`, while static assertions enforce `SECTION_COUNT <= MAX_SECTIONS` and `SENSOR_COUNT <= MAX_SENSORS`.|
-|Isolate hardware adapters from control logic for future multi-MCU bridge|**Complete**|Control-path section, pump, run/hold, pressure, and pulse I/O are routed through adapter interfaces in `include/interfaces.h`, `include/arduino_adapters.h`, and `Spray-controller.ino`; raw GPIO access is confined to Arduino adapter implementations in `src/arduino_adapters.cpp`.|
-|Update `ARCHITECTURE.md` with scalable module boundaries and multi-MCU bridge-ready seams|**Complete**|`ARCHITECTURE.md` defines the control-core vs frozen-adapter vs concrete-transport split, explicit dependency direction, SEE/THINK/DO ownership, and the bridge-ready seam for future remote-MCU I/O.|
-|Add deterministic ID mapping for section and sensor telemetry|**Complete**|`include/protocol.h`, `PROTOCOLS.md`, and firmware telemetry emission use stable section/sensor IDs plus fixed field-order contracts for scalable consumers.|
-|Run deterministic validators for P5 invariants|**Complete**|`scripts/validate_p5_scalability.py` enforces descriptor count consistency, stable section/sensor IDs, ordered telemetry contracts, and backward-compatible 3-section mappings; `scripts/validate.sh` passes with `p5_scalability_ok`.|
+| P5 task (roadmap) | Status | Findings |
+| --- | --- | --- |
+| Replace hard-coded section arrays with config-driven descriptors | **Complete** | Section topology is defined by `kSectionDescriptors` in board pin headers, and `Spray-controller.ino` iterates descriptors for switch reads, output writes, telemetry, and bitmask generation. |
+| Introduce compile-time max constants (`MAX_SECTIONS`, `MAX_SENSORS`) | **Complete** | `config.h` defines `MAX_SECTIONS` and `MAX_SENSORS`, while static assertions enforce `SECTION_COUNT <= MAX_SECTIONS` and `SENSOR_COUNT <= MAX_SENSORS`. |
+| Isolate hardware adapters from control logic for future multi-MCU bridge | **Complete** | Control-path section, pump, run/hold, pressure, and pulse I/O are routed through adapter interfaces in `include/interfaces.h`, `include/arduino_adapters.h`, and `Spray-controller.ino`; raw GPIO access is confined to Arduino adapter implementations in `src/arduino_adapters.cpp`. |
+| Update `ARCHITECTURE.md` with scalable module boundaries and multi-MCU bridge-ready seams | **Complete** | `ARCHITECTURE.md` defines the control-core vs frozen-adapter vs concrete-transport split, explicit dependency direction, SEE/THINK/DO ownership, and the bridge-ready seam for future remote-MCU I/O. |
+| Add deterministic ID mapping for section and sensor telemetry | **Complete** | `include/protocol.h`, `PROTOCOLS.md`, and firmware telemetry emission use stable section/sensor IDs plus fixed field-order contracts for scalable consumers. |
+| Run deterministic validators for P5 invariants | **Complete** | `scripts/validate_p5_scalability.py` enforces descriptor count consistency, stable section/sensor IDs, ordered telemetry contracts, and backward-compatible 3-section mappings; `scripts/validate.sh` passes with `p5_scalability_ok`. |
 
 ## Deliverable status snapshot
 
-|P5 deliverable (roadmap)|Status|Evidence summary|
-|---|---|---|
-|Section count changes require config updates only|**Complete**|Section topology lives in board-specific descriptor tables, so section-count or pin-map changes are isolated to config/header updates instead of sketch loop rewrites.|
-|Interfaces remain backward compatible for the current 3-section build|**Complete**|The current 3-section build still uses `SECTION_COUNT=3` and descriptor-driven iteration while preserving the documented section bit mapping and stable telemetry contracts.|
-|`ARCHITECTURE.md` updated with scalable module boundaries|**Complete**|`ARCHITECTURE.md` documents the final scalable boundary diagram, dependency direction, module responsibilities, and bridge-ready transport seams required for P5.|
+| P5 deliverable (roadmap) | Status | Evidence summary |
+| --- | --- | --- |
+| Section count changes require config updates only | **Complete** | Section topology lives in board-specific descriptor tables, so section-count or pin-map changes are isolated to config/header updates instead of sketch loop rewrites. |
+| Interfaces remain backward compatible for the current 3-section build | **Complete** | The current 3-section build still uses `SECTION_COUNT=3` and descriptor-driven iteration while preserving the documented section bit mapping and stable telemetry contracts. |
+| `ARCHITECTURE.md` updated with scalable module boundaries | **Complete** | `ARCHITECTURE.md` documents the final scalable boundary diagram, dependency direction, module responsibilities, and bridge-ready transport seams required for P5. |
 
 ## Prioritized task list (required for P5 closure)
 
