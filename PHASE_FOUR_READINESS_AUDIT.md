@@ -30,20 +30,20 @@ documentation.
 
 ## P4 deterministic task status
 
-|P4 task (roadmap)|Status|Findings|
-|---|---|---|
-|Implement menu navigation states|**Complete**|`OperatorMenuState` + `OperatorMenuEvent` and deterministic transition handling are implemented; `ME:*` input events map to state transitions and emit `MS:*` state frames.|
-|Add live preview fields (speed, flow, duty, active sections)|**Complete**|`PV:` preview frame includes required live fields and is published at fixed interval gate (`PREVIEW_INTERVAL_MS`).|
-|Add distance and area accumulators based on wheel data and active width|**Complete**|Coverage accumulator updates distance/area deterministically from speed and active width; values are exposed in preview payload.|
-|Add reset confirmation workflow for counters and calibration|**Complete**|Two-step reset confirmation is implemented through `RESET_CONFIRM` + `CFM`; reset executes only on confirmed action and emits deterministic `RS:` event frame.|
+| P4 task (roadmap) | Status | Findings |
+| --- | --- | --- |
+| Implement menu navigation states | **Complete** | `OperatorMenuState` + `OperatorMenuEvent` and deterministic transition handling are implemented; `ME:*` input events map to state transitions and emit `MS:*` state frames. |
+| Add live preview fields (speed, flow, duty, active sections) | **Complete** | `PV:` preview frame includes required live fields and is published at fixed interval gate (`PREVIEW_INTERVAL_MS`). |
+| Add distance and area accumulators based on wheel data and active width | **Complete** | Coverage accumulator updates distance/area deterministically from speed and active width; values are exposed in preview payload. |
+| Add reset confirmation workflow for counters and calibration | **Complete** | Two-step reset confirmation is implemented through `RESET_CONFIRM` + `CFM`; reset executes only on confirmed action and emits deterministic `RS:` event frame. |
 
 ## Deliverable status snapshot
 
-|P4 deliverable (roadmap)|Status|Evidence summary|
-|---|---|---|
-|Operator menu state machine documented and tested|**Complete**|State machine is documented in `USAGE.md`/`DIAGRAMS.md` and checked by deterministic validator `validate_p4_operator_interface.py`.|
-|Live preview updates at fixed interval|**Complete**|Preview publication is gated by `PREVIEW_INTERVAL_MS` and integrated in the main loop with TX-capacity guard.|
-|Distance and area reset requires explicit confirm action|**Complete**|Reset only executes when confirmation flag is consumed after confirm transition and emits reset event telemetry.|
+| P4 deliverable (roadmap) | Status | Evidence summary |
+| --- | --- | --- |
+| Operator menu state machine documented and tested | **Complete** | State machine is documented in `USAGE.md`/`DIAGRAMS.md` and checked by deterministic validator `validate_p4_operator_interface.py`. |
+| Live preview updates at fixed interval | **Complete** | Preview publication is gated by `PREVIEW_INTERVAL_MS` and integrated in the main loop with TX-capacity guard. |
+| Distance and area reset requires explicit confirm action | **Complete** | Reset only executes when confirmation flag is consumed after confirm transition and emits reset event telemetry. |
 
 ## Prioritized task list (required for P4 closure)
 

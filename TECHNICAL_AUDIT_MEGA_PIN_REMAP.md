@@ -37,7 +37,7 @@ The compiled firmware currently reads board-specific constants from
 documentation/config artifact, not a compile-time source.
 
 | Function | UNO/Nano Pin | Usage class | Pin-type requirement |
-|---|---:|---|---|
+| --- | ---: | --- | --- |
 | Wheel sensor | D2 | Interrupt pulse input | External interrupt-capable pin |
 | Flow sensor | D3 | Interrupt pulse input | External interrupt-capable pin |
 | Pump control | D11 | PWM output | PWM-capable pin |
@@ -89,7 +89,7 @@ documentation/config artifact, not a compile-time source.
 ## 5) Mega compatibility analysis per function
 
 | Function | Can move to D22–D53/A8–A15 only? | Status | Reason |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Wheel sensor pulse input | No | **BLOCKED** | Current firmware requires external interrupt pin via `attachInterrupt`; Mega ext-interrupt pins are D2/3/18/19/20/21 only. |
 | Flow sensor pulse input | No | **BLOCKED** | Same as wheel sensor. |
 | Pump PWM | Yes (e.g., D44/45/46) | **CONDITIONAL** | Must stay on PWM-capable Mega pin. |

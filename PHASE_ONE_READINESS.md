@@ -31,13 +31,13 @@ dedicated P1 closure artifact check.
 
 ## P1 deliverable status
 
-|P1 deliverable (roadmap)|Status|Evidence|Gap/Action|
-|---|---|---|---|
-|Finalized pin map in `pins.yaml` for the Arduino Nano production map|**Complete**|`pins.yaml` defines the frozen Nano/Uno board profiles with three section outputs, one pump PWM output, one flow input, one wheel input, and one run/hold input.|No gap.|
-|Finalized runtime configuration schema in `config.yaml`|**Complete**|`config.yaml` contains concrete gains, limits, timing values, and feature toggles with no placeholder TODO keys.|No gap.|
-|Deterministic validation command covering YAML and config completeness|**Complete**|`./scripts/validate.sh` runs YAML schema, protocol, config, and closure validators in one canonical path.|No gap.|
-|Documentation synchronized to exact pin/config values|**Complete**|`pins.yaml`, `config.yaml`, `CONFIGURATION.md`, and `HARDWARE.md` remain aligned on the finalized P1 values.|No gap.|
-|Closure bookkeeping recorded in changelog|**Complete**|`CHANGELOG.md` v0.7 records P1 closure and `v0.39` records the deterministic P1 closure validator task.|No gap.|
+| P1 deliverable (roadmap) | Status | Evidence | Gap/Action |
+| --- | --- | --- | --- |
+| Finalized pin map in `pins.yaml` for the Arduino Nano production map | **Complete** | `pins.yaml` defines the frozen Nano/Uno board profiles with three section outputs, one pump PWM output, one flow input, one wheel input, and one run/hold input. | No gap. |
+| Finalized runtime configuration schema in `config.yaml` | **Complete** | `config.yaml` contains concrete gains, limits, timing values, and feature toggles with no placeholder TODO keys. | No gap. |
+| Deterministic validation command covering YAML and config completeness | **Complete** | `./scripts/validate.sh` runs YAML schema, protocol, config, and closure validators in one canonical path. | No gap. |
+| Documentation synchronized to exact pin/config values | **Complete** | `pins.yaml`, `config.yaml`, `CONFIGURATION.md`, and `HARDWARE.md` remain aligned on the finalized P1 values. | No gap. |
+| Closure bookkeeping recorded in changelog | **Complete** | `CHANGELOG.md` v0.7 records P1 closure and `v0.39` records the deterministic P1 closure validator task. | No gap. |
 
 ## Additional observations
 
