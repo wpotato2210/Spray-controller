@@ -27,7 +27,7 @@ Developer Notes
 
 |Stage|Order in `loop()`|Owner|Frozen I/O boundary|
 |---|---|---|---|
-|Pre-loop command handling|`processOperatorCommand(now_ms)` -> `g_operator_menu.update(now_ms, kNone)` -> `executeResetIfConfirmed()`|Operator menu + calibration/reset path|Consumes `ME:*` serial input; may emit `MS:` / `RS:` frames; does not alter frozen sensor/pump method signatures.|
+|Pre-loop command handling|`processOperatorCommand(now_ms)` -> `g_operator_menu.update(now_ms, kNone)` -> `executeResetIfConfirmed()`|Operator menu + calibration/reset path|Consumes `ME:*` serial input with overlong-line discard-until-newline guard; valid events are processed immediately and may emit `MS:` / `RS:` frames; does not alter frozen sensor/pump method signatures.|
 |SEE 1|`readSections()`|`SectionHardwareAdapter` + `SectionManager`|Reads section switches through `SectionHardwareAdapter::readSwitch()` and stores state through `SectionManager::setSection()`.|
 |SEE 2|`g_flow_sensor.readFlow()`|`FlowSensor`|Consumes `PulseCounterAdapter`; returns measured flow in L/min.|
 |SEE 3|`g_wheel_sensor.readSpeed()`|`WheelSensor`|Consumes `PulseCounterAdapter`; returns speed in km/h.|

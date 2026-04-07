@@ -13,7 +13,8 @@ OperatorMenuStateMachine::OperatorMenuStateMachine()
       wheel_calibration_requested_(false) {}
 
 bool OperatorMenuStateMachine::update(uint32_t now_ms, OperatorMenuEvent event) {
-  if ((now_ms - last_update_ms_) < kMenuUpdateIntervalMs) {
+  const bool is_event_driven_update = event != OperatorMenuEvent::kNone;
+  if (!is_event_driven_update && (now_ms - last_update_ms_) < kMenuUpdateIntervalMs) {
     return false;
   }
   last_update_ms_ = now_ms;
