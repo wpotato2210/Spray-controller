@@ -27,6 +27,7 @@ Spray Controller Testing Procedures
   - `== YAML schema validation ==`
   - `== Protocol structure check ==`
   - `== Config completeness check ==`
+  - `== PIN-WAVE-001 pin-map check ==`
   - `== P3 sensor robustness check ==`
   - `== P3 closure artifact check ==`
   - `== P0 closure artifact check ==`
@@ -47,6 +48,16 @@ Spray Controller Testing Procedures
 - Optional artifact capture:
   - `./scripts/run_validation_and_capture.sh`
   - Writes pass/fail transcript to `validation/validation_pass.txt`.
+
+## PIN-WAVE-001 Pin-Map Validator
+
+- Command: `python3 scripts/validate_pin_wave_001.py`
+- Expected pass marker: `pin_wave_001_ok`
+- Deterministic checks enforced:
+  - Required board profiles exist in `pins.yaml` (`nano`, `uno`, `mega2560`).
+  - Required pin keys exist per profile and are unique within each profile.
+  - `wheel_sensor` and `flow_sensor` both satisfy board interrupt-pin policy.
+  - `pump_pwm` is restricted to board PWM-capable pins.
 
 ## P3 Deterministic Robustness Validator
 
