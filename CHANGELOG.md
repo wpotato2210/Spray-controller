@@ -2,6 +2,12 @@
 
 ## Versions
 
+- **0.52** (2026-04-08): Executed `PIN-WAVE-003` by adding deterministic
+  `scripts/validate_pin_wave_003.py` Mega-profile policy checks for
+  `pins.yaml` invariants, Uno/Nano selector guardrails, and hardware policy
+  documentation continuity; integrated the check into `./scripts/validate.sh`
+  and documented command + pass marker in `TESTING.md`.
+
 - **0.51** (2026-04-08): Executed `PIN-WAVE-002` by adding deterministic
   `scripts/validate_pin_wave_002.py` parity coverage across `pins.yaml`,
   Uno/Nano pin headers, and target-policy docs; integrated the check into

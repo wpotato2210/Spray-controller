@@ -29,6 +29,7 @@ Spray Controller Testing Procedures
   - `== Config completeness check ==`
   - `== PIN-WAVE-001 pin-map check ==`
   - `== PIN-WAVE-002 parity check ==`
+  - `== PIN-WAVE-003 Mega policy check ==`
   - `== P3 sensor robustness check ==`
   - `== P3 closure artifact check ==`
   - `== P0 closure artifact check ==`
@@ -70,6 +71,20 @@ Spray Controller Testing Procedures
     switch inputs.
   - `HARDWARE.md` preserves the shared Uno/Nano mapping policy statement.
   - `include/pins.h` preserves the Uno/Nano-only build target selector policy.
+
+## PIN-WAVE-003 Mega-Profile Policy Validator
+
+- Command: `python3 scripts/validate_pin_wave_003.py`
+- Expected pass marker: `pin_wave_003_ok`
+- Deterministic checks enforced:
+  - `pins.yaml` Mega2560 profile preserves required keys for sensors, pump,
+    sections, run/hold, and optional pressure input.
+  - Mega wheel/flow inputs remain interrupt-capable and do not collide; pump PWM
+    remains on a PWM-capable Mega pin.
+  - Mega section/run/pressure fields remain constrained to the documented
+    D22-D53 / A8-A15 assignment range.
+  - `include/pins.h` preserves the current Uno/Nano-only selector policy and
+    `HARDWARE.md` preserves the unsupported-board statement.
 
 ## P3 Deterministic Robustness Validator
 
