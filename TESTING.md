@@ -28,6 +28,7 @@ Spray Controller Testing Procedures
   - `== Protocol structure check ==`
   - `== Config completeness check ==`
   - `== PIN-WAVE-001 pin-map check ==`
+  - `== PIN-WAVE-002 parity check ==`
   - `== P3 sensor robustness check ==`
   - `== P3 closure artifact check ==`
   - `== P0 closure artifact check ==`
@@ -58,6 +59,17 @@ Spray Controller Testing Procedures
   - Required pin keys exist per profile and are unique within each profile.
   - `wheel_sensor` and `flow_sensor` both satisfy board interrupt-pin policy.
   - `pump_pwm` is restricted to board PWM-capable pins.
+
+## PIN-WAVE-002 Pin-Parity Validator
+
+- Command: `python3 scripts/validate_pin_wave_002.py`
+- Expected pass marker: `pin_wave_002_ok`
+- Deterministic checks enforced:
+  - `pins.yaml` Nano/Uno profiles match `include/pins_nano.h` and
+    `include/pins_uno.h` constants for wheel/flow/pump, boom outputs, LED, and
+    switch inputs.
+  - `HARDWARE.md` preserves the shared Uno/Nano mapping policy statement.
+  - `include/pins.h` preserves the Uno/Nano-only build target selector policy.
 
 ## P3 Deterministic Robustness Validator
 
