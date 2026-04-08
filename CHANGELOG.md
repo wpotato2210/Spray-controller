@@ -2,6 +2,11 @@
 
 ## Versions
 
+- **0.50** (2026-04-08): Executed `PIN-WAVE-001` by adding deterministic
+  `scripts/validate_pin_wave_001.py` pin-map invariants coverage, integrating
+  the check into `./scripts/validate.sh`, and documenting command + pass marker
+  in `TESTING.md`.
+
 - **0.1** (TBD): Initial prototype firmware.
 - **0.2** (TBD): Added frozen module interfaces and flow sensor support.
 - **0.3** (TBD): Added run/hold switch and bypass solenoid logic.

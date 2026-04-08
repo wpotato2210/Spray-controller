@@ -26,6 +26,9 @@ run_step "Protocol structure check" \
 run_step "Config completeness check" \
   python3 scripts/validate_config.py
 
+run_step "PIN-WAVE-001 pin-map check" \
+  python3 scripts/validate_pin_wave_001.py
+
 run_step "P3 sensor robustness check" \
   python3 scripts/validate_p3_sensor_robustness.py
 
