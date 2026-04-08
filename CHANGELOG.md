@@ -2,6 +2,11 @@
 
 ## Versions
 
+- **0.51** (2026-04-08): Executed `PIN-WAVE-002` by adding deterministic
+  `scripts/validate_pin_wave_002.py` parity coverage across `pins.yaml`,
+  Uno/Nano pin headers, and target-policy docs; integrated the check into
+  `./scripts/validate.sh` and documented command + pass marker in `TESTING.md`.
+
 - **0.50** (2026-04-08): Executed `PIN-WAVE-001` by adding deterministic
   `scripts/validate_pin_wave_001.py` pin-map invariants coverage, integrating
   the check into `./scripts/validate.sh`, and documenting command + pass marker
