@@ -77,6 +77,21 @@ Uses the same core IO mapping as Nano for this firmware profile, with shared LCD
 
 - Individual section on/off
 - Run/Hold switch with optional bypass solenoid
+- Rotary encoder module with push button (`CLK`, `DT`, `SW`, `VCC`, `GND`)
+- Operator buttons:
+  - `UP`
+  - `DOWN`
+  - `SELECT`
+  - `CAL`
+  - `AUTO_MANUAL`
+
+## Operator input behavior contract
+
+- `CAL` long-press (`>= 3s`) enters calibration mode only when Run/Hold is in `HOLD`.
+- In calibration mode, `CAL` long-press (`>= 3s`) saves calibration changes and exits calibration mode.
+- Rotary encoder push button mappings:
+  - short press = same behavior as `SELECT`
+  - long press (`>= 3s`) = same behavior as `CAL`
 
 ## Power
 

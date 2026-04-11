@@ -44,13 +44,18 @@ The operator preview publishes the following fields every preview cycle in this 
 ### Operator command/event tokens
 
 - Input command frame: `ME:<event>`
-  - `ME:NAV`, `ME:SEL`, `ME:CAN`, `ME:CFM`, `ME:FCL`, `ME:WCL`
+  - `ME:UP`, `ME:DWN`, `ME:NAV`, `ME:SEL`, `ME:CAN`, `ME:CAL`, `ME:AUM`, `ME:CFM`, `ME:FCL`, `ME:WCL`
   - Overlong command lines are dropped until newline (safety against partial-frame parse).
 - State output frame: `MS:<state>`
   - `HOME`, `MENU`, `COUNTERS`, `RESET_CONFIRM`
 - Event output frame: `RS:<event>`
   - `COUNTERS_CALIBRATION_RESET`, `FLOW_CALIBRATION_ENTRYPOINT`,
     `WHEEL_CALIBRATION_ENTRYPOINT`
+- Physical control mapping:
+  - Rotary push short press = `ME:SEL`
+  - Rotary push long press (`>= 3s`) = `ME:CAL`
+  - `CAL` long press (`>= 3s`) while Run/Hold is `HOLD` enters calibration mode
+  - `CAL` long press (`>= 3s`) in calibration mode saves and exits calibration mode
 
 ### Determinism rules
 
