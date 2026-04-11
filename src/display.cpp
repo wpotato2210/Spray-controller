@@ -1,13 +1,17 @@
 #include "display.h"
 
-#if defined(ARDUINO_AVR_MEGA2560) || defined(ARDUINO_AVR_MEGA)
+#if defined(ARDUINO_AVR_MEGA2560) || defined(ARDUINO_AVR_MEGA) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)
 #include <U8g2lib.h>
 
-#include "pins.h"
+#include "pin_map_lcd.h"
+
+#ifndef LCD_CS
+#error "LCD pin mapping not defined for this board"
+#endif
 
 namespace spray {
 namespace {
-U8G2_ST7920_128X64_F_SW_SPI g_display(U8G2_R0, PIN_LCD_SCLK, PIN_LCD_MOSI, PIN_LCD_CS, PIN_LCD_RST);
+U8G2_ST7920_128X64_F_HW_SPI g_display(U8G2_R0, LCD_CS, LCD_RESET);
 
 void drawLabelValue(uint8_t y, const char* label, const char* value) {
   g_display.drawStr(0, y, label);

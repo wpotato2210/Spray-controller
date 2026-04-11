@@ -4,6 +4,40 @@ yamllint_ok
 protocols_ok
 == Config completeness check ==
 config_ok
+== PIN-WAVE-001 pin-map check ==
+pin_wave_001_ok
+== PIN-WAVE-002 parity check ==
+pin_wave_002_ok
+== PIN-WAVE-003 Mega policy check ==
+pin_wave_003_ok
 == P3 sensor robustness check ==
 p3_sensor_robustness_ok
+== P3 closure artifact check ==
+p3_closure_ok
+== P0 closure artifact check ==
+p0_closure_ok
+== P1 closure artifact check ==
+p1_closure_ok
+== P2 closure artifact check ==
+p2_closure_ok
+== P4 closure artifact check ==
+p4_closure_ok
+== P4 operator interface check ==
+p4_operator_interface_ok
+== P5 scalability invariant check ==
+p5_scalability_ok
+== P5 closure artifact check ==
+p5_closure_ok
+== P6 flow calibration workflow check ==
+p6_flow_calibration_ok
+== P6 wheel calibration workflow check ==
+p6_wheel_calibration_ok
+== P6 calibration storage check ==
+p6_calibration_storage_ok
+== P6 calibration override check ==
+p6_calibration_override_ok
+== P6 closure artifact check ==
+p6_closure_ok
+== P7 documentation alignment check ==
+p7_documentation_ok
 == SUCCESS ==

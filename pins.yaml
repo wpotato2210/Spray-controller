@@ -2,11 +2,11 @@ profiles:
   arduino_avr_nano:
     wheel_sensor: 2
     flow_sensor: 3
-    pump_pwm: 11
+    pump_pwm: 9
 
     boom_sections:
       section_1: 12
-      section_2: 13
+      section_2: 7
       section_3: A1
 
     leds:
@@ -19,14 +19,21 @@ profiles:
         section_2: A5
         section_3: 4  # Nano-safe: avoids A6/A7 analog-only pins
 
+    lcd:
+      interface: spi
+      clk: 13
+      mosi: 11
+      cs: 10
+      reset: 8
+
   arduino_avr_uno:
     wheel_sensor: 2
     flow_sensor: 3
-    pump_pwm: 11
+    pump_pwm: 9
 
     boom_sections:
       section_1: 12
-      section_2: 13
+      section_2: 7
       section_3: A1
 
     leds:
@@ -39,13 +46,16 @@ profiles:
         section_2: A5
         section_3: 4  # Uno/Nano shared safe digital input
 
+    lcd:
+      interface: spi
+      clk: 13
+      mosi: 11
+      cs: 10
+      reset: 8
+
   arduino_avr_mega2560:
-    # BLOCKED from D22-D53/A8-A15-only policy under current firmware:
-    # flow/wheel rely on attachInterrupt(digitalPinToInterrupt(pin)).
-    # On Mega2560 external interrupts are fixed to D2, D3, D18, D19, D20, D21.
     wheel_sensor: 18
     flow_sensor: 19
-    # PWM required for pump output (Mega PWM-capable in requested range: D44-D46).
     pump_pwm: 44
 
     boom_sections:
@@ -64,3 +74,10 @@ profiles:
         section_3: 29
 
     pressure_sensor: A8
+
+    lcd:
+      interface: spi
+      clk: 52
+      mosi: 51
+      cs: 53
+      reset: 49

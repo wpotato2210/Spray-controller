@@ -10,13 +10,13 @@ Spray Controller Hardware
 target_policy:
   arduino_uno: supported
   arduino_nano: supported
-  arduino_mega: unsupported
+  arduino_mega: supported
 ```
 
 - Single flow sensor for total flow feedback.
 - Multiple boom sections controlled independently as ON/OFF outputs.
 - 12V pump power stage with 5V MCU logic.
-- ST7920 128x64 LCD supported on Arduino Mega in serial/SPI mode via U8g2 (`U8G2_ST7920_128X64_F_SW_SPI`).
+- ST7920 128x64 LCD supported on Arduino Uno, Nano, and Mega in hardware SPI mode via U8g2 (`U8G2_ST7920_128X64_F_HW_SPI`).
 
 ## Pinout (board profiles)
 
@@ -36,10 +36,10 @@ target_policy:
 | 28 | Section Switch 2 | Input pull-up |
 | 29 | Section Switch 3 | Input pull-up |
 | A8 | Pressure Sensor (Optional) | Analog telemetry input; feature-gated and disabled by default |
-| 13 | LCD SCLK / E | ST7920 serial clock (U8g2 SW SPI clock) |
-| 11 | LCD MOSI / RW | ST7920 serial data (U8g2 SW SPI data) |
-| 10 | LCD CS / RS | ST7920 chip select |
-| 8 | LCD RST | ST7920 reset |
+| 52 | LCD SCLK / E | ST7920 hardware SPI clock |
+| 51 | LCD MOSI / RW | ST7920 hardware SPI data |
+| 53 | LCD CS / RS | ST7920 chip select |
+| 49 | LCD RST | ST7920 reset |
 
 #### ST7920 wiring requirements
 
@@ -54,9 +54,9 @@ target_policy:
 | --- | --- | --- |
 | 2 | Wheel Sensor | Digital pulse input |
 | 3 | Flow Sensor | Single total-flow pulse input (YF-S201C) |
-| 11 | Pump PWM | PWM output to 12V pump driver |
+| 9 | Pump PWM | PWM output to 12V pump driver |
 | 12 | Boom Section 1 | Digital output (ON/OFF) |
-| 13 | Boom Section 2 | Digital output (ON/OFF) |
+| 7 | Boom Section 2 | Digital output (ON/OFF) |
 | A1 | Boom Section 3 | Digital output (ON/OFF) |
 | A2 | Section 1 LED | Indicator |
 | A3 | Run/Hold Switch | Input pull-up |
@@ -64,10 +64,14 @@ target_policy:
 | A5 | Section Switch 2 | Input pull-up |
 | 4 | Section Switch 3 | Input pull-up; avoids A6 analog-only behavior |
 | A0 | Pressure Sensor (Optional) | Analog telemetry input; feature-gated and disabled by default |
+| 13 | LCD SCLK / E | ST7920 hardware SPI clock |
+| 11 | LCD MOSI / RW | ST7920 hardware SPI data |
+| 10 | LCD CS / RS | ST7920 chip select |
+| 8 | LCD RST | ST7920 reset |
 
 ### Arduino Uno (`ARDUINO_AVR_UNO`)
 
-Uses the same mapping as Nano for this firmware profile.
+Uses the same core IO mapping as Nano for this firmware profile, with shared LCD SPI mapping (CLK 13, MOSI 11, CS 10, RESET 8).
 
 ## Switches
 
@@ -94,10 +98,10 @@ MCU Mega2560 (5V logic)
 | 27 -> Section SW 1          |----> Toggle input
 | 28 -> Section SW 2          |----> Toggle input
 | 29 -> Section SW 3          |----> Toggle input
-| 13 -> LCD SCLK (E)          |----> ST7920 serial clock
-| 11 -> LCD MOSI (RW)         |----> ST7920 serial data
-| 10 -> LCD CS (RS)           |----> ST7920 chip select
-|  8 -> LCD RST               |----> ST7920 reset
+| 52 -> LCD SCLK (E)          |----> ST7920 hardware SPI clock
+| 51 -> LCD MOSI (RW)         |----> ST7920 hardware SPI data
+| 53 -> LCD CS (RS)           |----> ST7920 chip select
+| 49 -> LCD RST               |----> ST7920 reset
 | PSB -> GND                  |----> Force serial/SPI mode
 | A8 -> Pressure In (opt)     |----> Optional analog pressure telemetry
 | GND ------------------------|----> Common GND
@@ -106,4 +110,4 @@ MCU Mega2560 (5V logic)
 
 ## Unsupported boards
 
-- `ARDUINO_AVR_MEGA2560`
+- None (Uno, Nano, and Mega2560 are supported).
