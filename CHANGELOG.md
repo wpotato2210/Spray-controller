@@ -281,3 +281,8 @@ TX-capacity gating to reduce control-loop jitter risk.
   `PHASE_EIGHT_READINESS_AUDIT.md`; decision: **NO-GO for P8 closure
   readiness** pending prioritized release tasks `P8-RA-001` through
   `P8-RA-007`.
+
+- **0.50** (2026-04-11): Revalidated `P3-CLS-001` deterministically by running
+  `python3 scripts/validate_p3_closure.py` and `python3
+  scripts/validate_p3_sensor_robustness.py`; both checks passed and preserved
+  the existing P3 closure/fault-telemetry contract without interface changes.
