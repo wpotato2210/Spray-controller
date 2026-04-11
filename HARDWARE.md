@@ -4,6 +4,15 @@ Spray Controller Hardware
 
 ## Hardware Summary
 
+## Target Policy
+
+```yaml
+target_policy:
+  arduino_uno: supported
+  arduino_nano: supported
+  arduino_mega: unsupported
+```
+
 - Single flow sensor for total flow feedback.
 - Multiple boom sections controlled independently as ON/OFF outputs.
 - 12V pump power stage with 5V MCU logic.
@@ -94,3 +103,7 @@ MCU Mega2560 (5V logic)
 | GND ------------------------|----> Common GND
 +-----------------------------+
 ```
+
+## Unsupported boards
+
+- `ARDUINO_AVR_MEGA2560`
