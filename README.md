@@ -25,6 +25,7 @@ speed, and active width.
 
 - `ARCHITECTURE.md`: module interfaces.
 - `HARDWARE.md`: pin mappings.
+- `WIRING.md`: wiring reference and connection map.
 - `PROTOCOLS.md`: message formats.
 - `CONFIGURATION.md`: constants and units.
 - `DEVELOPMENT_ROADMAP.md`: phased implementation plan.
