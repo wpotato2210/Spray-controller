@@ -9,10 +9,10 @@ namespace spray {
 
 constexpr uint8_t PIN_WHEEL_SENSOR = 2U;
 constexpr uint8_t PIN_FLOW_SENSOR = 3U;
-constexpr uint8_t PIN_PUMP_PWM = 11U;
+constexpr uint8_t PIN_PUMP_PWM = 9U;
 
 constexpr uint8_t PIN_BOOM_1 = 12U;
-constexpr uint8_t PIN_BOOM_2 = 13U;
+constexpr uint8_t PIN_BOOM_2 = 7U;
 constexpr uint8_t PIN_BOOM_3 = A1;
 
 constexpr uint8_t PIN_LED_SECTION_1 = A2;

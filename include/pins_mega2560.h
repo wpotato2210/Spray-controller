@@ -23,12 +23,6 @@ constexpr uint8_t PIN_SECTION_SW_2 = 28U;
 constexpr uint8_t PIN_SECTION_SW_3 = 29U;
 constexpr uint8_t PIN_PRESSURE_SENSOR = A8;
 
-// ST7920 128x64 (SPI/serial mode, U8g2 SW SPI constructor pin order)
-constexpr uint8_t PIN_LCD_SCLK = 13U;
-constexpr uint8_t PIN_LCD_MOSI = 11U;
-constexpr uint8_t PIN_LCD_CS = 10U;
-constexpr uint8_t PIN_LCD_RST = 8U;
-
 constexpr std::array<SectionDescriptor, SECTION_COUNT> kSectionDescriptors = {{{
     {0U, PIN_BOOM_1, PIN_SECTION_SW_1},
     {1U, PIN_BOOM_2, PIN_SECTION_SW_2},

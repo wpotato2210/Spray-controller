@@ -85,13 +85,14 @@ def extract_header_pin_map(content: str) -> dict[str, str]:
 
 
 def hardware_uses_shared_uno_mapping(content: str) -> bool:
-    return "Uses the same mapping as Nano" in content
+    return "Uses the same core IO mapping as Nano" in content or "Uses the same mapping as Nano" in content
 
 
-def pins_selector_is_uno_nano_only(content: str) -> bool:
+def pins_selector_has_supported_targets(content: str) -> bool:
     has_nano = "#if defined(ARDUINO_AVR_NANO)" in content
     has_uno = "#elif defined(ARDUINO_AVR_UNO)" in content
-    return has_nano and has_uno and "Unsupported board target" in content
+    has_mega = "#elif defined(ARDUINO_AVR_MEGA2560) || defined(ARDUINO_AVR_MEGA)" in content
+    return has_nano and has_uno and has_mega and "Unsupported board target" in content
 
 
 def main() -> int:
@@ -125,7 +126,7 @@ def main() -> int:
         errors.append("hardware_doc_missing_shared_uno_mapping_note")
 
     pins_selector = read(PINS_SELECTOR_H)
-    if not pins_selector_is_uno_nano_only(pins_selector):
+    if not pins_selector_has_supported_targets(pins_selector):
         errors.append("pins_selector_target_policy_drift")
 
     if errors:

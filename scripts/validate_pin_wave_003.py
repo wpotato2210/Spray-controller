@@ -63,7 +63,7 @@ def extract_key(block: str, key: str) -> str | None:
 CANONICAL_POLICY = {
     "arduino_uno": "supported",
     "arduino_nano": "supported",
-    "arduino_mega": "unsupported",
+    "arduino_mega": "supported",
 }
 
 
@@ -126,7 +126,7 @@ def main() -> int:
     hardware_policy = extract_target_policy(read(HARDWARE_MD))
 
     if hardware_policy != CANONICAL_POLICY:
-        errors.append("hardware_doc_missing_unsupported_policy")
+        errors.append("hardware_doc_target_policy_mismatch")
 
     if pins_selector_policy != hardware_policy:
         errors.append("pins_selector_target_policy_drift")
