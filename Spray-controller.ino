@@ -9,6 +9,7 @@
 #include "protocol.h"
 #include "interrupt_guards.h"
 #include "operator_menu.h"
+#include "display.h"
 
 namespace spray {
 namespace {
@@ -377,6 +378,7 @@ void setup() {
     }
   }
   spray::setupPins();
+  spray::beginDisplay();
   spray::calibrationStore().begin();
   spray::calibrationStore().load();
   spray::g_flow_sensor.begin();
@@ -428,6 +430,7 @@ void loop() {
 
   spray::g_pump.setDutyCycle(duty);
   spray::writeSections();
+  spray::renderDisplay(measured_flow_lpm, speed_kmh, duty, run_enabled, active_sections, spray::getStatusFaultBitfield());
   if (spray::shouldPublishPreview(now_ms, last_preview_ms) && spray::hasTelemetryTxCapacity()) {
     spray::publishPreview(speed_kmh, measured_flow_lpm, duty, active_sections, distance_m, area_ha);
     last_preview_ms = now_ms;
