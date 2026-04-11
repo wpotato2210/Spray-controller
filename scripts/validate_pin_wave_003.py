@@ -60,17 +60,26 @@ def extract_key(block: str, key: str) -> str | None:
 
 
 
-def selector_is_uno_nano_only(content: str) -> bool:
-    has_nano = "#if defined(ARDUINO_AVR_NANO)" in content
-    has_uno = "#elif defined(ARDUINO_AVR_UNO)" in content
-    blocks_others = "Unsupported board target" in content
-    mentions_mega = "ARDUINO_AVR_MEGA2560" in content
-    return has_nano and has_uno and blocks_others and not mentions_mega
+CANONICAL_POLICY = {
+    "arduino_uno": "supported",
+    "arduino_nano": "supported",
+    "arduino_mega": "unsupported",
+}
 
 
+def extract_target_policy(content: str) -> dict[str, str]:
+    match = re.search(r"target_policy:\s*\n((?:[ \t]+[a-z_]+:\s*(?:supported|unsupported)\s*\n)+)", content)
+    if match is None:
+        return {}
 
-def hardware_mentions_unsupported_policy(content: str) -> bool:
-    return "## Unsupported boards" in content and "ARDUINO_AVR_NANO" in content and "ARDUINO_AVR_UNO" in content
+    policy: dict[str, str] = {}
+    for line in match.group(1).splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        key, value = [part.strip() for part in line.split(":", 1)]
+        policy[key] = value
+    return policy
 
 
 
@@ -113,11 +122,14 @@ def main() -> int:
                 if value not in MEGA_DIGITAL_RANGE and value not in MEGA_ANALOG_RANGE:
                     errors.append(f"mega_io_range_violation:{PROFILE_NAME}:{key}:{value}")
 
-    if not selector_is_uno_nano_only(read(PINS_SELECTOR_H)):
-        errors.append("pins_selector_target_policy_drift")
+    pins_selector_policy = extract_target_policy(read(PINS_SELECTOR_H))
+    hardware_policy = extract_target_policy(read(HARDWARE_MD))
 
-    if not hardware_mentions_unsupported_policy(read(HARDWARE_MD)):
+    if hardware_policy != CANONICAL_POLICY:
         errors.append("hardware_doc_missing_unsupported_policy")
+
+    if pins_selector_policy != hardware_policy:
+        errors.append("pins_selector_target_policy_drift")
 
     if errors:
         for error in sorted(errors):
