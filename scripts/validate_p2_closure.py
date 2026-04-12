@@ -57,7 +57,7 @@ CHECKS: tuple[tuple[str, Path, str], ...] = (
     (
         "hold_forces_safe_pump_state",
         Path("Spray-controller.ino"),
-        r"uint8_t duty = spray::PWM_MIN;\s+if \(run_enabled\) \{\s+duty = spray::g_flow_controller\.computePumpDuty\(speed_kmh, active_width_m, measured_flow_lpm\);\s+\} else \{\s+spray::g_flow_controller\.stop\(\);\s+\}",
+        r"(?:uint8_t duty = spray::PWM_MIN;\s+if \(run_enabled\) \{\s+duty = spray::g_flow_controller\.computePumpDuty\(speed_kmh, active_width_m, measured_flow_lpm\);\s+\} else \{\s+spray::g_flow_controller\.stop\(\);\s+\})|(?:ControlPhaseSnapshot runControlPhase\(const InputPhaseSnapshot& input\) \{\s+uint8_t duty = PWM_MIN;\s+if \(input\.run_enabled\) \{\s+duty = g_flow_controller\.computePumpDuty\(input\.speed_kmh, input\.active_width_m, input\.measured_flow_lpm\);\s+\} else \{\s+g_flow_controller\.stop\(\);\s+\}\s+return \{duty\};\s+\})",
     ),
     (
         "compact_status_publish",

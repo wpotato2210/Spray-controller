@@ -11,6 +11,10 @@ on:
       - 'include/pins_mega2560.h'
       - 'include/pin_map_lcd.h'
       - 'include/pin_policy_guards.h'
+      - 'include/interfaces.h'
+      - 'src/flow_sensor.cpp'
+      - 'src/wheel_sensor.cpp'
+      - 'src/flow_controller.cpp'
       - 'config.h'
       - 'PROTOCOLS.md'
       - 'CONFIGURATION.md'
@@ -18,6 +22,8 @@ on:
       - 'TESTING.md'
       - 'DEVELOPMENT_ROADMAP.md'
       - 'scripts/validate.sh'
+      - 'scripts/run_wave_04_unit_tests.sh'
+      - 'scripts/validate_wave_04_static.py'
       - 'scripts/validate_p0_closure.py'
       - 'scripts/validate_p1_closure.py'
       - 'scripts/validate_config.py'
@@ -27,6 +33,7 @@ on:
       - 'scripts/validate_pin_wave_004.py'
       - 'scripts/validate_protocols.py'
       - 'scripts/run_validation_and_capture.sh'
+      - 'tests/native/test_wave_04_quality.cpp'
       - '.github/workflows/validate.yml'
   pull_request:
     paths:
@@ -38,6 +45,10 @@ on:
       - 'include/pins_mega2560.h'
       - 'include/pin_map_lcd.h'
       - 'include/pin_policy_guards.h'
+      - 'include/interfaces.h'
+      - 'src/flow_sensor.cpp'
+      - 'src/wheel_sensor.cpp'
+      - 'src/flow_controller.cpp'
       - 'config.h'
       - 'PROTOCOLS.md'
       - 'CONFIGURATION.md'
@@ -45,6 +56,8 @@ on:
       - 'TESTING.md'
       - 'DEVELOPMENT_ROADMAP.md'
       - 'scripts/validate.sh'
+      - 'scripts/run_wave_04_unit_tests.sh'
+      - 'scripts/validate_wave_04_static.py'
       - 'scripts/validate_p0_closure.py'
       - 'scripts/validate_p1_closure.py'
       - 'scripts/validate_config.py'
@@ -54,6 +67,7 @@ on:
       - 'scripts/validate_pin_wave_004.py'
       - 'scripts/validate_protocols.py'
       - 'scripts/run_validation_and_capture.sh'
+      - 'tests/native/test_wave_04_quality.cpp'
       - '.github/workflows/validate.yml'
   workflow_dispatch:
 
@@ -83,3 +97,25 @@ jobs:
           name: validation-pass
           path: validation/validation_pass.txt
           if-no-files-found: error
+
+  wave-04-static:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run WAVE-04 static checks
+        run: python3 scripts/validate_wave_04_static.py
+
+  wave-04-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install compiler
+        run: sudo apt-get update && sudo apt-get install -y g++
+      - name: Run WAVE-04 native unit checks
+        run: bash scripts/run_wave_04_unit_tests.sh
