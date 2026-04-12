@@ -128,15 +128,26 @@ Spray Controller Protocols
 - Format:
 - `ME:<event>\n`
 - Accepted event tokens:
+  - `UP` = menu up / previous item
+  - `DWN` = menu down / next item
   - `NAV` = navigate
   - `SEL` = select
   - `CAN` = cancel/back
+  - `CAL` = calibration long-press action (`>= 3s`)
+  - `AUM` = auto/manual toggle request
   - `CFM` = confirm
   - `FCL` = flow calibration entrypoint (accepted from `MENU`)
   - `WCL` = wheel calibration entrypoint (accepted from `MENU`)
 - Unknown tokens are ignored with no state change.
 - Overlong command lines are discarded until newline; no partial token is
   processed after buffer overflow.
+- Physical-control mapping contract:
+  - `SELECT` button short press emits `SEL`.
+  - Rotary encoder push button short press emits `SEL`.
+  - `CAL` button long press (`>= 3s`) emits `CAL`.
+  - Rotary encoder push button long press (`>= 3s`) emits `CAL`.
+  - `CAL` long-press is accepted for calibration entry only when Run/Hold is `HOLD`.
+  - While in calibration mode, `CAL` long-press saves changes and exits calibration mode.
 
 #### MENU state output
 

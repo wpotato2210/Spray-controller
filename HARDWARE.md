@@ -11,6 +11,10 @@ target_policy:
   arduino_uno: supported
   arduino_nano: supported
   arduino_mega: supported
+  ui_inputs:
+    arduino_uno: not_allocated
+    arduino_nano: not_allocated
+    arduino_mega: allocated
 ```
 
 - Single flow sensor for total flow feedback.
@@ -35,6 +39,14 @@ target_policy:
 | 27 | Section Switch 1 | Input pull-up |
 | 28 | Section Switch 2 | Input pull-up |
 | 29 | Section Switch 3 | Input pull-up |
+| 30 | Encoder CLK (A) | Input pull-up |
+| 31 | Encoder DT (B) | Input pull-up |
+| 32 | Encoder SW | Input pull-up |
+| 33 | Button UP | Input pull-up |
+| 34 | Button DOWN | Input pull-up |
+| 35 | Button CAL | Input pull-up |
+| 36 | Button SELECT | Input pull-up |
+| 37 | Button AUTO/MANUAL | Input pull-up |
 | A8 | Pressure Sensor (Optional) | Analog telemetry input; feature-gated and disabled by default |
 | 52 | LCD SCLK / E | ST7920 hardware SPI clock |
 | 51 | LCD MOSI / RW | ST7920 hardware SPI data |
@@ -73,10 +85,30 @@ target_policy:
 
 Uses the same core IO mapping as Nano for this firmware profile, with shared LCD SPI mapping (CLK 13, MOSI 11, CS 10, RESET 8).
 
+### UI input allocation status
+
+- Mega2560: UI inputs are allocated on dedicated pins (`30-37`) with no overlaps.
+- Uno/Nano: UI inputs are intentionally unassigned (`0xFF`) in pin headers to avoid pin conflicts with existing frozen I/O.
+
 ## Switches
 
 - Individual section on/off
 - Run/Hold switch with optional bypass solenoid
+- Rotary encoder module with push button (`CLK`, `DT`, `SW`, `VCC`, `GND`)
+- Operator buttons:
+  - `UP`
+  - `DOWN`
+  - `SELECT`
+  - `CAL`
+  - `AUTO_MANUAL`
+
+## Operator input behavior contract
+
+- `CAL` long-press (`>= 3s`) enters calibration mode only when Run/Hold is in `HOLD`.
+- In calibration mode, `CAL` long-press (`>= 3s`) saves calibration changes and exits calibration mode.
+- Rotary encoder push button mappings:
+  - short press = same behavior as `SELECT`
+  - long press (`>= 3s`) = same behavior as `CAL`
 
 ## Power
 
