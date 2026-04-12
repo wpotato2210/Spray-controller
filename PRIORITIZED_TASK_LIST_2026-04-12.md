@@ -4,42 +4,37 @@
 
 | Wave ID | Priority | Objective | Exit Criteria |
 | --- | --- | --- | --- |
-| WAVE-01-HW-SAFETY | P0 | Remove hardware correctness risks that can cause system failure. | No pin conflicts, pin-policy asserts passing, hardware docs aligned with source headers. |
-| WAVE-02-FW-STABILITY | P1 | Improve runtime determinism and fault resilience in control loop/telemetry/input handling. | Stable debounced inputs, bounded telemetry output, deterministic command/event handling. |
-| WAVE-03-ARCH-PORTABILITY | P2 | Reduce coupling to Arduino runtime and improve testability/maintainability. | Time abstraction in place, loop services split, shared utilities consolidated. |
-| WAVE-04-QUALITY-VALIDATION | P3 | Strengthen CI, validation coverage, and long-term hygiene. | Compile matrix + static checks + unit/HIL scaffolding operational. |
+| WAVE-01-MEM-PIN | P0 | Remove immediate hardware/firmware failure risks. | AVR display mode changed to page buffer, pin-policy asserts cover all assigned roles, docs reflect real dependencies. |
+| WAVE-02-TIMING-EVENTS | P1 | Improve deterministic runtime behavior under load. | Atomic pulse snapshots, bounded multi-event dequeue, phase overrun metrics active. |
+| WAVE-03-HAL-FAULTS | P2 | Improve portability and fault behavior consistency. | Display HAL backend selection + fault manager integrated behind stable interfaces. |
+| WAVE-04-VALIDATION | P3 | Lock improvements with automated validation and HIL checks. | CI gates for board matrix, docs consistency, SRAM soak and serial stress tests defined and running. |
 
 ## Prioritized Tasks
 
 | Task ID | Wave ID | Priority | Task | Deliverable | Depends On |
 | --- | --- | --- | --- | --- | --- |
-| TASK-HW-001 | WAVE-01-HW-SAFETY | P0 | Resolve Mega D49 conflict by remapping `PIN_BTN_SELECT` away from `LCD_RESET`. | Updated `include/pins_mega2560.h` + synchronized hardware docs. | None |
-| TASK-HW-002 | WAVE-01-HW-SAFETY | P0 | Add compile-time uniqueness assertions for enabled pin roles per board. | `static_assert` guards for duplicate pin assignments. | TASK-HW-001 |
-| TASK-HW-003 | WAVE-01-HW-SAFETY | P0 | Add feature-aware reserved-pin policy (SPI/LCD/UI domains). | Board pin policy checks for UNO/Nano/Mega. | TASK-HW-002 |
-| TASK-HW-004 | WAVE-01-HW-SAFETY | P0 | Eliminate doc/code pin-map drift via single-source generation or validation. | Hardware pin table validation step in CI. | TASK-HW-001 |
-| TASK-FW-001 | WAVE-02-FW-STABILITY | P1 | Implement debounce service for run/hold + section switches (20–40 ms configurable). | Stable input module + integration in loop path. | TASK-HW-003 |
-| TASK-FW-002 | WAVE-02-FW-STABILITY | P1 | Add telemetry frame budgeting/backpressure (bounded frames per cycle). | Non-blocking telemetry scheduler with per-loop budget. | None |
-| TASK-FW-003 | WAVE-02-FW-STABILITY | P1 | Introduce bounded operator event queue with overflow accounting. | Ring buffer + overflow metric/event publication. | TASK-FW-002 |
-| TASK-FW-004 | WAVE-02-FW-STABILITY | P1 | Define serial ingress/egress arbitration policy for deterministic loop timing. | Scheduler contract documented + enforced in code. | TASK-FW-002, TASK-FW-003 |
-| TASK-AR-001 | WAVE-03-ARCH-PORTABILITY | P2 | Introduce `TimeSourceAdapter` and remove direct `millis()` from domain sensors. | Time abstraction interface + migrated `FlowSensor`/`WheelSensor`. | TASK-FW-004 |
-| TASK-AR-002 | WAVE-03-ARCH-PORTABILITY | P2 | Refactor monolithic loop into service phases (`Input`, `Control`, `Output`, `Telemetry`). | Phase-oriented orchestration with explicit budgets. | TASK-FW-004 |
-| TASK-AR-003 | WAVE-03-ARCH-PORTABILITY | P2 | Consolidate duplicated numeric sanitation/clamp helpers. | Shared utility header + updated call sites. | None |
-| TASK-AR-004 | WAVE-03-ARCH-PORTABILITY | P2 | Remove/feature-guard unused protocol tokens/placeholders. | Lean protocol constants + feature-gated placeholders. | TASK-AR-002 |
-| TASK-QA-001 | WAVE-04-QUALITY-VALIDATION | P3 | Add board compile matrix (UNO/Nano/Mega) to CI. | CI workflow compile jobs for all declared targets. | TASK-HW-004 |
-| TASK-QA-002 | WAVE-04-QUALITY-VALIDATION | P3 | Add unit tests for flow/wheel conversion and controller edge behavior. | Test suite for timeout/clamp/fallback/ramp invariants. | TASK-AR-001 |
-| TASK-QA-003 | WAVE-04-QUALITY-VALIDATION | P3 | Add HIL test protocol for ISR pulse rates, serial saturation, and switch bounce. | Repeatable HIL checklist/scripts + pass criteria. | TASK-FW-001, TASK-FW-002 |
-| TASK-QA-004 | WAVE-04-QUALITY-VALIDATION | P3 | Add static checks for dead code/include hygiene/protocol drift. | CI static-analysis stage + reporting. | TASK-AR-003, TASK-AR-004 |
+| TASK-001 | WAVE-01-MEM-PIN | P0 | Move AVR display from `U8G2_*_F_*` to page-buffer mode (`_1_` or `_2_`). | `src/display.cpp` updated + memory note in docs + smoke test evidence. | None |
+| TASK-002 | WAVE-01-MEM-PIN | P0 | Expand pin-policy checks to validate all assigned role pins against LCD/SPI reserved sets. | `include/pin_policy_guards.h` static asserts for full assigned-pin matrix by board. | None |
+| TASK-003 | WAVE-01-MEM-PIN | P0 | Align dependency docs with implementation (U8g2 required). | `README.md` / `INSTALL.md` updated with required library/version guidance. | None |
+| TASK-004 | WAVE-02-TIMING-EVENTS | P1 | Add atomic pulse snapshot API to pulse counter adapter. | `PulseCounterAdapter` + Arduino implementation support single-lock snapshot reads. | TASK-001 |
+| TASK-005 | WAVE-02-TIMING-EVENTS | P1 | Increase operator event dequeue budget per loop (bounded, e.g., 2-4). | Queue processing loop updated + overflow/depth telemetry retained. | None |
+| TASK-006 | WAVE-02-TIMING-EVENTS | P1 | Add phase budget and overrun counters for loop phases. | Scheduler stats struct + telemetry/report output for overruns. | TASK-004, TASK-005 |
+| TASK-007 | WAVE-03-HAL-FAULTS | P2 | Introduce display backend abstraction with compile-time backend selection. | `DisplayAdapter` interface + `ST7920_SPI` backend + `NONE` backend. | TASK-001 |
+| TASK-008 | WAVE-03-HAL-FAULTS | P2 | Add centralized fault manager with latching/clear policy. | New module used by status fault publishing and runtime decisions. | TASK-006 |
+| TASK-009 | WAVE-03-HAL-FAULTS | P2 | Replace repeated section descriptor scans with direct indexed access guards. | Section lookup simplification + static assertions for contiguous IDs. | None |
+| TASK-010 | WAVE-04-VALIDATION | P3 | Add CI docs-consistency check between pin headers and hardware docs. | Script + CI job failing on pin-map drift. | TASK-002, TASK-003 |
+| TASK-011 | WAVE-04-VALIDATION | P3 | Add UNO/Nano SRAM soak HIL test protocol for display+telemetry workload. | Repeatable HIL procedure with pass/fail limits. | TASK-001, TASK-006 |
+| TASK-012 | WAVE-04-VALIDATION | P3 | Add serial burst/menu responsiveness HIL stress test. | Test script/protocol validating queue depth, overflow, and latency targets. | TASK-005, TASK-006 |
 
 ## Execution Order
 
-1. WAVE-01-HW-SAFETY
-2. WAVE-02-FW-STABILITY
-3. WAVE-03-ARCH-PORTABILITY
-4. WAVE-04-QUALITY-VALIDATION
+1. WAVE-01-MEM-PIN
+2. WAVE-02-TIMING-EVENTS
+3. WAVE-03-HAL-FAULTS
+4. WAVE-04-VALIDATION
 
-## WAVE-04 Execution Status (2026-04-12)
+## Recommended Next 3 Starts
 
-- [x] `TASK-QA-001` compile matrix expanded to UNO/Nano/Mega in CI (`.github/workflows/build.yml`).
-- [x] `TASK-QA-002` unit coverage added for flow/wheel conversion edges and controller fallback behavior (`tests/native/test_wave_04_quality.cpp`).
-- [x] `TASK-QA-003` repeatable HIL checklist added with pass criteria (`validation/hil_wave_04_protocol.md`).
-- [x] `TASK-QA-004` deterministic static checks added for include hygiene, placeholder dead-code markers, and protocol drift (`scripts/validate_wave_04_static.py`).
+1. Start `TASK-001` (highest user-visible stability risk on AVR).
+2. Start `TASK-002` (prevents latent hardware regressions).
+3. Start `TASK-003` (prevents failed bring-up due to missing dependency).
