@@ -7,12 +7,15 @@ Spray Controller Installation
 - Toolchain: Arduino IDE
 - Board: Arduino Nano
 - Port: COMx / /dev/ttyUSBx
-- Libraries: no additional libraries required (uses Arduino core `Arduino.h`)
+- Libraries:
+  - `U8g2` by olikraus (`v2.35.x` baseline validated)
+  - Arduino core (`Arduino.h`)
 
 ## Install Steps
 
 1. Connect the controller hardware per `HARDWARE.md`.
 1. Open firmware project in Arduino IDE.
+1. Install `U8g2` from Library Manager (search for `U8g2`).
 1. Select board and serial port.
 1. Build and upload firmware.
 1. Validate protocol output and I/O behavior per `TESTING.md`.

@@ -11,7 +11,7 @@
 
 namespace spray {
 namespace {
-U8G2_ST7920_128X64_F_HW_SPI g_display(U8G2_R0, LCD_CS, LCD_RESET);
+U8G2_ST7920_128X64_1_HW_SPI g_display(U8G2_R0, LCD_CS, LCD_RESET);
 
 void drawLabelValue(uint8_t y, const char* label, const char* value) {
   g_display.drawStr(0, y, label);
@@ -22,11 +22,12 @@ void drawLabelValue(uint8_t y, const char* label, const char* value) {
 void beginDisplay() {
   g_display.begin();
   g_display.setContrast(30);
-  g_display.clearBuffer();
-  g_display.setFont(u8g2_font_6x10_tr);
-  g_display.drawStr(0, 12, "Spray Controller");
-  g_display.drawStr(0, 26, "ST7920 ready");
-  g_display.sendBuffer();
+  g_display.firstPage();
+  do {
+    g_display.setFont(u8g2_font_6x10_tr);
+    g_display.drawStr(0, 12, "Spray Controller");
+    g_display.drawStr(0, 26, "ST7920 ready");
+  } while (g_display.nextPage());
 }
 
 void renderDisplay(float flow_lpm,
@@ -45,13 +46,14 @@ void renderDisplay(float flow_lpm,
   snprintf(line2, sizeof(line2), "%3u", pump_duty);
   snprintf(line3, sizeof(line3), "%u F:%u", active_sections, fault_bits);
 
-  g_display.clearBuffer();
-  g_display.setFont(u8g2_font_6x10_tr);
-  drawLabelValue(12, "FLOW LPM:", line0);
-  drawLabelValue(24, "SPD KMH:", line1);
-  drawLabelValue(36, "PUMP PWM:", line2);
-  drawLabelValue(48, run_enabled ? "RUN/SECT:" : "HOLD/SECT:", line3);
-  g_display.sendBuffer();
+  g_display.firstPage();
+  do {
+    g_display.setFont(u8g2_font_6x10_tr);
+    drawLabelValue(12, "FLOW LPM:", line0);
+    drawLabelValue(24, "SPD KMH:", line1);
+    drawLabelValue(36, "PUMP PWM:", line2);
+    drawLabelValue(48, run_enabled ? "RUN/SECT:" : "HOLD/SECT:", line3);
+  } while (g_display.nextPage());
 }
 
 }  // namespace spray
