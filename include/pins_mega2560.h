@@ -21,6 +21,14 @@ constexpr uint8_t PIN_RUN_HOLD = 26U;
 constexpr uint8_t PIN_SECTION_SW_1 = 27U;
 constexpr uint8_t PIN_SECTION_SW_2 = 28U;
 constexpr uint8_t PIN_SECTION_SW_3 = 29U;
+constexpr uint8_t PIN_ENCODER_CLK = 30U;
+constexpr uint8_t PIN_ENCODER_DT = 31U;
+constexpr uint8_t PIN_ENCODER_SW = 32U;
+constexpr uint8_t PIN_BTN_UP = 33U;
+constexpr uint8_t PIN_BTN_DOWN = 34U;
+constexpr uint8_t PIN_BTN_CAL = 35U;
+constexpr uint8_t PIN_BTN_SELECT = 36U;
+constexpr uint8_t PIN_BTN_AUTO_MANUAL = 37U;
 constexpr uint8_t PIN_PRESSURE_SENSOR = A8;
 
 constexpr std::array<SectionDescriptor, SECTION_COUNT> kSectionDescriptors = {{{

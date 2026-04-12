@@ -21,3 +21,34 @@ consistency_checks:
   - md_vs_headers
   - headers_vs_yaml
   - protocols_consistency
+  - pin_conflicts
+
+pin_allocation:
+  ui_inputs:
+    mega2560:
+      encoder_clk: 30
+      encoder_dt: 31
+      encoder_sw: 32
+      button_up: 33
+      button_down: 34
+      button_cal: 35
+      button_select: 36
+      button_auto_manual: 37
+    uno:
+      encoder_clk: unassigned
+      encoder_dt: unassigned
+      encoder_sw: unassigned
+      button_up: unassigned
+      button_down: unassigned
+      button_cal: unassigned
+      button_select: unassigned
+      button_auto_manual: unassigned
+    nano:
+      encoder_clk: unassigned
+      encoder_dt: unassigned
+      encoder_sw: unassigned
+      button_up: unassigned
+      button_down: unassigned
+      button_cal: unassigned
+      button_select: unassigned
+      button_auto_manual: unassigned
