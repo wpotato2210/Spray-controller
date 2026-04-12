@@ -85,6 +85,8 @@ void ArduinoInterruptPulseCounter::recordPulse() {
   last_pulse_ms_ = millis();
 }
 
+uint32_t ArduinoMillisTimeSource::nowMs() const { return millis(); }
+
 ArduinoSectionHardwareAdapter::ArduinoSectionHardwareAdapter(
     const std::array<SectionDescriptor, SECTION_COUNT>& sections,
     DigitalOutputAdapter& indicator_output)

@@ -22,8 +22,9 @@ ArduinoSectionHardwareAdapter g_section_hardware(kSectionDescriptors, g_section_
 #if ENABLE_PRESSURE_SENSOR
 ArduinoAnalogInput g_pressure_input(PIN_PRESSURE_SENSOR);
 #endif
-FlowSensor g_flow_sensor(flowPulseCounter());
-WheelSensor g_wheel_sensor(wheelPulseCounter());
+ArduinoMillisTimeSource g_time_source;
+FlowSensor g_flow_sensor(flowPulseCounter(), g_time_source);
+WheelSensor g_wheel_sensor(wheelPulseCounter(), g_time_source);
 RunHoldSwitch g_run_hold(g_run_hold_input);
 SectionManager g_section_manager;
 FlowController g_flow_controller;
@@ -549,6 +550,90 @@ void publishOperatorOverflowIfNeeded() {
   publishOperatorOverflowEvent(g_operator_event_queue.overflow_count);
   g_operator_event_queue.last_reported_overflow_count = g_operator_event_queue.overflow_count;
 }
+
+struct InputPhaseSnapshot {
+  float measured_flow_lpm;
+  float speed_kmh;
+  bool run_enabled;
+  float active_width_m;
+  uint8_t active_sections;
+  float distance_m;
+  float area_ha;
+};
+
+struct ControlPhaseSnapshot {
+  uint8_t duty;
+};
+
+struct RuntimePhaseState {
+  uint32_t now_ms;
+  uint32_t* last_preview_ms;
+  uint32_t* last_telemetry_ms;
+};
+
+InputPhaseSnapshot runInputPhase(uint32_t now_ms) {
+  readSections(now_ms);
+  const float measured_flow_lpm = g_flow_sensor.readFlow();
+  const float speed_kmh = g_wheel_sensor.readSpeed();
+  const bool run_enabled = readRunHoldDebounced(now_ms);
+  const float active_width_m = g_section_manager.getActiveWidth();
+  const uint8_t active_sections = g_section_manager.getActiveCount();
+  g_coverage_accumulator.update(speed_kmh, active_width_m, LOOP_INTERVAL_MS);
+
+  return {measured_flow_lpm,
+          speed_kmh,
+          run_enabled,
+          active_width_m,
+          active_sections,
+          g_coverage_accumulator.getDistanceMeters(),
+          g_coverage_accumulator.getAreaHectares()};
+}
+
+ControlPhaseSnapshot runControlPhase(const InputPhaseSnapshot& input) {
+  uint8_t duty = PWM_MIN;
+  if (input.run_enabled) {
+    duty = g_flow_controller.computePumpDuty(input.speed_kmh, input.active_width_m, input.measured_flow_lpm);
+  } else {
+    g_flow_controller.stop();
+  }
+  return {duty};
+}
+
+void runOutputPhase(const InputPhaseSnapshot& input, const ControlPhaseSnapshot& control) {
+  g_pump.setDutyCycle(control.duty);
+  writeSections();
+  renderDisplay(input.measured_flow_lpm,
+                input.speed_kmh,
+                control.duty,
+                input.run_enabled,
+                input.active_sections,
+                getStatusFaultBitfield());
+}
+
+void runTelemetryPhase(const InputPhaseSnapshot& input,
+                       const ControlPhaseSnapshot& control,
+                       const RuntimePhaseState& runtime) {
+  if (shouldPublishPreview(runtime.now_ms, *runtime.last_preview_ms) && hasTelemetryTxCapacity()) {
+    publishPreview(input.speed_kmh,
+                   input.measured_flow_lpm,
+                   control.duty,
+                   input.active_sections,
+                   input.distance_m,
+                   input.area_ha);
+    *runtime.last_preview_ms = runtime.now_ms;
+  }
+  if (shouldPublishTelemetry(runtime.now_ms, *runtime.last_telemetry_ms)) {
+    resetTelemetryCursor();
+    *runtime.last_telemetry_ms = runtime.now_ms;
+  }
+  uint8_t emitted_frames = 0U;
+  while ((emitted_frames < TELEMETRY_FRAME_BUDGET_PER_LOOP) && hasTelemetryTxCapacity()) {
+    if (!emitNextTelemetryFrame(input.measured_flow_lpm, input.speed_kmh, control.duty, input.run_enabled)) {
+      break;
+    }
+    ++emitted_frames;
+  }
+}
 }  // namespace
 }  // namespace spray
 
@@ -608,41 +693,8 @@ void loop() {
   }
   last_loop_ms = now_ms;
 
-  spray::readSections(now_ms);
-
-  const float measured_flow_lpm = spray::g_flow_sensor.readFlow();
-  const float speed_kmh = spray::g_wheel_sensor.readSpeed();
-  const bool run_enabled = spray::readRunHoldDebounced(now_ms);
-
-  const float active_width_m = spray::g_section_manager.getActiveWidth();
-  const uint8_t active_sections = spray::g_section_manager.getActiveCount();
-  spray::g_coverage_accumulator.update(speed_kmh, active_width_m, spray::LOOP_INTERVAL_MS);
-  const float distance_m = spray::g_coverage_accumulator.getDistanceMeters();
-  const float area_ha = spray::g_coverage_accumulator.getAreaHectares();
-
-  uint8_t duty = spray::PWM_MIN;
-  if (run_enabled) {
-    duty = spray::g_flow_controller.computePumpDuty(speed_kmh, active_width_m, measured_flow_lpm);
-  } else {
-    spray::g_flow_controller.stop();
-  }
-
-  spray::g_pump.setDutyCycle(duty);
-  spray::writeSections();
-  spray::renderDisplay(measured_flow_lpm, speed_kmh, duty, run_enabled, active_sections, spray::getStatusFaultBitfield());
-  if (spray::shouldPublishPreview(now_ms, last_preview_ms) && spray::hasTelemetryTxCapacity()) {
-    spray::publishPreview(speed_kmh, measured_flow_lpm, duty, active_sections, distance_m, area_ha);
-    last_preview_ms = now_ms;
-  }
-  if (spray::shouldPublishTelemetry(now_ms, last_telemetry_ms)) {
-    spray::resetTelemetryCursor();
-    last_telemetry_ms = now_ms;
-  }
-  uint8_t emitted_frames = 0U;
-  while ((emitted_frames < spray::TELEMETRY_FRAME_BUDGET_PER_LOOP) && spray::hasTelemetryTxCapacity()) {
-    if (!spray::emitNextTelemetryFrame(measured_flow_lpm, speed_kmh, duty, run_enabled)) {
-      break;
-    }
-    ++emitted_frames;
-  }
+  const spray::InputPhaseSnapshot input = spray::runInputPhase(now_ms);
+  const spray::ControlPhaseSnapshot control = spray::runControlPhase(input);
+  spray::runOutputPhase(input, control);
+  spray::runTelemetryPhase(input, control, {now_ms, &last_preview_ms, &last_telemetry_ms});
 }

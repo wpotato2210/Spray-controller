@@ -45,6 +45,12 @@ class PulseCounterAdapter {
   virtual void reset() = 0;
 };
 
+class TimeSourceAdapter {
+ public:
+  virtual ~TimeSourceAdapter() = default;
+  virtual uint32_t nowMs() const = 0;
+};
+
 class SectionHardwareAdapter {
  public:
   virtual ~SectionHardwareAdapter() = default;
@@ -55,7 +61,7 @@ class SectionHardwareAdapter {
 
 class FlowSensor {
  public:
-  explicit FlowSensor(PulseCounterAdapter& pulse_counter);
+  FlowSensor(PulseCounterAdapter& pulse_counter, TimeSourceAdapter& time_source);
   void begin();
   float readFlow();
   void reset();
@@ -64,6 +70,7 @@ class FlowSensor {
 
  private:
   PulseCounterAdapter& pulse_counter_;
+  TimeSourceAdapter& time_source_;
   uint32_t last_total_pulses_;
   uint32_t last_read_ms_;
   uint32_t last_pulse_ms_;
@@ -73,7 +80,7 @@ class FlowSensor {
 
 class WheelSensor {
  public:
-  explicit WheelSensor(PulseCounterAdapter& pulse_counter);
+  WheelSensor(PulseCounterAdapter& pulse_counter, TimeSourceAdapter& time_source);
   void begin();
   float readSpeed();
   void reset();
@@ -82,6 +89,7 @@ class WheelSensor {
 
  private:
   PulseCounterAdapter& pulse_counter_;
+  TimeSourceAdapter& time_source_;
   uint32_t last_total_pulses_;
   uint32_t last_read_ms_;
   uint32_t last_pulse_ms_;
