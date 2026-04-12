@@ -1,0 +1,5 @@
+== WAVE-04 static analysis check ==
+wave_04_static_ok
+== WAVE-04 native unit check ==
+wave_04_unit_ok
+== SUCCESS ==
