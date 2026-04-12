@@ -25,6 +25,7 @@ class FakeTime final : public spray::TimeSourceAdapter {
 class FakePulseCounter final : public spray::PulseCounterAdapter {
  public:
   void begin() override {}
+  spray::PulseCounterSnapshot readSnapshot() const override { return {count_, last_pulse_ms_}; }
   uint32_t readCount() const override { return count_; }
   uint32_t readLastPulseMs() const override { return last_pulse_ms_; }
   void reset() override {

@@ -2,6 +2,13 @@
 
 ## Versions
 
+- **0.56** (2026-04-12): Executed `WAVE-02-TIMING-EVENTS` by adding an
+  atomic `PulseCounterSnapshot` API and wiring flow/wheel reads to single-lock
+  snapshots, increasing menu event dequeue service to a bounded per-loop budget
+  (`OPERATOR_EVENT_DEQUEUE_BUDGET_PER_LOOP`), and introducing loop phase timing
+  budgets with cumulative overrun telemetry events
+  (`RS:PHASE_OVERRUN,<phase>,<count>`).
+
 - **0.55** (2026-04-12): Executed `WAVE-01-MEM-PIN` by moving AVR ST7920
   rendering from full-frame (`_F_`) U8g2 mode to page-buffer (`_1_`) mode,
   expanding compile-time pin policy guards so all assigned role pins are checked

@@ -28,8 +28,9 @@ float WheelSensor::readSpeed() {
     return 0.0f;
   }
 
-  const uint32_t total_pulses = pulse_counter_.readCount();
-  const uint32_t last_pulse_ms = pulse_counter_.readLastPulseMs();
+  const PulseCounterSnapshot snapshot = pulse_counter_.readSnapshot();
+  const uint32_t total_pulses = snapshot.count;
+  const uint32_t last_pulse_ms = snapshot.last_pulse_ms;
 
   const uint32_t delta_pulses = total_pulses - last_total_pulses_;
   const bool pulse_timed_out = (now_ms - last_pulse_ms) >= WHEEL_PULSE_TIMEOUT_MS;

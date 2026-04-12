@@ -511,9 +511,16 @@ void processOperatorCommand() {
 }
 
 void processOperatorEventQueue(uint32_t now_ms) {
-  OperatorMenuEvent event = OperatorMenuEvent::kNone;
-  if (dequeueOperatorEvent(event) && g_operator_menu.update(now_ms, event)) {
-    publishMenuState(g_operator_menu.getState());
+  uint8_t processed_events = 0U;
+  while (processed_events < OPERATOR_EVENT_DEQUEUE_BUDGET_PER_LOOP) {
+    OperatorMenuEvent event = OperatorMenuEvent::kNone;
+    if (!dequeueOperatorEvent(event)) {
+      break;
+    }
+    if (g_operator_menu.update(now_ms, event)) {
+      publishMenuState(g_operator_menu.getState());
+    }
+    ++processed_events;
   }
 }
 
@@ -549,6 +556,56 @@ void publishOperatorOverflowIfNeeded() {
   }
   publishOperatorOverflowEvent(g_operator_event_queue.overflow_count);
   g_operator_event_queue.last_reported_overflow_count = g_operator_event_queue.overflow_count;
+}
+
+struct PhaseTimingStats {
+  uint32_t input_overrun_count;
+  uint32_t control_overrun_count;
+  uint32_t output_overrun_count;
+  uint32_t telemetry_overrun_count;
+  uint32_t last_reported_input_overrun_count;
+  uint32_t last_reported_control_overrun_count;
+  uint32_t last_reported_output_overrun_count;
+  uint32_t last_reported_telemetry_overrun_count;
+};
+
+PhaseTimingStats g_phase_timing_stats{0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U};
+
+void updatePhaseOverrunCount(uint32_t elapsed_ms, uint32_t budget_ms, uint32_t& overrun_counter) {
+  if (elapsed_ms > budget_ms) {
+    ++overrun_counter;
+  }
+}
+
+void publishPhaseOverrunIfNeeded(const char* phase_name,
+                                 uint32_t overrun_count,
+                                 uint32_t& last_reported_overrun_count) {
+  if (overrun_count == last_reported_overrun_count) {
+    return;
+  }
+  if (!hasTelemetryTxCapacity()) {
+    return;
+  }
+  Serial.print(MSG_RESET_EVENT_PREFIX);
+  Serial.print("PHASE_OVERRUN,");
+  Serial.print(phase_name);
+  Serial.print(',');
+  Serial.print(overrun_count);
+  Serial.print(MSG_TERMINATOR);
+  last_reported_overrun_count = overrun_count;
+}
+
+void publishPhaseOverrunEventsIfNeeded() {
+  publishPhaseOverrunIfNeeded(
+      "INPUT", g_phase_timing_stats.input_overrun_count, g_phase_timing_stats.last_reported_input_overrun_count);
+  publishPhaseOverrunIfNeeded("CONTROL",
+                              g_phase_timing_stats.control_overrun_count,
+                              g_phase_timing_stats.last_reported_control_overrun_count);
+  publishPhaseOverrunIfNeeded(
+      "OUTPUT", g_phase_timing_stats.output_overrun_count, g_phase_timing_stats.last_reported_output_overrun_count);
+  publishPhaseOverrunIfNeeded("TELEMETRY",
+                              g_phase_timing_stats.telemetry_overrun_count,
+                              g_phase_timing_stats.last_reported_telemetry_overrun_count);
 }
 
 struct InputPhaseSnapshot {
@@ -688,13 +745,30 @@ void loop() {
   spray::executeCalibrationEntrypointEvents();
   spray::executeResetIfConfirmed();
   spray::publishOperatorOverflowIfNeeded();
+  spray::publishPhaseOverrunEventsIfNeeded();
   if ((now_ms - last_loop_ms) < spray::LOOP_INTERVAL_MS) {
     return;
   }
   last_loop_ms = now_ms;
 
+  const uint32_t input_start_ms = millis();
   const spray::InputPhaseSnapshot input = spray::runInputPhase(now_ms);
+  spray::updatePhaseOverrunCount(millis() - input_start_ms,
+                                 spray::INPUT_PHASE_BUDGET_MS,
+                                 spray::g_phase_timing_stats.input_overrun_count);
+  const uint32_t control_start_ms = millis();
   const spray::ControlPhaseSnapshot control = spray::runControlPhase(input);
+  spray::updatePhaseOverrunCount(millis() - control_start_ms,
+                                 spray::CONTROL_PHASE_BUDGET_MS,
+                                 spray::g_phase_timing_stats.control_overrun_count);
+  const uint32_t output_start_ms = millis();
   spray::runOutputPhase(input, control);
+  spray::updatePhaseOverrunCount(millis() - output_start_ms,
+                                 spray::OUTPUT_PHASE_BUDGET_MS,
+                                 spray::g_phase_timing_stats.output_overrun_count);
+  const uint32_t telemetry_start_ms = millis();
   spray::runTelemetryPhase(input, control, {now_ms, &last_preview_ms, &last_telemetry_ms});
+  spray::updatePhaseOverrunCount(millis() - telemetry_start_ms,
+                                 spray::TELEMETRY_PHASE_BUDGET_MS,
+                                 spray::g_phase_timing_stats.telemetry_overrun_count);
 }
