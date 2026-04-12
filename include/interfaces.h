@@ -8,6 +8,11 @@
 
 namespace spray {
 
+struct PulseCounterSnapshot {
+  uint32_t count;
+  uint32_t last_pulse_ms;
+};
+
 class DigitalInputAdapter {
  public:
   virtual ~DigitalInputAdapter() = default;
@@ -40,6 +45,7 @@ class PulseCounterAdapter {
  public:
   virtual ~PulseCounterAdapter() = default;
   virtual void begin() = 0;
+  virtual PulseCounterSnapshot readSnapshot() const = 0;
   virtual uint32_t readCount() const = 0;
   virtual uint32_t readLastPulseMs() const = 0;
   virtual void reset() = 0;

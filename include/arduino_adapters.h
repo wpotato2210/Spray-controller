@@ -58,6 +58,7 @@ class ArduinoInterruptPulseCounter : public PulseCounterAdapter {
 
   ArduinoInterruptPulseCounter(uint8_t pin, InterruptHandler handler);
   void begin() override;
+  PulseCounterSnapshot readSnapshot() const override;
   uint32_t readCount() const override;
   uint32_t readLastPulseMs() const override;
   void reset() override;

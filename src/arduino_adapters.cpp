@@ -59,18 +59,19 @@ void ArduinoInterruptPulseCounter::begin() {
   last_pulse_ms_ = millis();
 }
 
-uint32_t ArduinoInterruptPulseCounter::readCount() const {
+PulseCounterSnapshot ArduinoInterruptPulseCounter::readSnapshot() const {
   noInterrupts();
-  const uint32_t count = pulse_count_;
+  const PulseCounterSnapshot snapshot{pulse_count_, last_pulse_ms_};
   interrupts();
-  return count;
+  return snapshot;
+}
+
+uint32_t ArduinoInterruptPulseCounter::readCount() const {
+  return readSnapshot().count;
 }
 
 uint32_t ArduinoInterruptPulseCounter::readLastPulseMs() const {
-  noInterrupts();
-  const uint32_t last_pulse_ms = last_pulse_ms_;
-  interrupts();
-  return last_pulse_ms;
+  return readSnapshot().last_pulse_ms;
 }
 
 void ArduinoInterruptPulseCounter::reset() {

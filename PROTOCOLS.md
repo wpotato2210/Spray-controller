@@ -178,6 +178,8 @@ Spray Controller Protocols
   - `RS:WHEEL_CALIBRATION_ENTRYPOINT\n`
   - `RS:OP_EVENT_OVERFLOW,<count>\n` when the bounded operator-event queue
     overflows and the cumulative overflow count increases.
+  - `RS:PHASE_OVERRUN,<phase>,<count>\n` when a loop phase exceeds its
+    configured time budget (`INPUT`, `CONTROL`, `OUTPUT`, `TELEMETRY`).
 
 ### PRESSURE (optional, compile-time gated)
 
@@ -196,7 +198,7 @@ Spray Controller Protocols
 
 - Control-loop ownership order per main iteration:
   1. Bounded serial ingress parsing (`SERIAL_INGRESS_BUDGET_BYTES_PER_LOOP`).
-  2. One dequeued operator event application (deterministic queue service).
+  2. Bounded operator-event dequeue service (`OPERATOR_EVENT_DEQUEUE_BUDGET_PER_LOOP`).
   3. Control/sensor/update path at fixed `LOOP_INTERVAL_MS`.
   4. Bounded serial egress (`TELEMETRY_FRAME_BUDGET_PER_LOOP`) in fixed frame
      order: `ST` -> `S` (section order, field order) -> `SN` (sensor order,
