@@ -32,9 +32,9 @@ Therefore, Mega 2560 validation in this audit is compatibility analysis of curre
 | 2 | Sensor | Wheel sensor pulse input | IN (INPUT_PULLUP + interrupt) | `PIN_WHEEL_SENSOR`; interrupt attached on `RISING` |
 | 3 | Sensor | Flow sensor pulse input | IN (INPUT_PULLUP + interrupt) | `PIN_FLOW_SENSOR`; interrupt attached on `RISING` |
 | 11 | Actuation | Pump PWM | OUT (PWM) | `PIN_PUMP_PWM`; written via `analogWrite` |
-| 12 | Section control | Boom section 1 output | OUT | `PIN_BOOM_1`; active-high output |
-| 13 | Section control | Boom section 2 output | OUT | `PIN_BOOM_2`; also board LED/SCK on UNO/NANO hardware |
-| A1 | Section control | Boom section 3 output | OUT | `PIN_BOOM_3` |
+| 12 | Section control | Boom section 1 output | OUT | `PIN_SECTION_RELAY_1`; active-high output |
+| 13 | Section control | Boom section 2 output | OUT | `PIN_SECTION_RELAY_2`; also board LED/SCK on UNO/NANO hardware |
+| A1 | Section control | Boom section 3 output | OUT | `PIN_SECTION_RELAY_3` |
 | A2 | Indicator | Section 1 indicator output | OUT | `PIN_LED_SECTION_1`; mirrors section 0 state |
 | A3 | User input | RUN/HOLD switch | IN (INPUT_PULLUP) | `PIN_RUN_HOLD`; active-low logic |
 | A4 | User input | Section switch 1 input | IN (INPUT_PULLUP) | `PIN_SECTION_SW_1`; active-low logic |
@@ -65,7 +65,7 @@ Therefore, Mega 2560 validation in this audit is compatibility analysis of curre
 1. **Potential SPI contention on pin 13 if SPI LCD/device is added later**
    - **Pin:** 13
    - **Conflicting modules:** Boom section output vs hardware SCK semantics on UNO/NANO and ISP programming path.
-   - **Root cause:** `PIN_BOOM_2` mapped to D13.
+   - **Root cause:** `PIN_SECTION_RELAY_2` mapped to D13.
    - **Impact:** Any later SPI peripheral wiring (including potential ST7920 SPI mode on UNO/NANO-style SPI pins) could conflict electrically/functionally.
 
 2. **Interrupt policy guard is UNO/NANO-specific, not Mega-specific**
