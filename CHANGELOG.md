@@ -2,6 +2,12 @@
 
 ## Versions
 
+- **0.55** (2026-04-12): Executed `WAVE-01-MEM-PIN` by moving AVR ST7920
+  rendering from full-frame (`_F_`) U8g2 mode to page-buffer (`_1_`) mode,
+  expanding compile-time pin policy guards so all assigned role pins are checked
+  against reserved LCD/SPI pins, and aligning `README.md`/`INSTALL.md` with the
+  required `U8g2` dependency + AVR SRAM guidance.
+
 - **0.54** (2026-04-12): Executed `WAVE-02-FW-STABILITY` by adding
   `INPUT_DEBOUNCE_MS`-backed run/hold + section switch debounce in the loop
   path, introducing bounded serial ingress/event-queue handling with

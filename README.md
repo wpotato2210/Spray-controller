@@ -39,7 +39,15 @@ speed, and active width.
 ## Dependencies
 
 - Arduino IDE.
-- Required libraries: none beyond the Arduino core (`Arduino.h`).
+- Required libraries:
+  - [`U8g2`](https://github.com/olikraus/u8g2) (install from Arduino Library
+    Manager; current validated baseline: `v2.35.x`).
+  - Arduino core (`Arduino.h`).
+
+## AVR memory note
+
+- AVR builds now use the U8g2 ST7920 page-buffer backend (`_1_`) to reduce SRAM
+  pressure compared with the full-frame (`_F_`) buffer mode.
 
 ## Board support and compile guard
 

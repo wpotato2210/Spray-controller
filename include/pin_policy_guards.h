@@ -79,10 +79,14 @@ static_assert(detail::hasUniqueAssignedPins(detail::kUiPins),
 
 #if defined(ARDUINO_AVR_MEGA2560) || defined(ARDUINO_AVR_MEGA)
 constexpr std::array<uint8_t, 4> kReservedLcdPins = {{LCD_CLK, LCD_MOSI, LCD_CS, LCD_RESET}};
+static_assert(!detail::containsAnyAssignedPin(detail::kAssignedRolePins, kReservedLcdPins),
+              "Assigned role pins may not overlap reserved Mega LCD/SPI pins (52, 51, 53, 49).");
 static_assert(!detail::containsAnyAssignedPin(detail::kUiPins, kReservedLcdPins),
               "UI pins may not overlap reserved Mega LCD/SPI pins (52, 51, 53, 49).");
 #elif defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)
 constexpr std::array<uint8_t, 4> kReservedLcdPins = {{LCD_CLK, LCD_MOSI, LCD_CS, LCD_RESET}};
+static_assert(!detail::containsAnyAssignedPin(detail::kAssignedRolePins, kReservedLcdPins),
+              "Assigned role pins may not overlap reserved Uno/Nano LCD/SPI pins (13, 11, 10, 8).");
 static_assert(!detail::containsAnyAssignedPin(detail::kUiPins, kReservedLcdPins),
               "UI pins may not overlap reserved Uno/Nano LCD/SPI pins (13, 11, 10, 8).");
 #endif
