@@ -86,4 +86,10 @@ run_step "P6 closure artifact check" \
 run_step "P7 documentation alignment check" \
   python3 scripts/validate_p7_documentation.py
 
+run_step "WAVE-04 static analysis check" \
+  python3 scripts/validate_wave_04_static.py
+
+run_step "WAVE-04 native unit check" \
+  bash scripts/run_wave_04_unit_tests.sh
+
 echo "== SUCCESS =="

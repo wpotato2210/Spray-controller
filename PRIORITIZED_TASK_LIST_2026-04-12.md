@@ -36,3 +36,10 @@
 2. WAVE-02-FW-STABILITY
 3. WAVE-03-ARCH-PORTABILITY
 4. WAVE-04-QUALITY-VALIDATION
+
+## WAVE-04 Execution Status (2026-04-12)
+
+- [x] `TASK-QA-001` compile matrix expanded to UNO/Nano/Mega in CI (`.github/workflows/build.yml`).
+- [x] `TASK-QA-002` unit coverage added for flow/wheel conversion edges and controller fallback behavior (`tests/native/test_wave_04_quality.cpp`).
+- [x] `TASK-QA-003` repeatable HIL checklist added with pass criteria (`validation/hil_wave_04_protocol.md`).
+- [x] `TASK-QA-004` deterministic static checks added for include hygiene, placeholder dead-code markers, and protocol drift (`scripts/validate_wave_04_static.py`).
