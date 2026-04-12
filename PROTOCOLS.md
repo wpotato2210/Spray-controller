@@ -176,6 +176,8 @@ Spray Controller Protocols
 - Additional deterministic calibration-entrypoint event outputs:
   - `RS:FLOW_CALIBRATION_ENTRYPOINT\n`
   - `RS:WHEEL_CALIBRATION_ENTRYPOINT\n`
+  - `RS:OP_EVENT_OVERFLOW,<count>\n` when the bounded operator-event queue
+    overflows and the cumulative overflow count increases.
 
 ### PRESSURE (optional, compile-time gated)
 
@@ -189,3 +191,17 @@ Spray Controller Protocols
 
 - Frozen protocol identifier: `PROTOCOL_V1`
 - Documentation alignment date for this protocol contract: `2026-03-23`
+
+## Serial Ingress/Egress Arbitration Policy (WAVE-02-FW-STABILITY)
+
+- Control-loop ownership order per main iteration:
+  1. Bounded serial ingress parsing (`SERIAL_INGRESS_BUDGET_BYTES_PER_LOOP`).
+  2. One dequeued operator event application (deterministic queue service).
+  3. Control/sensor/update path at fixed `LOOP_INTERVAL_MS`.
+  4. Bounded serial egress (`TELEMETRY_FRAME_BUDGET_PER_LOOP`) in fixed frame
+     order: `ST` -> `S` (section order, field order) -> `SN` (sensor order,
+     field order) -> optional `PR`.
+- Telemetry cycles are cadence-triggered but may be drained across multiple
+  loops; no frame reordering is allowed.
+- Run/Hold and section switch reads are debounced with
+  `INPUT_DEBOUNCE_MS` (default `30 ms`) before control and telemetry use.

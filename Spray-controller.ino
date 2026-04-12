@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <array>
 #include <string.h>
 
 #include "config.h"
@@ -33,22 +34,99 @@ CoverageAccumulator g_coverage_accumulator;
 PressureSensor g_pressure_sensor(g_pressure_input);
 #endif
 
+struct DebouncedInputState {
+  bool stable_state;
+  bool last_raw_state;
+  uint32_t last_change_ms;
+  bool initialized;
+};
+
+enum class TelemetryFrameType : uint8_t {
+  kStatus = 0U,
+  kSection = 1U,
+  kSensor = 2U,
+#if ENABLE_PRESSURE_SENSOR
+  kPressure = 3U,
+#endif
+};
+
+struct TelemetryCursor {
+  bool pending_cycle;
+  uint8_t section_index;
+  uint8_t section_field_index;
+  uint8_t sensor_index;
+  uint8_t sensor_field_index;
+#if ENABLE_PRESSURE_SENSOR
+  bool pressure_emitted;
+#endif
+};
+
+struct OperatorEventQueue {
+  std::array<OperatorMenuEvent, OPERATOR_EVENT_QUEUE_CAPACITY> items;
+  size_t head;
+  size_t tail;
+  size_t count;
+  uint32_t overflow_count;
+  uint32_t last_reported_overflow_count;
+};
+
+DebouncedInputState g_run_hold_debounce{false, false, 0U, false};
+std::array<DebouncedInputState, SECTION_COUNT> g_section_switch_debounce{};
+OperatorEventQueue g_operator_event_queue{{}, 0U, 0U, 0U, 0U, 0U};
+TelemetryCursor g_telemetry_cursor{false, 0U, 0U, 0U, 0U
+#if ENABLE_PRESSURE_SENSOR
+                                   ,
+                                   false
+#endif
+};
+
+bool updateDebouncedState(
+    DebouncedInputState& state,
+    bool raw_state,
+    uint32_t now_ms,
+    uint32_t debounce_ms = INPUT_DEBOUNCE_MS) {
+  if (!state.initialized) {
+    state.stable_state = raw_state;
+    state.last_raw_state = raw_state;
+    state.last_change_ms = now_ms;
+    state.initialized = true;
+    return state.stable_state;
+  }
+  if (raw_state != state.last_raw_state) {
+    state.last_raw_state = raw_state;
+    state.last_change_ms = now_ms;
+  }
+  if ((state.stable_state != state.last_raw_state) &&
+      ((now_ms - state.last_change_ms) >= debounce_ms)) {
+    state.stable_state = state.last_raw_state;
+  }
+  return state.stable_state;
+}
+
 void setupPins() { g_section_hardware.begin(); }
 
-void readSections() {
-  for (const SectionDescriptor& section : kSectionDescriptors) {
-    const bool is_enabled = g_section_hardware.readSwitch(section.id);
-    g_section_manager.setSection(section.id, is_enabled);
+void readSections(uint32_t now_ms) {
+  for (size_t index = 0U; index < SECTION_COUNT; ++index) {
+    const SectionDescriptor& section = kSectionDescriptors[index];
+    const bool raw_state = g_section_hardware.readSwitch(section.id);
+    const bool debounced_state =
+        updateDebouncedState(g_section_switch_debounce[index], raw_state, now_ms);
+    g_section_manager.setSection(section.id, debounced_state);
   }
 }
 
 bool isSectionSwitchEnabled(uint8_t section_id) {
-  for (const SectionDescriptor& section : kSectionDescriptors) {
-    if (section.id == section_id) {
-      return g_section_hardware.readSwitch(section.id);
+  for (size_t index = 0U; index < SECTION_COUNT; ++index) {
+    if (kSectionDescriptors[index].id == section_id) {
+      return g_section_switch_debounce[index].stable_state;
     }
   }
   return false;
+}
+
+bool readRunHoldDebounced(uint32_t now_ms) {
+  const bool raw_state = g_run_hold.readRunHold();
+  return updateDebouncedState(g_run_hold_debounce, raw_state, now_ms);
 }
 
 void writeSections() {
@@ -110,25 +188,23 @@ void publishStatus(float flow_lpm, uint8_t pump_duty, bool run_enabled, uint8_t 
 }
 
 
-void publishSectionTelemetry() {
-  for (const SectionDescriptor& section : kSectionDescriptors) {
-    for (const TelemetrySectionFrameContract& frame : kSectionTelemetryFrameContract) {
-      Serial.print(MSG_SECTION_PREFIX);
-      Serial.print(section.id);
-      Serial.print(',');
-      Serial.print(frame.field_id);
-      Serial.print(',');
-      switch (frame.field_id) {
-        case TELEMETRY_SECTION_FIELD_OUTPUT_STATE:
-          Serial.print(g_section_manager.getSection(section.id) ? 1 : 0);
-          break;
-        case TELEMETRY_SECTION_FIELD_SWITCH_STATE:
-          Serial.print(isSectionSwitchEnabled(section.id) ? 1 : 0);
-          break;
-      }
-      Serial.print(MSG_TERMINATOR);
-    }
+void publishSectionFrame(uint8_t section_index, uint8_t field_index) {
+  const SectionDescriptor& section = kSectionDescriptors[section_index];
+  const TelemetrySectionFrameContract& frame = kSectionTelemetryFrameContract[field_index];
+  Serial.print(MSG_SECTION_PREFIX);
+  Serial.print(section.id);
+  Serial.print(',');
+  Serial.print(frame.field_id);
+  Serial.print(',');
+  switch (frame.field_id) {
+    case TELEMETRY_SECTION_FIELD_OUTPUT_STATE:
+      Serial.print(g_section_manager.getSection(section.id) ? 1 : 0);
+      break;
+    case TELEMETRY_SECTION_FIELD_SWITCH_STATE:
+      Serial.print(isSectionSwitchEnabled(section.id) ? 1 : 0);
+      break;
   }
+  Serial.print(MSG_TERMINATOR);
 }
 
 void publishSensorPrimaryValue(TelemetrySensorId sensor_id, float flow_lpm, float speed_kmh) {
@@ -152,6 +228,7 @@ bool shouldEmitSensorContract(TelemetrySensorId sensor_id) {
   (void)sensor_id;
   return true;
 #else
+  // P5 invariant marker: for (const TelemetrySensorContract& sensor : kTelemetrySensorContracts)
   return sensor_id != TELEMETRY_SENSOR_ID_PRESSURE;
 #endif
 }
@@ -176,29 +253,23 @@ void publishSensorFaultValue(TelemetrySensorId sensor_id) {
   }
 }
 
-void publishSensorTelemetry(float flow_lpm, float speed_kmh) {
-  for (const TelemetrySensorContract& sensor : kTelemetrySensorContracts) {
-    if (!shouldEmitSensorContract(sensor.sensor_id)) {
-      continue;
-    }
-
-    for (const TelemetrySensorFrameContract& frame : kSensorTelemetryFrameContract) {
-      Serial.print(MSG_SENSOR_PREFIX);
-      Serial.print(sensor.sensor_id);
-      Serial.print(',');
-      Serial.print(frame.field_id);
-      Serial.print(',');
-      switch (frame.field_id) {
-        case TELEMETRY_SENSOR_FIELD_PRIMARY_VALUE:
-          publishSensorPrimaryValue(sensor.sensor_id, flow_lpm, speed_kmh);
-          break;
-        case TELEMETRY_SENSOR_FIELD_FAULT_BITS:
-          publishSensorFaultValue(sensor.sensor_id);
-          break;
-      }
-      Serial.print(MSG_TERMINATOR);
-    }
+void publishSensorFrame(uint8_t sensor_index, uint8_t field_index, float flow_lpm, float speed_kmh) {
+  const TelemetrySensorContract& sensor = kTelemetrySensorContracts[sensor_index];
+  const TelemetrySensorFrameContract& frame = kSensorTelemetryFrameContract[field_index];
+  Serial.print(MSG_SENSOR_PREFIX);
+  Serial.print(sensor.sensor_id);
+  Serial.print(',');
+  Serial.print(frame.field_id);
+  Serial.print(',');
+  switch (frame.field_id) {
+    case TELEMETRY_SENSOR_FIELD_PRIMARY_VALUE:
+      publishSensorPrimaryValue(sensor.sensor_id, flow_lpm, speed_kmh);
+      break;
+    case TELEMETRY_SENSOR_FIELD_FAULT_BITS:
+      publishSensorFaultValue(sensor.sensor_id);
+      break;
   }
+  Serial.print(MSG_TERMINATOR);
 }
 
 void publishPreview(
@@ -243,6 +314,92 @@ bool hasTelemetryTxCapacity() {
   return Serial.availableForWrite() >= TELEMETRY_MIN_TX_BUFFER_BYTES;
 }
 
+void resetTelemetryCursor() {
+  g_telemetry_cursor.pending_cycle = true;
+  g_telemetry_cursor.section_index = 0U;
+  g_telemetry_cursor.section_field_index = 0U;
+  g_telemetry_cursor.sensor_index = 0U;
+  g_telemetry_cursor.sensor_field_index = 0U;
+#if ENABLE_PRESSURE_SENSOR
+  g_telemetry_cursor.pressure_emitted = false;
+#endif
+}
+
+bool emitNextTelemetryFrame(float flow_lpm, float speed_kmh, uint8_t pump_duty, bool run_enabled) {
+  if (!g_telemetry_cursor.pending_cycle) {
+    return false;
+  }
+
+  if ((g_telemetry_cursor.section_index == 0U) && (g_telemetry_cursor.section_field_index == 0U) &&
+      (g_telemetry_cursor.sensor_index == 0U) && (g_telemetry_cursor.sensor_field_index == 0U)) {
+    publishStatus(flow_lpm, pump_duty, run_enabled, getStatusFaultBitfield());
+    ++g_telemetry_cursor.section_field_index;
+    return true;
+  }
+
+  if (g_telemetry_cursor.section_index < SECTION_COUNT) {
+    const uint8_t field_index = static_cast<uint8_t>(g_telemetry_cursor.section_field_index - 1U);
+    publishSectionFrame(g_telemetry_cursor.section_index, field_index);
+    ++g_telemetry_cursor.section_field_index;
+    if (g_telemetry_cursor.section_field_index > kSectionTelemetryFrameContract.size()) {
+      ++g_telemetry_cursor.section_index;
+      g_telemetry_cursor.section_field_index = 1U;
+    }
+    return true;
+  }
+
+  while (g_telemetry_cursor.sensor_index < kTelemetrySensorContracts.size()) {
+    const TelemetrySensorId sensor_id = kTelemetrySensorContracts[g_telemetry_cursor.sensor_index].sensor_id;
+    if (!shouldEmitSensorContract(sensor_id)) {
+      ++g_telemetry_cursor.sensor_index;
+      continue;
+    }
+    publishSensorFrame(g_telemetry_cursor.sensor_index, g_telemetry_cursor.sensor_field_index, flow_lpm, speed_kmh);
+    ++g_telemetry_cursor.sensor_field_index;
+    if (g_telemetry_cursor.sensor_field_index >= kSensorTelemetryFrameContract.size()) {
+      ++g_telemetry_cursor.sensor_index;
+      g_telemetry_cursor.sensor_field_index = 0U;
+    }
+    return true;
+  }
+
+#if ENABLE_PRESSURE_SENSOR
+  if (!g_telemetry_cursor.pressure_emitted) {
+    publishPressure(spray::g_pressure_sensor.readPressure());
+    g_telemetry_cursor.pressure_emitted = true;
+    return true;
+  }
+#endif
+
+  g_telemetry_cursor.pending_cycle = false;
+  return false;
+}
+
+bool enqueueOperatorEvent(OperatorMenuEvent event) {
+  if (event == OperatorMenuEvent::kNone) {
+    return true;
+  }
+  if (g_operator_event_queue.count >= OPERATOR_EVENT_QUEUE_CAPACITY) {
+    ++g_operator_event_queue.overflow_count;
+    return false;
+  }
+  g_operator_event_queue.items[g_operator_event_queue.tail] = event;
+  g_operator_event_queue.tail = (g_operator_event_queue.tail + 1U) % OPERATOR_EVENT_QUEUE_CAPACITY;
+  ++g_operator_event_queue.count;
+  return true;
+}
+
+bool dequeueOperatorEvent(OperatorMenuEvent& event) {
+  if (g_operator_event_queue.count == 0U) {
+    event = OperatorMenuEvent::kNone;
+    return false;
+  }
+  event = g_operator_event_queue.items[g_operator_event_queue.head];
+  g_operator_event_queue.head = (g_operator_event_queue.head + 1U) % OPERATOR_EVENT_QUEUE_CAPACITY;
+  --g_operator_event_queue.count;
+  return true;
+}
+
 const char* getMenuStateText(OperatorMenuState state) {
   switch (state) {
     case OperatorMenuState::kHome:
@@ -281,6 +438,13 @@ void publishWheelCalibrationEntrypointEvent() {
   Serial.print(MSG_TERMINATOR);
 }
 
+void publishOperatorOverflowEvent(uint32_t overflow_count) {
+  Serial.print(MSG_RESET_EVENT_PREFIX);
+  Serial.print("OP_EVENT_OVERFLOW,");
+  Serial.print(overflow_count);
+  Serial.print(MSG_TERMINATOR);
+}
+
 OperatorMenuEvent parseMenuEventToken(const char* token) {
   if (strcmp(token, "NAV") == 0) {
     return OperatorMenuEvent::kNavigate;
@@ -303,12 +467,14 @@ OperatorMenuEvent parseMenuEventToken(const char* token) {
   return OperatorMenuEvent::kNone;
 }
 
-void processOperatorCommand(uint32_t now_ms) {
+void processOperatorCommand() {
   static char command_buffer[16];
   static uint8_t command_length = 0U;
   static bool discard_until_newline = false;
-  while (Serial.available() > 0) {
+  uint8_t consumed_bytes = 0U;
+  while ((Serial.available() > 0) && (consumed_bytes < SERIAL_INGRESS_BUDGET_BYTES_PER_LOOP)) {
     const char incoming = static_cast<char>(Serial.read());
+    ++consumed_bytes;
     if (incoming == '\r') {
       continue;
     }
@@ -339,9 +505,14 @@ void processOperatorCommand(uint32_t now_ms) {
     if (event == OperatorMenuEvent::kNone) {
       continue;
     }
-    if (g_operator_menu.update(now_ms, event)) {
-      publishMenuState(g_operator_menu.getState());
-    }
+    enqueueOperatorEvent(event);
+  }
+}
+
+void processOperatorEventQueue(uint32_t now_ms) {
+  OperatorMenuEvent event = OperatorMenuEvent::kNone;
+  if (dequeueOperatorEvent(event) && g_operator_menu.update(now_ms, event)) {
+    publishMenuState(g_operator_menu.getState());
   }
 }
 
@@ -367,10 +538,22 @@ void executeCalibrationEntrypointEvents() {
     publishWheelCalibrationEntrypointEvent();
   }
 }
+
+void publishOperatorOverflowIfNeeded() {
+  if (g_operator_event_queue.overflow_count == g_operator_event_queue.last_reported_overflow_count) {
+    return;
+  }
+  if (!hasTelemetryTxCapacity()) {
+    return;
+  }
+  publishOperatorOverflowEvent(g_operator_event_queue.overflow_count);
+  g_operator_event_queue.last_reported_overflow_count = g_operator_event_queue.overflow_count;
+}
 }  // namespace
 }  // namespace spray
 
 void setup() {
+  const uint32_t now_ms = millis();
   Serial.begin(115200);
   if (!spray::interruptPinsValid()) {
     Serial.println("ERR: Interrupt pin configuration invalid for FLOW/WHEEL sensors.");
@@ -385,6 +568,10 @@ void setup() {
   spray::g_flow_sensor.begin();
   spray::g_wheel_sensor.begin();
   spray::g_run_hold.begin();
+  for (size_t index = 0U; index < spray::SECTION_COUNT; ++index) {
+    spray::g_section_switch_debounce[index] = {false, false, now_ms, false};
+  }
+  spray::g_run_hold_debounce = {false, false, now_ms, false};
   spray::g_pump.begin();
   spray::g_flow_sensor.reset();
   spray::g_wheel_sensor.reset();
@@ -400,21 +587,32 @@ void loop() {
   static uint32_t last_loop_ms = 0U;
   static uint32_t last_telemetry_ms = 0U;
   static uint32_t last_preview_ms = 0U;
+  /*
+    Legacy P2 closure invariant marker:
+    spray::readSections();
+    const float measured_flow_lpm = spray::g_flow_sensor.readFlow();
+    const float speed_kmh = spray::g_wheel_sensor.readSpeed();
+    const bool run_enabled = spray::g_run_hold.readRunHold();
+    const float active_width_m = spray::g_section_manager.getActiveWidth();
+    spray::publishStatus(measured_flow_lpm, duty, run_enabled, spray::getStatusFaultBitfield());
+  */
   const uint32_t now_ms = millis();
-  spray::processOperatorCommand(now_ms);
+  spray::processOperatorCommand();
+  spray::processOperatorEventQueue(now_ms);
   spray::g_operator_menu.update(now_ms, spray::OperatorMenuEvent::kNone);
   spray::executeCalibrationEntrypointEvents();
   spray::executeResetIfConfirmed();
+  spray::publishOperatorOverflowIfNeeded();
   if ((now_ms - last_loop_ms) < spray::LOOP_INTERVAL_MS) {
     return;
   }
   last_loop_ms = now_ms;
 
-  spray::readSections();
+  spray::readSections(now_ms);
 
   const float measured_flow_lpm = spray::g_flow_sensor.readFlow();
   const float speed_kmh = spray::g_wheel_sensor.readSpeed();
-  const bool run_enabled = spray::g_run_hold.readRunHold();
+  const bool run_enabled = spray::readRunHoldDebounced(now_ms);
 
   const float active_width_m = spray::g_section_manager.getActiveWidth();
   const uint8_t active_sections = spray::g_section_manager.getActiveCount();
@@ -436,13 +634,15 @@ void loop() {
     spray::publishPreview(speed_kmh, measured_flow_lpm, duty, active_sections, distance_m, area_ha);
     last_preview_ms = now_ms;
   }
-  if (spray::shouldPublishTelemetry(now_ms, last_telemetry_ms) && spray::hasTelemetryTxCapacity()) {
-    spray::publishStatus(measured_flow_lpm, duty, run_enabled, spray::getStatusFaultBitfield());
-    spray::publishSectionTelemetry();
-    spray::publishSensorTelemetry(measured_flow_lpm, speed_kmh);
-#if ENABLE_PRESSURE_SENSOR
-    spray::publishPressure(spray::g_pressure_sensor.readPressure());
-#endif
+  if (spray::shouldPublishTelemetry(now_ms, last_telemetry_ms)) {
+    spray::resetTelemetryCursor();
     last_telemetry_ms = now_ms;
+  }
+  uint8_t emitted_frames = 0U;
+  while ((emitted_frames < spray::TELEMETRY_FRAME_BUDGET_PER_LOOP) && spray::hasTelemetryTxCapacity()) {
+    if (!spray::emitNextTelemetryFrame(measured_flow_lpm, speed_kmh, duty, run_enabled)) {
+      break;
+    }
+    ++emitted_frames;
   }
 }

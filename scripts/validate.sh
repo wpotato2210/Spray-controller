@@ -38,6 +38,9 @@ run_step "PIN-WAVE-003 Mega policy check" \
 run_step "PIN-WAVE-004 hardware doc parity check" \
   python3 scripts/validate_pin_wave_004.py
 
+run_step "WAVE-02 firmware stability check" \
+  python3 scripts/validate_fw_wave_02.py
+
 run_step "P3 sensor robustness check" \
   python3 scripts/validate_p3_sensor_robustness.py
 
