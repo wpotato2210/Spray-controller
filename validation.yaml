@@ -29,11 +29,11 @@ pin_allocation:
       encoder_clk: 30
       encoder_dt: 31
       encoder_sw: 32
-      button_up: 33
-      button_down: 34
-      button_cal: 35
-      button_select: 36
-      button_auto_manual: 37
+      button_up: 46
+      button_down: 47
+      button_cal: 48
+      button_select: 49
+      button_auto_manual: 50
     uno:
       encoder_clk: unassigned
       encoder_dt: unassigned
