@@ -2,6 +2,14 @@
 
 ## Versions
 
+- **0.54** (2026-04-12): Executed `WAVE-02-FW-STABILITY` by adding
+  `INPUT_DEBOUNCE_MS`-backed run/hold + section switch debounce in the loop
+  path, introducing bounded serial ingress/event-queue handling with
+  overflow telemetry (`RS:OP_EVENT_OVERFLOW,<count>`), implementing
+  deterministic telemetry frame budgeting via cursor scheduling, adding
+  `scripts/validate_fw_wave_02.py`, and wiring the new gate into
+  `./scripts/validate.sh` + `TESTING.md`.
+
 - **0.53** (2026-04-12): Executed `WAVE-01-HW-SAFETY` by remapping Mega
   `PIN_BTN_SELECT` off `LCD_RESET`, adding compile-time
   `include/pin_policy_guards.h` uniqueness/reserved-domain assertions,

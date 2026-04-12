@@ -31,6 +31,7 @@ Spray Controller Testing Procedures
   - `== PIN-WAVE-002 parity check ==`
   - `== PIN-WAVE-003 Mega policy check ==`
   - `== PIN-WAVE-004 hardware doc parity check ==`
+  - `== WAVE-02 firmware stability check ==`
   - `== P3 sensor robustness check ==`
   - `== P3 closure artifact check ==`
   - `== P0 closure artifact check ==`
@@ -47,6 +48,19 @@ Spray Controller Testing Procedures
   - `== P6 closure artifact check ==`
   - `== P7 documentation alignment check ==`
   - `== SUCCESS ==`
+
+## WAVE-02 Firmware Stability Validator
+
+- Command: `python3 scripts/validate_fw_wave_02.py`
+- Expected pass marker: `fw_wave_02_stability_ok`
+- Deterministic checks enforced:
+  - Debounce constants and queue/budget constants are defined in `config.h`.
+  - Run/Hold and section switch path use debounced states in the loop path.
+  - Serial ingress is bounded by `SERIAL_INGRESS_BUDGET_BYTES_PER_LOOP`.
+  - Operator input is queue-backed with overflow accounting and
+    `RS:OP_EVENT_OVERFLOW,<count>` publication.
+  - Telemetry emission is frame-budgeted and ordered through a deterministic
+    cursor scheduler.
 
 - Optional artifact capture:
   - `./scripts/run_validation_and_capture.sh`
