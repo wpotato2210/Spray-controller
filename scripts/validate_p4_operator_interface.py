@@ -62,7 +62,7 @@ CHECKS: tuple[tuple[str, Path, str], ...] = (
     (
         "preview_loop_publish",
         Path("Spray-controller.ino"),
-        r"if\s*\(spray::shouldPublishPreview\(now_ms,\s*last_preview_ms\)\s*&&\s*spray::hasTelemetryTxCapacity\(\)\)\s*\{[\s\S]*?spray::publishPreview\([\s\S]*?\);[\s\S]*?last_preview_ms\s*=\s*now_ms;",
+        r"(?:if\s*\(spray::shouldPublishPreview\(now_ms,\s*last_preview_ms\)\s*&&\s*spray::hasTelemetryTxCapacity\(\)\)\s*\{[\s\S]*?spray::publishPreview\([\s\S]*?\);[\s\S]*?last_preview_ms\s*=\s*now_ms;)|(?:if\s*\(shouldPublishPreview\(runtime\.now_ms,\s*\*runtime\.last_preview_ms\)\s*&&\s*hasTelemetryTxCapacity\(\)\)\s*\{[\s\S]*?publishPreview\([\s\S]*?\);[\s\S]*?\*runtime\.last_preview_ms\s*=\s*runtime\.now_ms;)",
     ),
     (
         "preview_interval_fixed_to_loop",
@@ -72,7 +72,7 @@ CHECKS: tuple[tuple[str, Path, str], ...] = (
     (
         "counter_update_uses_active_width",
         Path("Spray-controller.ino"),
-        r"const\s+float\s+active_width_m\s*=\s*spray::g_section_manager\.getActiveWidth\(\);[\s\S]*?spray::g_coverage_accumulator\.update\(speed_kmh,\s*active_width_m,\s*spray::LOOP_INTERVAL_MS\);",
+        r"(?:const\s+float\s+active_width_m\s*=\s*spray::g_section_manager\.getActiveWidth\(\);[\s\S]*?spray::g_coverage_accumulator\.update\(speed_kmh,\s*active_width_m,\s*spray::LOOP_INTERVAL_MS\);)|(?:const\s+float\s+active_width_m\s*=\s*g_section_manager\.getActiveWidth\(\);[\s\S]*?g_coverage_accumulator\.update\(speed_kmh,\s*active_width_m,\s*LOOP_INTERVAL_MS\);)",
     ),
     (
         "reset_requires_confirm_flag",
