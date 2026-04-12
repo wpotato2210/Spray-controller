@@ -4,19 +4,24 @@
 #include <array>
 #include <stdint.h>
 
+#include "config.h"
+
 namespace spray {
 
 constexpr const char* MSG_STATUS_PREFIX = "ST:";
 constexpr const char* MSG_PREVIEW_PREFIX = "PV:";
-constexpr const char* MSG_FLOW_PREFIX = "FS:";
-constexpr const char* MSG_PUMP_PREFIX = "P:";
 constexpr const char* MSG_SECTION_PREFIX = "S:";
-constexpr const char* MSG_SWITCH_PREFIX = "SW:";
 constexpr const char* MSG_PRESSURE_PREFIX = "PR:";
 constexpr const char* MSG_SENSOR_PREFIX = "SN:";
 constexpr const char* MSG_MENU_STATE_PREFIX = "MS:";
 constexpr const char* MSG_RESET_EVENT_PREFIX = "RS:";
 constexpr char MSG_TERMINATOR = '\n';
+
+#if ENABLE_LEGACY_PROTOCOL_PREFIXES
+constexpr const char* MSG_FLOW_PREFIX = "FS:";
+constexpr const char* MSG_PUMP_PREFIX = "P:";
+constexpr const char* MSG_SWITCH_PREFIX = "SW:";
+#endif
 
 enum StatusFaultBit : uint8_t {
   STATUS_FAULT_FLOW_STALE = 1U << 0,
