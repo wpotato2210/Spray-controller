@@ -16,9 +16,10 @@ Spray Controller Testing Procedures
 - Install Arduino CLI and AVR core:
   - `chmod +x ./ci/setup-arduino-cli.sh`
   - `./ci/setup-arduino-cli.sh`
-- Compile both supported board targets:
+- Compile all supported board targets:
   - `FQBN=arduino:avr:nano ./ci/compile-sketch.sh`
   - `FQBN=arduino:avr:uno ./ci/compile-sketch.sh`
+  - `FQBN=arduino:avr:mega ./ci/compile-sketch.sh`
 
 ## Canonical Validation Gate
 
@@ -47,6 +48,8 @@ Spray Controller Testing Procedures
   - `== P6 calibration override check ==`
   - `== P6 closure artifact check ==`
   - `== P7 documentation alignment check ==`
+  - `== WAVE-04 static analysis check ==`
+  - `== WAVE-04 native unit check ==`
   - `== SUCCESS ==`
 
 ## WAVE-02 Firmware Stability Validator
@@ -321,3 +324,29 @@ Spray Controller Testing Procedures
   and target rate (`100.0 L/ha`).
 - Verify wheel timeout and flow stale timeout behavior at
   `1200 ms` fault thresholds.
+
+## WAVE-04 Static Analysis Validator
+
+- Command: `python3 scripts/validate_wave_04_static.py`
+- Expected pass marker: `wave_04_static_ok`
+- Deterministic checks enforced:
+  - No `TODO` / `FIXME` / `XXX` placeholders in firmware code paths (`src/`, `include/`, `Spray-controller.ino`).
+  - Include-hygiene checks reject duplicate include directives and parent-directory include traversals.
+  - Protocol drift check delegates to `python3 scripts/validate_protocols.py` and requires `protocols_ok`.
+
+## WAVE-04 Native Unit Checks
+
+- Command: `bash scripts/run_wave_04_unit_tests.sh`
+- Expected pass marker: `wave_04_unit_ok`
+- Deterministic checks enforced:
+  - Flow conversion edge behavior: stale timeout fallback + max clamp invariant.
+  - Wheel conversion edge behavior: timeout-to-zero invariant.
+  - Controller edge behavior: no-flow fallback duty + low-speed stop semantics.
+
+## WAVE-04 HIL Protocol
+
+- Protocol: `validation/hil_wave_04_protocol.md`
+- Required scenarios:
+  - ISR pulse-rate validation across low/mid/high rates.
+  - Serial saturation with bounded ingress/telemetry behavior.
+  - Run/hold and section-switch bounce rejection with debounce stability.
