@@ -56,6 +56,7 @@ constexpr float WHEEL_PULSES_PER_REV = 20.0f;
 constexpr uint32_t WHEEL_PULSE_TIMEOUT_MS = 1200UL;
 
 constexpr bool ENABLE_PRESSURE_SENSOR = false;
+constexpr bool ENABLE_LEGACY_PROTOCOL_PREFIXES = false;
 constexpr float PRESSURE_SENSOR_MIN_KPA = 0.0f;
 constexpr float PRESSURE_SENSOR_MAX_KPA = 1000.0f;
 
