@@ -2,6 +2,13 @@
 
 ## Versions
 
+- **0.53** (2026-04-12): Executed `WAVE-01-HW-SAFETY` by remapping Mega
+  `PIN_BTN_SELECT` off `LCD_RESET`, adding compile-time
+  `include/pin_policy_guards.h` uniqueness/reserved-domain assertions,
+  introducing deterministic `scripts/validate_pin_wave_004.py` hardware-doc
+  parity checks, and integrating the new check into `./scripts/validate.sh`
+  and the validation workflow trigger matrix.
+
 - **0.52** (2026-04-08): Executed `PIN-WAVE-003` by adding deterministic
   `scripts/validate_pin_wave_003.py` Mega-profile policy checks for
   `pins.yaml` invariants, Uno/Nano selector guardrails, and hardware policy

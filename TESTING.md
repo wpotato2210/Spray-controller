@@ -30,6 +30,7 @@ Spray Controller Testing Procedures
   - `== PIN-WAVE-001 pin-map check ==`
   - `== PIN-WAVE-002 parity check ==`
   - `== PIN-WAVE-003 Mega policy check ==`
+  - `== PIN-WAVE-004 hardware doc parity check ==`
   - `== P3 sensor robustness check ==`
   - `== P3 closure artifact check ==`
   - `== P0 closure artifact check ==`
@@ -83,8 +84,19 @@ Spray Controller Testing Procedures
     remains on a PWM-capable Mega pin.
   - Mega section/run/pressure fields remain constrained to the documented
     D22-D53 / A8-A15 assignment range.
-  - `include/pins.h` preserves the current Uno/Nano-only selector policy and
-    `HARDWARE.md` preserves the unsupported-board statement.
+  - `include/pins.h` and `HARDWARE.md` preserve aligned board target policy
+    declarations.
+
+## PIN-WAVE-004 Hardware-Doc Parity Validator
+
+- Command: `python3 scripts/validate_pin_wave_004.py`
+- Expected pass marker: `pin_wave_004_ok`
+- Deterministic checks enforced:
+  - Mega functional pin constants in `include/pins_mega2560.h` match the
+    Mega pinout table in `HARDWARE.md`.
+  - Mega LCD SPI/reset constants in `include/pin_map_lcd.h` match the Mega
+    LCD rows in `HARDWARE.md`.
+  - `PIN_BTN_SELECT` must not collide with `LCD_RESET`.
 
 ## P3 Deterministic Robustness Validator
 

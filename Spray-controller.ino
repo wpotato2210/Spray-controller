@@ -6,6 +6,7 @@
 #include "calibration_store.h"
 #include "interfaces.h"
 #include "pins.h"
+#include "pin_policy_guards.h"
 #include "protocol.h"
 #include "interrupt_guards.h"
 #include "operator_menu.h"
