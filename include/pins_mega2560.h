@@ -39,6 +39,8 @@ constexpr std::array<SectionDescriptor, SECTION_COUNT> kSectionDescriptors = {{{
 
 static_assert(kSectionDescriptors.size() == SECTION_COUNT,
               "Section descriptor count must match SECTION_COUNT.");
+static_assert(sectionIdsAreContiguous(kSectionDescriptors),
+              "Section descriptor IDs must be contiguous and index-aligned.");
 
 }  // namespace spray
 

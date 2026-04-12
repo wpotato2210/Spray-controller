@@ -12,6 +12,7 @@
 #include "interrupt_guards.h"
 #include "operator_menu.h"
 #include "display.h"
+#include "fault_manager.h"
 
 namespace spray {
 namespace {
@@ -31,6 +32,7 @@ FlowController g_flow_controller;
 PumpControl g_pump(g_pump_output);
 OperatorMenuStateMachine g_operator_menu;
 CoverageAccumulator g_coverage_accumulator;
+FaultManager g_fault_manager;
 #if ENABLE_PRESSURE_SENSOR
 PressureSensor g_pressure_sensor(g_pressure_input);
 #endif
@@ -117,12 +119,10 @@ void readSections(uint32_t now_ms) {
 }
 
 bool isSectionSwitchEnabled(uint8_t section_id) {
-  for (size_t index = 0U; index < SECTION_COUNT; ++index) {
-    if (kSectionDescriptors[index].id == section_id) {
-      return g_section_switch_debounce[index].stable_state;
-    }
+  if (section_id >= SECTION_COUNT) {
+    return false;
   }
-  return false;
+  return g_section_switch_debounce[section_id].stable_state;
 }
 
 bool readRunHoldDebounced(uint32_t now_ms) {
@@ -146,7 +146,7 @@ uint8_t getSectionBitmask() {
   return mask;
 }
 
-uint8_t getStatusFaultBitfield() {
+uint8_t getObservedStatusFaultBitfield() {
   uint8_t faults = 0U;
   if (g_flow_sensor.isStaleFaultActive()) {
     faults |= STATUS_FAULT_FLOW_STALE;
@@ -167,6 +167,8 @@ uint8_t getStatusFaultBitfield() {
 #endif
   return faults;
 }
+
+uint8_t getStatusFaultBitfield() { return g_fault_manager.faultBits(); }
 
 const char* getStatusFaultText(uint8_t faults) {
   return (faults == 0U) ? "OK" : "FAULT";
@@ -648,7 +650,7 @@ InputPhaseSnapshot runInputPhase(uint32_t now_ms) {
 
 ControlPhaseSnapshot runControlPhase(const InputPhaseSnapshot& input) {
   uint8_t duty = PWM_MIN;
-  if (input.run_enabled) {
+  if (input.run_enabled && !g_fault_manager.shouldInhibitPump()) {
     duty = g_flow_controller.computePumpDuty(input.speed_kmh, input.active_width_m, input.measured_flow_lpm);
   } else {
     g_flow_controller.stop();
@@ -705,6 +707,7 @@ void setup() {
   }
   spray::setupPins();
   spray::beginDisplay();
+  spray::g_fault_manager.begin();
   spray::calibrationStore().begin();
   spray::calibrationStore().load();
   spray::g_flow_sensor.begin();
@@ -753,6 +756,7 @@ void loop() {
 
   const uint32_t input_start_ms = millis();
   const spray::InputPhaseSnapshot input = spray::runInputPhase(now_ms);
+  spray::g_fault_manager.update(spray::getObservedStatusFaultBitfield());
   spray::updatePhaseOverrunCount(millis() - input_start_ms,
                                  spray::INPUT_PHASE_BUDGET_MS,
                                  spray::g_phase_timing_stats.input_overrun_count);
