@@ -11,9 +11,9 @@ constexpr uint8_t PIN_WHEEL_SENSOR = 2U;
 constexpr uint8_t PIN_FLOW_SENSOR = 3U;
 constexpr uint8_t PIN_PUMP_PWM = 9U;
 
-constexpr uint8_t PIN_BOOM_1 = 12U;
-constexpr uint8_t PIN_BOOM_2 = 7U;
-constexpr uint8_t PIN_BOOM_3 = A1;
+constexpr uint8_t PIN_SECTION_RELAY_1 = 12U;
+constexpr uint8_t PIN_SECTION_RELAY_2 = 7U;
+constexpr uint8_t PIN_SECTION_RELAY_3 = A1;
 
 constexpr uint8_t PIN_LED_SECTION_1 = A2;
 
@@ -32,9 +32,9 @@ constexpr uint8_t PIN_BTN_AUTO_MANUAL = 0xFFU;
 constexpr uint8_t PIN_PRESSURE_SENSOR = A0;
 
 constexpr std::array<SectionDescriptor, SECTION_COUNT> kSectionDescriptors = {{{
-    {0U, PIN_BOOM_1, PIN_SECTION_SW_1},
-    {1U, PIN_BOOM_2, PIN_SECTION_SW_2},
-    {2U, PIN_BOOM_3, PIN_SECTION_SW_3},
+    {0U, PIN_SECTION_RELAY_1, PIN_SECTION_SW_1},
+    {1U, PIN_SECTION_RELAY_2, PIN_SECTION_SW_2},
+    {2U, PIN_SECTION_RELAY_3, PIN_SECTION_SW_3},
 }}};
 
 static_assert(kSectionDescriptors.size() == SECTION_COUNT,
