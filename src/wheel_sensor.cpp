@@ -1,14 +1,13 @@
 #include "interfaces.h"
 
-#include <Arduino.h>
-
 #include "config.h"
 #include "calibration_store.h"
 
 namespace spray {
 
-WheelSensor::WheelSensor(PulseCounterAdapter& pulse_counter)
+WheelSensor::WheelSensor(PulseCounterAdapter& pulse_counter, TimeSourceAdapter& time_source)
     : pulse_counter_(pulse_counter),
+      time_source_(time_source),
       last_total_pulses_(0U),
       last_read_ms_(0U),
       last_pulse_ms_(0U),
@@ -17,13 +16,13 @@ WheelSensor::WheelSensor(PulseCounterAdapter& pulse_counter)
 
 void WheelSensor::begin() {
   pulse_counter_.begin();
-  last_read_ms_ = millis();
+  last_read_ms_ = time_source_.nowMs();
   last_pulse_ms_ = last_read_ms_;
   pulse_counter_.reset();
 }
 
 float WheelSensor::readSpeed() {
-  const uint32_t now_ms = millis();
+  const uint32_t now_ms = time_source_.nowMs();
   const uint32_t elapsed_ms = now_ms - last_read_ms_;
   if (elapsed_ms == 0U) {
     return 0.0f;
@@ -64,7 +63,7 @@ float WheelSensor::readSpeed() {
 void WheelSensor::reset() {
   pulse_counter_.reset();
   last_total_pulses_ = 0U;
-  last_read_ms_ = millis();
+  last_read_ms_ = time_source_.nowMs();
   last_pulse_ms_ = last_read_ms_;
   timeout_fault_active_ = false;
   config_fault_active_ = false;

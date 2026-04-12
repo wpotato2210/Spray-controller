@@ -70,6 +70,11 @@ class ArduinoInterruptPulseCounter : public PulseCounterAdapter {
   volatile uint32_t last_pulse_ms_;
 };
 
+class ArduinoMillisTimeSource : public TimeSourceAdapter {
+ public:
+  uint32_t nowMs() const override;
+};
+
 class ArduinoSectionHardwareAdapter : public SectionHardwareAdapter {
  public:
   ArduinoSectionHardwareAdapter(

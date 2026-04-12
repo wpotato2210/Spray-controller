@@ -1,28 +1,9 @@
 #include "interfaces.h"
 
-#include <math.h>
-
 #include "config.h"
+#include "numeric_utils.h"
 
 namespace spray {
-namespace {
-float clampValue(float value, float min_value, float max_value) {
-  if (value < min_value) {
-    return min_value;
-  }
-  if (value > max_value) {
-    return max_value;
-  }
-  return value;
-}
-
-float sanitizeNonNegativeFinite(float value) {
-  if (!isfinite(value) || value < 0.0f) {
-    return 0.0f;
-  }
-  return value;
-}
-}  // namespace
 
 FlowController::FlowController()
     : current_duty_(static_cast<float>(PWM_MIN)),
@@ -63,7 +44,7 @@ uint8_t FlowController::computePumpDuty(float speed_kmh,
       (filtered_speed_kmh_ * active_width_m * TARGET_RATE_LPHA) / 600.0f;
   const float flow_error_lpm = target_flow_lpm - filtered_flow_lpm_;
   flow_integral_ += flow_error_lpm;
-  flow_integral_ = clampValue(flow_integral_, INTEGRAL_MIN, INTEGRAL_MAX);
+  flow_integral_ = clampMinMax(flow_integral_, INTEGRAL_MIN, INTEGRAL_MAX);
 
   if (target_flow_lpm >= MIN_TARGET_FLOW_FOR_FAULT_LPM &&
       measured_flow_lpm <= FLOW_FAULT_LPM_THRESHOLD) {
@@ -81,8 +62,8 @@ uint8_t FlowController::computePumpDuty(float speed_kmh,
   const float requested_duty = current_duty_ + (KP * flow_error_lpm) + (KI * flow_integral_);
   const float lower_bound = current_duty_ - MAX_DELTA_PWM_PER_CYCLE;
   const float upper_bound = current_duty_ + MAX_DELTA_PWM_PER_CYCLE;
-  current_duty_ = clampValue(requested_duty, lower_bound, upper_bound);
-  current_duty_ = clampValue(current_duty_, static_cast<float>(PWM_MIN), static_cast<float>(PWM_MAX));
+  current_duty_ = clampMinMax(requested_duty, lower_bound, upper_bound);
+  current_duty_ = clampMinMax(current_duty_, static_cast<float>(PWM_MIN), static_cast<float>(PWM_MAX));
 
   return static_cast<uint8_t>(current_duty_ + 0.5f);
 }

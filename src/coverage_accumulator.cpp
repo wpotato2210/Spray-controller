@@ -1,6 +1,6 @@
 #include "interfaces.h"
 
-#include <math.h>
+#include "numeric_utils.h"
 
 namespace spray {
 namespace {
@@ -9,20 +9,6 @@ constexpr float kSecondsPerHour = 3600.0f;
 constexpr float kSquareMetersPerHectare = 10000.0f;
 constexpr float kMaxDistanceMeters = 1000000000.0f;
 constexpr float kMaxAreaHectares = 1000000.0f;
-
-float sanitizeNonNegativeFinite(float value) {
-  if (!isfinite(value) || value < 0.0f) {
-    return 0.0f;
-  }
-  return value;
-}
-
-float clamp(float value, float max_value) {
-  if (value > max_value) {
-    return max_value;
-  }
-  return value;
-}
 }  // namespace
 
 CoverageAccumulator::CoverageAccumulator() : distance_m_(0.0f), area_ha_(0.0f) {}
@@ -38,14 +24,14 @@ void CoverageAccumulator::update(float speed_kmh, float active_width_m, uint32_t
   const float speed_mps = (speed_kmh * kMetersPerKm) / kSecondsPerHour;
   const float delta_distance_m = speed_mps * elapsed_s;
 
-  distance_m_ = clamp(distance_m_ + delta_distance_m, kMaxDistanceMeters);
+  distance_m_ = clampMax(distance_m_ + delta_distance_m, kMaxDistanceMeters);
 
   if (active_width_m <= 0.0f) {
     return;
   }
 
   const float delta_area_ha = (delta_distance_m * active_width_m) / kSquareMetersPerHectare;
-  area_ha_ = clamp(area_ha_ + delta_area_ha, kMaxAreaHectares);
+  area_ha_ = clampMax(area_ha_ + delta_area_ha, kMaxAreaHectares);
 }
 
 void CoverageAccumulator::reset() {
