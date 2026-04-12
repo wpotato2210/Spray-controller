@@ -18,6 +18,16 @@ struct SectionDescriptor {
   uint8_t switch_pin;
 };
 
+template <size_t N>
+constexpr bool sectionIdsAreContiguous(const std::array<SectionDescriptor, N>& descriptors) {
+  for (size_t i = 0U; i < N; ++i) {
+    if (descriptors[i].id != i) {
+      return false;
+    }
+  }
+  return true;
+}
+
 constexpr float TARGET_RATE_LPHA = 100.0f;
 constexpr float SECTION_WIDTH_M = 0.5f;
 
