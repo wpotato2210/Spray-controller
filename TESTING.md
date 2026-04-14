@@ -35,6 +35,7 @@ Spray Controller Testing Procedures
   - `== W-01 memory/pin/doc closure check ==`
   - `== W-02 timing/event closure check ==`
   - `== W-03 HAL/fault closure check ==`
+  - `== W-04 validation/HIL closure check ==`
   - `== WAVE-02 firmware stability check ==`
   - `== P3 sensor robustness check ==`
   - `== P3 closure artifact check ==`
@@ -99,6 +100,21 @@ Spray Controller Testing Procedures
   - `FaultManager` preserves centralized fault latching, clear-streak policy, and pump-inhibit mask behavior.
   - Sketch runtime continues to initialize, update, and consume `FaultManager` outputs for pump gating and status fault publication.
   - Section output and status-bitmask paths preserve direct index-based descriptor access and board pin headers retain contiguous-ID static assertions.
+
+## W-04 Validation/HIL Closure Validator
+
+- Command: `python3 scripts/validate_wave_w_04.py`
+- Expected pass marker: `wave_w_04_ok`
+- Deterministic checks enforced:
+  - Canonical validation gate (`./scripts/validate.sh`) preserves both WAVE-04
+    static and native unit checks.
+  - `TESTING.md` preserves the WAVE-04 HIL protocol section with the required
+    ISR-rate, serial saturation, and debounce-stability scenarios.
+  - `validation/hil_wave_04_protocol.md` remains present as the concrete HIL
+    procedure artifact.
+  - Validation CI workflow retains dedicated `wave-04-static` and
+    `wave-04-unit` jobs.
+  - Build CI keeps the UNO/Nano/Mega compile matrix targets.
 
 ## PIN-WAVE-001 Pin-Map Validator
 
