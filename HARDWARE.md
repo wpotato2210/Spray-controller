@@ -97,7 +97,10 @@ Uses the same core IO mapping as Nano for this firmware profile, with shared ST7
 
 - Individual section on/off
 - Run/Hold switch with optional bypass solenoid
-- Rotary encoder module with push button (`CLK`, `DT`, `SW`, `VCC`, `GND`)
+- Rotary encoder module with push button.
+  - Common silk labels: `CLK`, `DT`, `SW`, `VCC`, `GND`
+  - Alternate silk labels: `S1`, `S2`, `Key`, `5V`, `GND`
+  - Label equivalence: `S1 == CLK`, `S2 == DT`, `Key == SW`
 - Operator buttons:
   - `UP`
   - `DOWN`

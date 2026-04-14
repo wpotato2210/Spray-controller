@@ -35,6 +35,7 @@ Primary sources:
   - Mega: CLK/DT/SW allocated
   - Nano: CLK/DT allocated, SW unassigned
   - Uno: unassigned
+  - Alternate encoder module labels are equivalent: `S1->CLK`, `S2->DT`, `Key->SW`, `5V->VCC`
 - Buttons (UP/DOWN/CAL/SELECT/AUTO-MANUAL):
   - Mega: allocated
   - Uno/Nano: unassigned (`0xFF` sentinel)
@@ -361,6 +362,9 @@ Harness construction notes:
 | Encoder CLK (if allocated) | MCU encoder CLK pin | ENC_A | Nano/Mega profile |
 | Encoder DT (if allocated) | MCU encoder DT pin | ENC_B | Nano/Mega profile |
 | Encoder SW (if allocated) | MCU encoder SW pin | ENC_SW | Mega profile |
+| Encoder S1 (alternate label) | Same net as encoder CLK | ENC_A | Some encoder breakout boards |
+| Encoder S2 (alternate label) | Same net as encoder DT | ENC_B | Some encoder breakout boards |
+| Encoder Key (alternate label) | Same net as encoder SW | ENC_SW | If SW is allocated on board profile |
 | MCU LCD SCLK pin | ST7920 SCLK/E | LCD_SCLK | Serial clock |
 | MCU LCD MOSI pin | ST7920 SID/RW | LCD_MOSI | Serial data |
 | MCU LCD CS pin | ST7920 CS/RS | LCD_CS | LCD chip select |
