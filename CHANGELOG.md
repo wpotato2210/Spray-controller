@@ -2,6 +2,13 @@
 
 ## Versions
 
+- **0.60** (2026-04-14): Executed `W-04` closure gate by adding
+  `scripts/validate_wave_w_04.py` to enforce Wave-04 validation invariants
+  (WAVE-04 static + native checks wired in canonical validation,
+  CI wave jobs + AVR board matrix preserved, and required HIL protocol
+  artifact/scenarios present), and wiring the gate into
+  `./scripts/validate.sh`, `TESTING.md`, and validation workflow path triggers.
+
 - **0.59** (2026-04-14): Executed `W-03` closure gate by adding
   `scripts/validate_wave_w_03.py` to enforce Wave-03 HAL/fault invariants
   (display backend abstraction with compile-time `ST7920_SPI`/`NONE`
