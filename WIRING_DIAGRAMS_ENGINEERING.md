@@ -25,7 +25,7 @@ Primary sources:
 
 ### Display
 
-- ST7920 128x64 LCD in hardware SPI mode via U8g2 (`U8G2_ST7920_128X64_F_HW_SPI`)
+- ST7920 128x64 LCD in serial 3-wire mode via U8g2 software SPI (`U8G2_ST7920_128X64_F_SW_SPI` / `_1_SW_SPI`)
 
 ### Inputs
 
@@ -90,9 +90,9 @@ Direction legend:
 | Button SELECT | N/C (`0xFF`) | N/C (`0xFF`) | D36 | IN | Operator button | Mega only |
 | Button AUTO/MANUAL | N/C (`0xFF`) | N/C (`0xFF`) | D37 | IN | Operator button | Mega only |
 | Pressure sensor (optional) | A0 | A0 | A8 | IN | Analog sensor | Feature disabled by default |
-| LCD SCLK | D13 | D13 | D52 | ALT/OUT | ST7920 SPI | Hardware SPI clock |
-| LCD MOSI | D11 | D11 | D51 | ALT/OUT | ST7920 SPI | Hardware SPI data |
-| LCD CS | D10 | D10 | D53 | OUT | ST7920 control | Chip select |
+| LCD SCLK | D13 | D13 | D52 | ALT/OUT | ST7920 serial | E/clock line |
+| LCD MOSI | D11 | D11 | D51 | ALT/OUT | ST7920 serial | RW/SID data line |
+| LCD CS | D10 | D10 | D53 | OUT | ST7920 control | RS/chip select line |
 | LCD RESET | D8 | D8 | D49 | OUT | ST7920 control | LCD reset |
 
 ### 2.2 Complete pin occupancy (Mega2560, recommended full-feature build)
@@ -110,9 +110,9 @@ Direction legend:
 | D8 | N/C | Unused by firmware | Spare digital I/O |
 | D9 | N/C | Unused by firmware | PWM-capable spare |
 | D10 | N/C | Unused by firmware | SPI SS spare |
-| D11 | N/C | Unused by firmware | SPI MOSI spare |
+| D11 | N/C | Unused by firmware | Digital spare |
 | D12 | N/C | Unused by firmware | SPI MISO spare |
-| D13 | N/C | Unused by firmware | SPI SCK / LED spare |
+| D13 | N/C | Unused by firmware | LED / digital spare |
 | D14 | N/C | UART3 TX spare | ALT capable |
 | D15 | N/C | UART3 RX spare | ALT capable |
 | D16 | N/C | UART2 TX spare | ALT capable |
@@ -150,8 +150,8 @@ Direction legend:
 | D48 | N/C | Unused by firmware | Spare digital I/O |
 | D49 | OUT | LCD RESET | Reserved for ST7920 |
 | D50 | N/C | SPI MISO spare | Reserved if SPI expansion added |
-| D51 | ALT/OUT | LCD MOSI | Reserved for ST7920 |
-| D52 | ALT/OUT | LCD SCLK | Reserved for ST7920 |
+| D51 | ALT/OUT | LCD MOSI | Reserved for ST7920 SID/RW |
+| D52 | ALT/OUT | LCD SCLK | Reserved for ST7920 E/SCLK |
 | D53 | OUT | LCD CS | Reserved for ST7920 |
 | A0..A7 | N/C | Unused by firmware | Analog spares |
 | A8 | IN | Pressure sensor (optional) | Analog input, feature-gated |
@@ -172,9 +172,9 @@ Direction legend:
 | D8 | LCD RESET | LCD RESET | OUT | ST7920 reset | Reserved |
 | D9 | Pump PWM | Pump PWM | OUT | PWM to pump driver | External driver required |
 | D10 | LCD CS | LCD CS | OUT | ST7920 chip select | Reserved |
-| D11 | LCD MOSI | LCD MOSI | ALT/OUT | ST7920 data | Hardware SPI |
+| D11 | LCD MOSI | LCD MOSI | ALT/OUT | ST7920 SID/RW data | Serial mode |
 | D12 | Section relay 1 | Section relay 1 | OUT | Section output | Active-high |
-| D13 | LCD SCLK | LCD SCLK | ALT/OUT | ST7920 clock | Hardware SPI |
+| D13 | LCD SCLK | LCD SCLK | ALT/OUT | ST7920 E/SCLK clock | Serial mode |
 | A0 | Pressure sensor (optional) | Pressure sensor (optional) | IN | Analog pressure | Feature-gated |
 | A1 | Section relay 3 | Section relay 3 | OUT | Section output | Analog pin used as digital out |
 | A2 | Section LED 1 | Section LED 1 | OUT | Indicator output | Analog pin used as digital out |
@@ -208,7 +208,7 @@ Unassigned logical roles on Uno/Nano profile:
 | - Encoder/buttons (board profile)                            |
 | - Optional pressure analog input                              |
 |                                                              |
-| Top buses: LCD SPI (SCLK, MOSI, CS, RST)                    |
+| Top buses: LCD serial (E/SCLK, SID/RW, CS/RS, RST)          |
 | Bottom: common GND                                            |
 +--------------------------------------------------------------+
 ```
@@ -239,12 +239,13 @@ BTN_SELECT ------+----> D36 (IN_PU)
 BTN_A/M ---------+----> D37 (IN_PU)
 Pressure OUT ----------> A8 (ANALOG IN, optional)
 
-[Top bus: LCD SPI]
+[Top bus: LCD serial]
 D52 (SCLK) -----------> ST7920 SCLK/E
 D51 (MOSI) -----------> ST7920 SID/RW
 D53 (CS) -------------> ST7920 CS/RS
 D49 (RST) ------------> ST7920 RST
 ST7920 PSB -----------> GND (force serial mode)
+ST7920 DB0..DB7 ------> N/C (unused in serial mode)
 
 [Bottom bus: GND]
 MCU GND --------------> LCD GND, sensor GND, switch returns, driver grounds
@@ -263,7 +264,7 @@ A5  <- Section SW2 (IN_PU)
 A0  <- Pressure analog (optional)
 Nano-only: D5 <- Enc CLK, D6 <- Enc DT
 
-LCD SPI bus:
+LCD serial bus:
 D13 -> ST7920 SCLK/E
 D11 -> ST7920 SID/RW
 D10 -> ST7920 CS/RS
@@ -340,7 +341,7 @@ Harness construction notes:
 
 ### 7.3 Interface correctness
 
-- SPI/LCD: repo maps hardware SPI clock/data and dedicated CS/RESET per board profile; ST7920 serial mode requires PSB tied LOW.
+- ST7920 LCD: repo maps serial clock/data and dedicated CS/RESET per board profile; PSB must be tied LOW.
 - Interrupt pins: flow and wheel pins are compile-time constrained to external interrupt-capable pins for each board family.
 
 ## 8) Wiring table (mandatory)
@@ -360,11 +361,12 @@ Harness construction notes:
 | Encoder CLK (if allocated) | MCU encoder CLK pin | ENC_A | Nano/Mega profile |
 | Encoder DT (if allocated) | MCU encoder DT pin | ENC_B | Nano/Mega profile |
 | Encoder SW (if allocated) | MCU encoder SW pin | ENC_SW | Mega profile |
-| MCU LCD SCLK pin | ST7920 SCLK/E | LCD_SCLK | Hardware SPI clock |
-| MCU LCD MOSI pin | ST7920 SID/RW | LCD_MOSI | Hardware SPI data |
+| MCU LCD SCLK pin | ST7920 SCLK/E | LCD_SCLK | Serial clock |
+| MCU LCD MOSI pin | ST7920 SID/RW | LCD_MOSI | Serial data |
 | MCU LCD CS pin | ST7920 CS/RS | LCD_CS | LCD chip select |
 | MCU LCD RESET pin | ST7920 RST | LCD_RST | LCD reset |
 | ST7920 PSB | GND | LCD_PSB_MODE | Must be LOW for serial mode |
+| ST7920 DB0..DB7 | N/C | LCD_PARALLEL_BUS | Must be unused in serial mode |
 | +5V rail | MCU + LCD + sensors | +5V | Logic supply |
 | +12V rail | Pump and valve power stage | +12V_ACT | High-power rail |
 | System grounds | All module grounds | GND_COMMON | Mandatory common reference |

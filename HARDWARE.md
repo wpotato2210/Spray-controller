@@ -20,7 +20,7 @@ target_policy:
 - Single flow sensor for total flow feedback.
 - Multiple boom sections controlled independently as ON/OFF outputs.
 - 12V pump power stage with 5V MCU logic.
-- ST7920 128x64 LCD supported on Arduino Uno, Nano, and Mega in hardware SPI mode via U8g2 (`U8G2_ST7920_128X64_F_HW_SPI`).
+- ST7920 128x64 LCD supported on Arduino Uno, Nano, and Mega in **serial 3-wire mode** via U8g2 software SPI (`U8G2_ST7920_128X64_F_SW_SPI`/`_1_SW_SPI`).
 
 ## Pinout (board profiles)
 
@@ -48,17 +48,20 @@ target_policy:
 | 36 | Button SELECT | Input pull-up |
 | 37 | Button AUTO/MANUAL | Input pull-up |
 | A8 | Pressure Sensor (Optional) | Analog telemetry input; feature-gated and disabled by default |
-| 52 | LCD SCLK / E | ST7920 hardware SPI clock |
-| 51 | LCD MOSI / RW | ST7920 hardware SPI data |
-| 53 | LCD CS / RS | ST7920 chip select |
+| 52 | LCD SCLK / E | ST7920 serial clock (E) |
+| 51 | LCD MOSI / RW | ST7920 serial data (SID/RW) |
+| 53 | LCD CS / RS | ST7920 serial chip select (RS) |
 | 49 | LCD RST | ST7920 reset |
 
 #### ST7920 wiring requirements
 
-- Tie **PSB LOW** to force serial/SPI mode.
+- Tie **PSB LOW** to force ST7920 serial mode.
+- ST7920 serial mapping is fixed: **RS = CS**, **RW = SID(data)**, **E = SCLK(clock)**.
+- Do **not** tie RW to GND in serial mode.
+- Leave **DB0..DB7 unconnected** in serial mode.
 - Connect **VO** to contrast potentiometer wiper (typical 10k pot between 5V and GND).
 - Wire LCD backlight pins through appropriate resistor/driver path for the module variant.
-- Keep display mode single-interface only (serial/SPI); do not mix with parallel wiring.
+- Keep display mode single-interface only (serial); do not mix with parallel wiring.
 
 ### Arduino Nano (`ARDUINO_AVR_NANO`)
 
@@ -76,14 +79,14 @@ target_policy:
 | A5 | Section Switch 2 | Input pull-up |
 | 4 | Section Switch 3 | Input pull-up; avoids A6 analog-only behavior |
 | A0 | Pressure Sensor (Optional) | Analog telemetry input; feature-gated and disabled by default |
-| 13 | LCD SCLK / E | ST7920 hardware SPI clock |
-| 11 | LCD MOSI / RW | ST7920 hardware SPI data |
-| 10 | LCD CS / RS | ST7920 chip select |
+| 13 | LCD SCLK / E | ST7920 serial clock (E) |
+| 11 | LCD MOSI / RW | ST7920 serial data (SID/RW) |
+| 10 | LCD CS / RS | ST7920 serial chip select (RS) |
 | 8 | LCD RST | ST7920 reset |
 
 ### Arduino Uno (`ARDUINO_AVR_UNO`)
 
-Uses the same core IO mapping as Nano for this firmware profile, with shared LCD SPI mapping (CLK 13, MOSI 11, CS 10, RESET 8).
+Uses the same core IO mapping as Nano for this firmware profile, with shared ST7920 serial mapping (CLK/E 13, SID/RW 11, CS/RS 10, RESET 8).
 
 ### UI input allocation status
 
@@ -130,11 +133,11 @@ MCU Mega2560 (5V logic)
 | 27 -> Section SW 1          |----> Toggle input
 | 28 -> Section SW 2          |----> Toggle input
 | 29 -> Section SW 3          |----> Toggle input
-| 52 -> LCD SCLK (E)          |----> ST7920 hardware SPI clock
-| 51 -> LCD MOSI (RW)         |----> ST7920 hardware SPI data
-| 53 -> LCD CS (RS)           |----> ST7920 chip select
+| 52 -> LCD SCLK (E)          |----> ST7920 serial clock (E)
+| 51 -> LCD MOSI (RW)         |----> ST7920 serial data (SID/RW)
+| 53 -> LCD CS (RS)           |----> ST7920 serial chip select (RS)
 | 49 -> LCD RST               |----> ST7920 reset
-| PSB -> GND                  |----> Force serial/SPI mode
+| PSB -> GND                  |----> Force ST7920 serial mode
 | A8 -> Pressure In (opt)     |----> Optional analog pressure telemetry
 | GND ------------------------|----> Common GND
 +-----------------------------+
