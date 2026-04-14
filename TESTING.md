@@ -33,6 +33,7 @@ Spray Controller Testing Procedures
   - `== PIN-WAVE-003 Mega policy check ==`
   - `== PIN-WAVE-004 hardware doc parity check ==`
   - `== W-01 memory/pin/doc closure check ==`
+  - `== W-02 timing/event closure check ==`
   - `== WAVE-02 firmware stability check ==`
   - `== P3 sensor robustness check ==`
   - `== P3 closure artifact check ==`
@@ -65,6 +66,23 @@ Spray Controller Testing Procedures
     `RS:OP_EVENT_OVERFLOW,<count>` publication.
   - Telemetry emission is frame-budgeted and ordered through a deterministic
     cursor scheduler.
+
+## W-02 Timing/Event Closure Validator
+
+- Command: `python3 scripts/validate_wave_w_02.py`
+- Expected pass marker: `wave_w_02_ok`
+- Deterministic checks enforced:
+  - `PulseCounterSnapshot` and `PulseCounter::readSnapshot()` are preserved
+    as the canonical pulse-counter snapshot interface contract.
+  - `ArduinoInterruptPulseCounter` preserves a single-lock atomic snapshot read
+    implementation and exports the `readSnapshot()` override.
+  - Flow and wheel sensor paths read counter state through
+    `pulse_counter_.readSnapshot()`.
+  - Operator input service preserves bounded per-loop dequeue via
+    `OPERATOR_EVENT_DEQUEUE_BUDGET_PER_LOOP` and a bounded loop in the sketch.
+  - Loop phase timing budgets and overrun telemetry remain present via
+    `*_PHASE_BUDGET_MS` constants, `PhaseTimingStats`, and `PHASE_OVERRUN`
+    reporting.
 
 - Optional artifact capture:
   - `./scripts/run_validation_and_capture.sh`
