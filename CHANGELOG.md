@@ -2,6 +2,13 @@
 
 ## Versions
 
+- **0.57** (2026-04-14): Executed `W-01` closure gate by adding
+  `scripts/validate_wave_w_01.py` to enforce the Wave-01 invariants
+  (AVR ST7920 page-buffer rendering, assigned-role pin policy guard coverage,
+  and explicit `U8g2` dependency documentation in `README.md` and
+  `INSTALL.md`), and wiring the gate into `./scripts/validate.sh` and
+  `TESTING.md`.
+
 - **0.56** (2026-04-12): Executed `WAVE-02-TIMING-EVENTS` by adding an
   atomic `PulseCounterSnapshot` API and wiring flow/wheel reads to single-lock
   snapshots, increasing menu event dequeue service to a bounded per-loop budget
