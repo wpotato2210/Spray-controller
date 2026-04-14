@@ -54,9 +54,9 @@ profiles:
       reset: 8
 
   arduino_avr_mega2560:
-    wheel_sensor: 18
-    flow_sensor: 19
-    pump_pwm: 44
+    wheel_sensor: 2
+    flow_sensor: 3
+    pump_pwm: 9
 
     boom_sections:
       section_1: 22
