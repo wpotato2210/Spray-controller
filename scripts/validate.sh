@@ -41,6 +41,9 @@ run_step "PIN-WAVE-004 hardware doc parity check" \
 run_step "W-01 memory/pin/doc closure check" \
   python3 scripts/validate_wave_w_01.py
 
+run_step "W-02 timing/event closure check" \
+  python3 scripts/validate_wave_w_02.py
+
 run_step "WAVE-02 firmware stability check" \
   python3 scripts/validate_fw_wave_02.py
 

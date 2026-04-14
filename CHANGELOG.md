@@ -2,6 +2,13 @@
 
 ## Versions
 
+- **0.58** (2026-04-14): Executed `W-02` closure gate by adding
+  `scripts/validate_wave_w_02.py` to enforce Wave-02 timing/event invariants
+  (atomic pulse snapshot interface + adapter implementation, bounded
+  per-loop operator event dequeue, and phase budget/overrun telemetry
+  coverage), and wiring the gate into `./scripts/validate.sh` and
+  `TESTING.md`.
+
 - **0.57** (2026-04-14): Executed `W-01` closure gate by adding
   `scripts/validate_wave_w_01.py` to enforce the Wave-01 invariants
   (AVR ST7920 page-buffer rendering, assigned-role pin policy guard coverage,
