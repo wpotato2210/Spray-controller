@@ -92,7 +92,7 @@ documentation/config artifact, not a compile-time source.
 | --- | --- | --- | --- |
 | Wheel sensor pulse input | No | **BLOCKED** | Current firmware requires external interrupt pin via `attachInterrupt`; Mega ext-interrupt pins are D2/3/18/19/20/21 only. |
 | Flow sensor pulse input | No | **BLOCKED** | Same as wheel sensor. |
-| Pump PWM | Yes (e.g., D44/45/46) | **CONDITIONAL** | Must stay on PWM-capable Mega pin. |
+| Pump PWM | Yes (e.g., D9 or D44/45/46) | **CONDITIONAL** | Must stay on PWM-capable Mega pin. |
 | Boom section outputs | Yes | **SAFE** | Plain digital outputs. |
 | LED output | Yes | **SAFE** | Plain digital output. |
 | Run/Hold switch | Yes | **SAFE** | Digital input pull-up. |
@@ -115,10 +115,10 @@ The following profile was added as proposal:
     # BLOCKED from D22-D53/A8-A15-only policy under current firmware:
     # flow/wheel rely on attachInterrupt(digitalPinToInterrupt(pin)).
     # On Mega2560 external interrupts are fixed to D2, D3, D18, D19, D20, D21.
-    wheel_sensor: 18
-    flow_sensor: 19
-    # PWM required for pump output (Mega PWM-capable in requested range: D44-D46).
-    pump_pwm: 44
+    wheel_sensor: 2
+    flow_sensor: 3
+    # PWM required for pump output (Mega PWM-capable examples: D9 or D44-D46).
+    pump_pwm: 9
 
     boom_sections:
       section_1: 22

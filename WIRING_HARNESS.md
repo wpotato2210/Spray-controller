@@ -16,9 +16,9 @@ Engineering-grade harness definition derived from board pin headers and hardware
 
 | Signal | MCU Pin | Dir | Module | Notes |
 | --- | --- | --- | --- | --- |
-| WHEEL_SIG | D18 | IN | Wheel/Hall sensor | External interrupt-capable pin |
-| FLOW_SIG | D19 | IN | Flow sensor | External interrupt-capable pin |
-| PUMP_PWM | D44 (PWM) | OUT | Pump driver | PWM output to external driver |
+| WHEEL_SIG | D2 | IN | Wheel/Hall sensor | External interrupt-capable pin |
+| FLOW_SIG | D3 | IN | Flow sensor | External interrupt-capable pin |
+| PUMP_PWM | D9 (PWM) | OUT | Pump driver | PWM output to external driver |
 | SECTION_1_OUT | D22 | OUT | Section relay/driver 1 | Digital output |
 | SECTION_2_OUT | D23 | OUT | Section relay/driver 2 | Digital output |
 | SECTION_3_OUT | D24 | OUT | Section relay/driver 3 | Digital output |
@@ -58,9 +58,9 @@ Engineering-grade harness definition derived from board pin headers and hardware
 | --- | --- | --- | --- | --- |
 | J1 | 1 | +5V_LOGIC | J6.2 | MCU 5V rail |
 | J1 | 2 | GND | J6.3 | Common return |
-| J1 | 3 | D18_WHEEL | J4.3 | Wheel sensor signal |
-| J1 | 4 | D19_FLOW | J4.6 | Flow sensor signal |
-| J1 | 5 | D44_PUMP_PWM | J5.2 | Pump driver PWM input |
+| J1 | 3 | D2_WHEEL | J4.3 | Wheel sensor signal |
+| J1 | 4 | D3_FLOW | J4.6 | Flow sensor signal |
+| J1 | 5 | D9_PUMP_PWM | J5.2 | Pump driver PWM input |
 | J1 | 6 | D22_SEC1 | J5.3 | Section 1 driver input |
 | J1 | 7 | D23_SEC2 | J5.4 | Section 2 driver input |
 | J1 | 8 | D24_SEC3 | J5.5 | Section 3 driver input |
@@ -163,8 +163,8 @@ Wire ID convention used:
 | W-110 | J1.19 | J3.11 | BTN_CAL | 24 AWG | Active-low button |
 | W-111 | J1.20 | J3.12 | BTN_SELECT | 24 AWG | Active-low button |
 | W-112 | J1.21 | J3.13 | BTN_AUTO_MAN | 24 AWG | Active-low button |
-| W-201 | J4.3 | J1.3 | WHEEL_SIG | 24 AWG | Hall pulse to MCU D18 |
-| W-202 | J4.6 | J1.4 | FLOW_SIG | 24 AWG | Flow pulse to MCU D19 |
+| W-201 | J4.3 | J1.3 | WHEEL_SIG | 24 AWG | Hall pulse to MCU D2 |
+| W-202 | J4.6 | J1.4 | FLOW_SIG | 24 AWG | Flow pulse to MCU D3 |
 | W-203 | J4.9 | J1.22 | PRESSURE_AOUT | 24 AWG | Optional analog to A8 |
 | W-301 | J1.5 | J5.2 | PUMP_PWM_CMD | 22 AWG | PWM command to pump driver input |
 | W-302 | J1.6 | J5.3 | SEC1_CMD | 22 AWG | Section 1 command |
@@ -227,11 +227,11 @@ flowchart LR
   J1_20[J1.20 D36] -- W-111: BTN_SELECT --> J3_12[J3.12 BTN_SELECT]
   J1_21[J1.21 D37] -- W-112: BTN_AUTO_MAN --> J3_13[J3.13 BTN_AUTO_MAN]
 
-  J4_3[J4.3 WHEEL_SIG] -- W-201: WHEEL_SIG --> J1_3[J1.3 D18]
-  J4_6[J4.6 FLOW_SIG] -- W-202: FLOW_SIG --> J1_4[J1.4 D19]
+  J4_3[J4.3 WHEEL_SIG] -- W-201: WHEEL_SIG --> J1_3[J1.3 D2]
+  J4_6[J4.6 FLOW_SIG] -- W-202: FLOW_SIG --> J1_4[J1.4 D3]
   J4_9[J4.9 PRESSURE_AOUT] -- W-203: PRESSURE_AOUT --> J1_22[J1.22 A8]
 
-  J1_5[J1.5 D44] -- W-301: PUMP_PWM_CMD --> J5_2[J5.2 PUMP_PWM_CMD]
+  J1_5[J1.5 D9] -- W-301: PUMP_PWM_CMD --> J5_2[J5.2 PUMP_PWM_CMD]
   J1_6[J1.6 D22] -- W-302: SEC1_CMD --> J5_3[J5.3 SEC1_CMD]
   J1_7[J1.7 D23] -- W-303: SEC2_CMD --> J5_4[J5.4 SEC2_CMD]
   J1_8[J1.8 D24] -- W-304: SEC3_CMD --> J5_5[J5.5 SEC3_CMD]

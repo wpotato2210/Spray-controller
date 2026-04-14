@@ -70,9 +70,9 @@ Direction legend:
 
 | Signal | Uno | Nano | Mega2560 | Direction | Module | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| Wheel sensor | D2 | D2 | D18 | IN | Pulse sensor | Interrupt-capable pin required by compile guards |
-| Flow sensor | D3 | D3 | D19 | IN | Pulse sensor | Interrupt-capable pin required by compile guards |
-| Pump PWM | D9 | D9 | D44 | OUT | Pump driver | 5V PWM to external 12V stage |
+| Wheel sensor | D2 | D2 | D2 | IN | Pulse sensor | Interrupt-capable pin required by compile guards |
+| Flow sensor | D3 | D3 | D3 | IN | Pulse sensor | Interrupt-capable pin required by compile guards |
+| Pump PWM | D9 | D9 | D9 | OUT | Pump driver | 5V PWM to external 12V stage |
 | Section relay 1 | D12 | D12 | D22 | OUT | Section output | Active-high output |
 | Section relay 2 | D7 | D7 | D23 | OUT | Section output | Active-high output |
 | Section relay 3 | A1 | A1 | D24 | OUT | Section output | Digital output on analog pin (Uno/Nano) |
@@ -101,14 +101,14 @@ Direction legend:
 | --- | --- | --- | --- |
 | D0 | ALT | UART RX (reserved) | Programming/telemetry serial; do not repurpose |
 | D1 | ALT | UART TX (reserved) | Programming/telemetry serial; do not repurpose |
-| D2 | N/C | Unused by firmware | Interrupt-capable spare |
-| D3 | N/C | Unused by firmware | Interrupt-capable spare |
+| D2 | IN | Wheel sensor pulse | External interrupt |
+| D3 | IN | Flow sensor pulse | External interrupt |
 | D4 | N/C | Unused by firmware | Spare digital I/O |
 | D5 | N/C | Unused by firmware | PWM-capable spare |
 | D6 | N/C | Unused by firmware | PWM-capable spare |
 | D7 | N/C | Unused by firmware | Spare digital I/O |
 | D8 | N/C | Unused by firmware | Spare digital I/O |
-| D9 | N/C | Unused by firmware | PWM-capable spare |
+| D9 | OUT | Pump PWM | PWM output to external driver |
 | D10 | N/C | Unused by firmware | SPI SS spare |
 | D11 | N/C | Unused by firmware | Digital spare |
 | D12 | N/C | Unused by firmware | SPI MISO spare |
@@ -117,8 +117,8 @@ Direction legend:
 | D15 | N/C | UART3 RX spare | ALT capable |
 | D16 | N/C | UART2 TX spare | ALT capable |
 | D17 | N/C | UART2 RX spare | ALT capable |
-| D18 | IN | Wheel sensor pulse | External interrupt |
-| D19 | IN | Flow sensor pulse | External interrupt |
+| D18 | N/C | Unused by firmware | Interrupt-capable spare |
+| D19 | N/C | Unused by firmware | Interrupt-capable spare |
 | D20 | N/C | I2C SDA spare | ALT capable |
 | D21 | N/C | I2C SCL spare | ALT capable |
 | D22 | OUT | Section relay 1 | Digital output |
@@ -143,7 +143,7 @@ Direction legend:
 | D41 | N/C | Unused by firmware | Spare digital I/O |
 | D42 | N/C | Unused by firmware | Spare digital I/O |
 | D43 | N/C | Unused by firmware | Spare digital I/O |
-| D44 | OUT | Pump PWM | PWM output to external driver |
+| D44 | N/C | Unused by firmware | PWM-capable spare |
 | D45 | N/C | Unused by firmware | PWM-capable spare |
 | D46 | N/C | Unused by firmware | PWM-capable spare |
 | D47 | N/C | Unused by firmware | Spare digital I/O |
@@ -223,8 +223,8 @@ Unassigned logical roles on Uno/Nano profile:
        +----------------+----------------+
        |                                 |
 [Inputs, left]                       [Outputs, right]
-Wheel sensor OUT -----> D18 (IN/INT)      D44 (PWM OUT) -----> Pump driver PWM IN
-Flow sensor OUT  -----> D19 (IN/INT)      D22 (OUT) ---------> Section relay 1 IN
+Wheel sensor OUT -----> D2 (IN/INT)       D9 (PWM OUT) ------> Pump driver PWM IN
+Flow sensor OUT  -----> D3 (IN/INT)       D22 (OUT) ---------> Section relay 1 IN
 Run/Hold SW -----+----> D26 (IN_PU)       D23 (OUT) ---------> Section relay 2 IN
 Section SW1 -----+----> D27 (IN_PU)       D24 (OUT) ---------> Section relay 3 IN
 Section SW2 -----+----> D28 (IN_PU)       D25 (OUT) ---------> Section LED+
@@ -348,9 +348,9 @@ Harness construction notes:
 
 | From | To | Signal | Notes |
 | --- | --- | --- | --- |
-| Wheel sensor signal | MCU wheel pin (D2 Uno/Nano, D18 Mega) | WHEEL_PULSE | Interrupt input |
-| Flow sensor signal | MCU flow pin (D3 Uno/Nano, D19 Mega) | FLOW_PULSE | Interrupt input |
-| Pump driver PWM input | MCU pump pin (D9 Uno/Nano, D44 Mega) | PUMP_PWM | 5V PWM logic |
+| Wheel sensor signal | MCU wheel pin (D2 Uno/Nano/Mega) | WHEEL_PULSE | Interrupt input |
+| Flow sensor signal | MCU flow pin (D3 Uno/Nano/Mega) | FLOW_PULSE | Interrupt input |
+| Pump driver PWM input | MCU pump pin (D9 Uno/Nano/Mega) | PUMP_PWM | 5V PWM logic |
 | Section driver CH1 input | Section relay pin 1 | SECTION1_CMD | Digital output |
 | Section driver CH2 input | Section relay pin 2 | SECTION2_CMD | Digital output |
 | Section driver CH3 input | Section relay pin 3 | SECTION3_CMD | Digital output |
