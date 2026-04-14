@@ -2,6 +2,14 @@
 
 ## Versions
 
+- **0.59** (2026-04-14): Executed `W-03` closure gate by adding
+  `scripts/validate_wave_w_03.py` to enforce Wave-03 HAL/fault invariants
+  (display backend abstraction with compile-time `ST7920_SPI`/`NONE`
+  selection, centralized `FaultManager` latching/inhibit integration, and
+  direct index-based section descriptor access checks), wiring the new gate
+  into `./scripts/validate.sh` and `TESTING.md`, and aligning section write/
+  bitmask paths to indexed descriptor access.
+
 - **0.58** (2026-04-14): Executed `W-02` closure gate by adding
   `scripts/validate_wave_w_02.py` to enforce Wave-02 timing/event invariants
   (atomic pulse snapshot interface + adapter implementation, bounded

@@ -44,6 +44,9 @@ run_step "W-01 memory/pin/doc closure check" \
 run_step "W-02 timing/event closure check" \
   python3 scripts/validate_wave_w_02.py
 
+run_step "W-03 HAL/fault closure check" \
+  python3 scripts/validate_wave_w_03.py
+
 run_step "WAVE-02 firmware stability check" \
   python3 scripts/validate_fw_wave_02.py
 
