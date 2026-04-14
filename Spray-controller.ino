@@ -131,14 +131,16 @@ bool readRunHoldDebounced(uint32_t now_ms) {
 }
 
 void writeSections() {
-  for (const SectionDescriptor& section : kSectionDescriptors) {
+  for (size_t index = 0U; index < SECTION_COUNT; ++index) {
+    const SectionDescriptor& section = kSectionDescriptors[index];
     g_section_hardware.writeSection(section.id, g_section_manager.getSection(section.id));
   }
 }
 
 uint8_t getSectionBitmask() {
   uint8_t mask = 0U;
-  for (const SectionDescriptor& section : kSectionDescriptors) {
+  for (size_t index = 0U; index < SECTION_COUNT; ++index) {
+    const SectionDescriptor& section = kSectionDescriptors[index];
     if (g_section_manager.getSection(section.id)) {
       mask |= static_cast<uint8_t>(1U << section.id);
     }

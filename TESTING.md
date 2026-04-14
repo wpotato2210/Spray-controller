@@ -34,6 +34,7 @@ Spray Controller Testing Procedures
   - `== PIN-WAVE-004 hardware doc parity check ==`
   - `== W-01 memory/pin/doc closure check ==`
   - `== W-02 timing/event closure check ==`
+  - `== W-03 HAL/fault closure check ==`
   - `== WAVE-02 firmware stability check ==`
   - `== P3 sensor robustness check ==`
   - `== P3 closure artifact check ==`
@@ -87,6 +88,17 @@ Spray Controller Testing Procedures
 - Optional artifact capture:
   - `./scripts/run_validation_and_capture.sh`
   - Writes pass/fail transcript to `validation/validation_pass.txt`.
+
+## W-03 HAL/Fault Closure Validator
+
+- Command: `python3 scripts/validate_wave_w_03.py`
+- Expected pass marker: `wave_w_03_ok`
+- Deterministic checks enforced:
+  - `DisplayAdapter` interface contract is preserved with compile-time display backend selection for `ST7920_SPI` and `NONE`.
+  - ST7920 path continues to use page-buffer mode (`U8G2_ST7920_128X64_1_SW_SPI`) and unsupported backend selections are compile-time rejected.
+  - `FaultManager` preserves centralized fault latching, clear-streak policy, and pump-inhibit mask behavior.
+  - Sketch runtime continues to initialize, update, and consume `FaultManager` outputs for pump gating and status fault publication.
+  - Section output and status-bitmask paths preserve direct index-based descriptor access and board pin headers retain contiguous-ID static assertions.
 
 ## PIN-WAVE-001 Pin-Map Validator
 
