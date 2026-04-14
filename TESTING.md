@@ -32,6 +32,7 @@ Spray Controller Testing Procedures
   - `== PIN-WAVE-002 parity check ==`
   - `== PIN-WAVE-003 Mega policy check ==`
   - `== PIN-WAVE-004 hardware doc parity check ==`
+  - `== W-01 memory/pin/doc closure check ==`
   - `== WAVE-02 firmware stability check ==`
   - `== P3 sensor robustness check ==`
   - `== P3 closure artifact check ==`
@@ -114,6 +115,19 @@ Spray Controller Testing Procedures
   - Mega LCD SPI/reset constants in `include/pin_map_lcd.h` match the Mega
     LCD rows in `HARDWARE.md`.
   - `PIN_BTN_SELECT` must not collide with `LCD_RESET`.
+
+## W-01 Memory/Pin/Docs Closure Validator
+
+- Command: `python3 scripts/validate_wave_w_01.py`
+- Expected pass marker: `wave_w_01_ok`
+- Deterministic checks enforced:
+  - `src/display.cpp` must keep the AVR ST7920 constructor on U8g2 page-buffer
+    mode (`U8G2_ST7920_128X64_1_*`) and must not reintroduce full-frame (`_F_`)
+    mode.
+  - `include/pin_policy_guards.h` must preserve assigned-role matrix coverage
+    and the reserved LCD/SPI overlap guard against `kAssignedRolePins`.
+  - `README.md` and `INSTALL.md` must both preserve explicit `U8g2`
+    dependency guidance.
 
 ## P3 Deterministic Robustness Validator
 

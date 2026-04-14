@@ -38,6 +38,9 @@ run_step "PIN-WAVE-003 Mega policy check" \
 run_step "PIN-WAVE-004 hardware doc parity check" \
   python3 scripts/validate_pin_wave_004.py
 
+run_step "W-01 memory/pin/doc closure check" \
+  python3 scripts/validate_wave_w_01.py
+
 run_step "WAVE-02 firmware stability check" \
   python3 scripts/validate_fw_wave_02.py
 
