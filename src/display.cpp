@@ -30,7 +30,7 @@ namespace {
 #error "LCD pin mapping not defined for this board"
 #endif
 
-class St7920SpiDisplayAdapter final : public DisplayAdapter {
+class St7920SerialDisplayAdapter final : public DisplayAdapter {
  public:
   void begin() override {
     display_.begin();
@@ -70,11 +70,14 @@ class St7920SpiDisplayAdapter final : public DisplayAdapter {
     display_.drawStr(58, y, value);
   }
 
-  U8G2_ST7920_128X64_1_HW_SPI display_{U8G2_R0, LCD_CS, LCD_RESET};
+  // ST7920 serial (3-wire) mapping:
+  //   RS -> CS, RW -> SID(data), E -> SCLK(clock)
+  // Use software SPI constructor to avoid assuming hardware SPI bus routing.
+  U8G2_ST7920_128X64_1_SW_SPI display_{U8G2_R0, LCD_CLK, LCD_MOSI, LCD_CS, LCD_RESET};
 };
 
 DisplayAdapter& displayAdapter() {
-  static St7920SpiDisplayAdapter adapter;
+  static St7920SerialDisplayAdapter adapter;
   return adapter;
 }
 
